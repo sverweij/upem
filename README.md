@@ -9,17 +9,26 @@
 
 
 ## What
-You brush your teeth every day. You keep your dependencies up to date. 
+You brush your teeth every day. And you keep your dependencies up to date.
 Brushing your teeth is hard to automate. Keeping your dependencies up to date
 is not.
 
-_up'em_ updates your dependencies to latest. As pinned version. So no
-relying on third parties to stick to semver.
+_up'em_ updates your dependencies to latest, so you don't have to manually.
+
+### Opinionated
+After processing all versions are 'pinned'. Sure, you could use package-lock
+for that too, sort of. But still if your package.json contains "^1.0.0" of
+a package, do you know what you're using?
+
+### Respectless
+_up'em_ does not respect your current version preferences. `^`, `~`, `*` =>
+they all get pinned.
+
 
 If `npm outdated` says:
 ```
 Package    Current  Wanted  Latest  Location
-midash       1.8.2  ^1.8.0   2.0.1  your-cool-package
+midash       1.8.2  ^1.8.0   2.0.1  your-golden-package
 ```
 
 running `npm outdated --json | upem` will set midash' version to 2.0.1
@@ -33,13 +42,13 @@ running `npm outdated --json | upem` will set midash' version to 2.0.1
 ```
 
 There's no warning system for major version upgrades. I've found the most
-reliable way to find out if nothing breaks is to make sure your automated
-QA is up to date and run it after updates.
+reliable way to find out if nothing breaks is to run your automated QA
+after updates.
 
 ## Typical use
 You'd typically run the output from `npm outdated --json` through it. When it's done
 `npm install` and re-run your automated quality checks before checking the
-changes in in. I have some little scripts set up so I can just `npm run upem`
+changes in. I have some npm scripts set up so I can just `npm run upem`
 and watch cat videos in the mean time:
 
 ```json
@@ -50,10 +59,12 @@ and watch cat videos in the mean time:
     "lint:fix": "eslint --fix bin src test",
     "test": "jest --collectCoverage --config ./jest.config.js",
     "upem": "npm-run-all upem:update upem:install lint:fix check",
-    "upem:update": "npm outdated --json | bin/upem.js",
+    "upem:update": "npm outdated --json | upem",
     "upem:install": "npm install"
   }
 ```
+
+... but a similar approach in a `Makefile` would do the trick as well.
 
 ## Options
 If you want to keep versions untouched by _up'em_, put an `upem` section
