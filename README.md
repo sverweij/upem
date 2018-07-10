@@ -92,5 +92,7 @@ my own would only take a sunday afternoon...
 ## Alternatives
 - [npm-check-updates](https://github.com/tjunnone/npm-check-updates) - use that if you
   need something more feature rich and less opinionated.
-- Cloud services - are happy to do this trivial task for you as well.
+- Cloud services (like [greenkeeper](https://greenkeeper.io) and 
+  [renovate](https://renovatebot.com)) will be happy to do this 
+  trivial task for you as well.
 
