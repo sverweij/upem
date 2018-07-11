@@ -91,7 +91,10 @@ my own would only take a sunday afternoon...
 
 ## Alternatives
 - [npm-check-updates](https://github.com/tjunnone/npm-check-updates) - use that if you
-  need something more feature rich and less opinionated.
+  need something more feature rich and less opinionated and don't mind the outdated
+  (/ insecure) dependencies.
+- [npm-check](https://github.com/dylang/npm-check) - never used but has a lot of stars
+  & downloads, so probably legit. Feature rich.
 - Cloud services (like [greenkeeper](https://greenkeeper.io) and 
   [renovate](https://renovatebot.com)) will be happy to do this 
   trivial task for you as well.
