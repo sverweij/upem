@@ -15,7 +15,16 @@ function updateDeps (pDependencyObject, pOutdatedObject, pDoNotUpArray) {
       )
   )
 }
-
+/**
+ * Updates all dependencies in the passed package.json that match a key in the
+ * passed outdated object to the _latest_ in that object, ignoring the
+ * packages mentioned in the upem.donotup key.
+ *
+ * @param {any} pPackageObject - the contents of a package.json in object format
+ * @param {any} pOutdatedObject - the output of npm outdated --json, in object format
+ *
+ * @return {any} - the transformed pPackageObject
+ */
 function updateAllDeps (pPackageObject, pOutdatedObject = {}) {
   const lDoNotUpArray = _get(pPackageObject, 'upem.donotup') || []
 
