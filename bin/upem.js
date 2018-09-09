@@ -4,18 +4,18 @@ const path = require('path')
 const up = require('../src')
 const readFromStream = require('../src/readFromStream')
 
-const gPackageFileName = path.join(process.cwd(), 'package.json')
+const PACKAGE_FILE_NAME = path.join(process.cwd(), 'package.json')
 
 try {
-  const gPackageFile = fs.readFileSync(gPackageFileName)
-  let $package = JSON.parse(gPackageFile)
+  const lPackageFile = fs.readFileSync(PACKAGE_FILE_NAME)
+  let $package = JSON.parse(lPackageFile)
 
   readFromStream().then(pInput => {
     if (pInput.length > 0) {
       const gOutdatedObject = JSON.parse(pInput)
       try {
         fs.writeFileSync(
-          gPackageFileName,
+          PACKAGE_FILE_NAME,
           JSON.stringify(up.updateAllDeps($package, gOutdatedObject), null, 2)
         )
         process.stdout.write('  Up\'em just updated all dependencies in package.json to latest\n\n')
