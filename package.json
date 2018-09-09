@@ -62,6 +62,7 @@
     "extends": "standard",
     "plugins": ["security"],
     "rules": {
+      "complexity": ["warn", 4],
       "security/detect-unsafe-regex": "error",
       "security/detect-buffer-noassert": "error",
       "security/detect-child-process": "error",
