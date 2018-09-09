@@ -10,7 +10,7 @@
 
 ## What
 You brush your teeth every day. You keep your dependencies up to date.
-Brushing your teeth is hard to automate. Keeping your dependencies up to date
+Brushing your teeth is hard to automate. Keeping dependencies up to date
 is not.
 
 _up'em_ updates your dependencies to latest, so you don't have to manually.
