@@ -49,12 +49,25 @@
   "scripts": {
     "check": "npm-run-all --parallel depcruise lint test",
     "depcruise": "depcruise --validate -- bin src test",
-    "depcruise:graph": "depcruise --validate --output-type dot -- bin src | dot -T svg > tmp_deps.svg",
+    "depcruise:graph": "depcruise --validate --output-type rcdot -- bin src | dot -T svg > tmp_deps.svg",
     "lint": "eslint bin src test",
     "lint:fix": "eslint --fix bin src test",
-    "test": "jest --collectCoverage --config ./jest.config.js",
+    "test": "jest --collectCoverage",
     "update-dependencies": "npm-run-all upem:update upem:install lint:fix check",
     "upem:update": "npm outdated --json | bin/upem.js",
     "upem:install": "npm install"
+  },
+  "eslintConfig": {
+    "extends": "standard"
+  },
+  "jest": {
+    "clearMocks": true,
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+        "text-summary",
+        "lcov",
+        "html"
+    ],
+    "testEnvironment": "node"
   }
 }
