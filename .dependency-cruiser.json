@@ -17,7 +17,7 @@
       "severity": "error",
       "from": {},
       "to": {
-        "path": "\\.spec\\.js)$"
+        "path": "\\.spec\\.js$"
       }
     },
     {
