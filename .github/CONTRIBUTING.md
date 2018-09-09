@@ -12,13 +12,8 @@ To make this as easy as possible for you, here's some simple guidelines:
     or 
   - [GitLab's one](https://gitlab.com/sverweij/upem/issues)
     are the easiest way to submit them.
-- We prefer bug reports in  **_steps taken_ - _expected_ - _found_** format.
-  -  that makes it more easy to reproduce it, and concoct a solution that fits
-     your expectation.
-  - If applicable, it is also nice when you provide
-    - the **input** you used and
-    - the **environment** (browser version/ os, or node.js version + os).
-  - [template](ISSUE_TEMPLATE.md)
+- To make it easier to reproduce an issue & concoct a solution that fits
+  your expectation, we've made a [template](ISSUE_TEMPLATE.md)
 - In turn, we try to **respond within a week**.    
   This might or might not include an actual code fix.
 
@@ -27,8 +22,9 @@ To make this as easy as possible for you, here's some simple guidelines:
   **[pull requests](https://help.github.com/articles/creating-a-pull-request/)**
   based on the most recent version of the **develop** branch.
 - Code quality
-    - Additions pass eslint (as configured in this repo)
-    - Mocha tests prove your code does what it intends.
+    - Additions pass eslint (as configured in this repo -
+      `npm run lint:fix` will help you loads).
+    - Unit tests (we use jest) prove your code does what it intends.
     - Your code does not introduce regressions - ```npm run check``` proves this.
     - Code style (you know, petty things like indentations, where brackets go,
       how variables & parameters are named) fits in with the current code base.
@@ -40,6 +36,5 @@ To make this as easy as possible for you, here's some simple guidelines:
 
 ### Legal
 - the code you add will be subject to the
-  [MIT](../LICENSE) license, just like the rest of
-  smcat
+  [MIT](../LICENSE) license, just like the rest of upem
 - the code you add is your own original work

@@ -9,7 +9,7 @@
 
 
 ## What
-You brush your teeth every day. And you keep your dependencies up to date.
+You brush your teeth every day. You keep your dependencies up to date.
 Brushing your teeth is hard to automate. Keeping your dependencies up to date
 is not.
 
