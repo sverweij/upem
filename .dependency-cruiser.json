@@ -17,7 +17,7 @@
       "severity": "error",
       "from": {},
       "to": {
-        "path": "\\.spec\\.(js|ts|ls|coffee|litcoffee|coffee\\.md)$"
+        "path": "\\.spec\\.js)$"
       }
     },
     {
@@ -74,10 +74,9 @@
     {
       "name": "not-to-dev-dep",
       "severity": "error",
-      "comment": "Don't allow dependencies from src/app/lib to a development only package",
+      "comment": "Don't allow dependencies from src to a development only package",
       "from": {
-        "path": "^(src|app|lib)",
-        "pathNot": "\\.spec\\.(js|ts|ls|coffee|litcoffee|coffee\\.md)$"
+        "path": "^src"
       },
       "to": {
         "dependencyTypes": [
@@ -134,7 +133,7 @@
     },
     {
       "name": "no-file-access",
-      "comment": "",
+      "comment": "file access only from the bin (and not in src)",
       "severity": "error",
       "from": {
         "path": "src"
