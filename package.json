@@ -24,7 +24,7 @@
   ],
   "author": "Sander Verweij (https://sverweij.github.io/)",
   "license": "MIT",
-  "homepage": "https://github.com/sverweij.upem",
+  "homepage": "https://github.com/sverweij/upem",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sverweij/upem"
