@@ -1,19 +1,29 @@
 const _get = require('lodash.get')
 
-function updateDeps (pDependencyObject, pOutdatedObject, pDoNotUpArray) {
+function updateDeps (pDependencyObject, pOutdatedPackagesObject) {
   return Object.assign(
     {},
     pDependencyObject,
     Object.keys(pDependencyObject)
-      .filter(pDep => Object.keys(pOutdatedObject).filter(pKey => !pDoNotUpArray.includes(pKey)).some(pPkg => pPkg === pDep))
+      .filter(pDep => Object.keys(pOutdatedPackagesObject).some(pPkg => pPkg === pDep))
       .reduce(
         (pAll, pThis) => {
-          pAll[pThis] = pOutdatedObject[pThis].latest
+          pAll[pThis] = pOutdatedPackagesObject[pThis].latest
           return pAll
         },
         {}
       )
   )
+}
+
+function getOutdatedPackages (pOutdatedObject, pPackageObject) {
+  const lDoNotUpArray = _get(pPackageObject, 'upem.donotup', [])
+  const lRetval = Object.assign({}, pOutdatedObject)
+
+  Object.keys(lRetval)
+    .filter(pKey => lDoNotUpArray.includes(pKey))
+    .forEach(pKey => delete lRetval[pKey])
+  return lRetval
 }
 /**
  * Updates all dependencies in the passed package.json that match a key in the
@@ -26,7 +36,7 @@ function updateDeps (pDependencyObject, pOutdatedObject, pDoNotUpArray) {
  * @return {any} - the transformed pPackageObject
  */
 function updateAllDeps (pPackageObject, pOutdatedObject = {}) {
-  const lDoNotUpArray = _get(pPackageObject, 'upem.donotup') || []
+  const lOutdatedPackages = getOutdatedPackages(pOutdatedObject, pPackageObject)
 
   return Object.assign(
     {},
@@ -35,7 +45,7 @@ function updateAllDeps (pPackageObject, pOutdatedObject = {}) {
       .filter(pPkgKey => pPkgKey.includes('ependencies'))
       .reduce(
         (pAll, pDepKey) => {
-          pAll[pDepKey] = updateDeps(pPackageObject[pDepKey], pOutdatedObject, lDoNotUpArray)
+          pAll[pDepKey] = updateDeps(pPackageObject[pDepKey], lOutdatedPackages)
           return pAll
         },
         {}

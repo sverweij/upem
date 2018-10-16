@@ -9,11 +9,6 @@ const DEPS_UPDATED_FIXTURE = {
   'outdated-one': '3.0.2',
   'outdated-possibly-pinned': '4.1.1'
 }
-const DEPS_UPDATED_MINUS_PINNED_FIXTURE = {
-  'not-outdated': '1.0.0',
-  'outdated-one': '3.0.2',
-  'outdated-possibly-pinned': '3.1.4'
-}
 const OUTDATED_FIXTURE = {
   'outdated-one': {
     'current': '2.0.0',
@@ -28,23 +23,18 @@ const OUTDATED_FIXTURE = {
     'location': 'node_modules/outdated-possibly-pinned'
   }
 }
-const PINNED_FIXTURE = ['outdated-possibly-pinned']
-
 describe('#updateDeps', () => {
-  test('empty deps, no outdated or pinned yield input', () => {
-    expect(up.updateDeps({}, [], [])).toEqual({})
+  test('empty deps, no outdated yield input', () => {
+    expect(up.updateDeps({}, [])).toEqual({})
   })
-  test('deps, no outdated or pinned yield input', () => {
-    expect(up.updateDeps(DEPS_FIXTURE, {}, [])).toEqual(DEPS_FIXTURE)
+  test('deps, no outdated yield input', () => {
+    expect(up.updateDeps(DEPS_FIXTURE, {})).toEqual(DEPS_FIXTURE)
   })
-  test('deps, no outdated or pinned yield input', () => {
-    expect(up.updateDeps(DEPS_FIXTURE, {}, PINNED_FIXTURE)).toEqual(DEPS_FIXTURE)
+  test('deps, no outdated yield input', () => {
+    expect(up.updateDeps(DEPS_FIXTURE, {})).toEqual(DEPS_FIXTURE)
   })
-  test('deps, outdated, no pinned yields updated deps', () => {
-    expect(up.updateDeps(DEPS_FIXTURE, OUTDATED_FIXTURE, [])).toEqual(DEPS_UPDATED_FIXTURE)
-  })
-  test('deps, outdated, no pinned yields updated deps', () => {
-    expect(up.updateDeps(DEPS_FIXTURE, OUTDATED_FIXTURE, PINNED_FIXTURE)).toEqual(DEPS_UPDATED_MINUS_PINNED_FIXTURE)
+  test('deps, outdated yields updated deps', () => {
+    expect(up.updateDeps(DEPS_FIXTURE, OUTDATED_FIXTURE)).toEqual(DEPS_UPDATED_FIXTURE)
   })
 })
 
