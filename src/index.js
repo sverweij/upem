@@ -1,5 +1,5 @@
 const fs = require('fs')
-const up = require('./core')
+const core = require('./core')
 
 /* eslint complexity:0 */
 module.exports = (pPackageInputFileName, pOutdatedObject, pPackageOutputFileName = pPackageInputFileName) => {
@@ -7,7 +7,7 @@ module.exports = (pPackageInputFileName, pOutdatedObject, pPackageOutputFileName
     pOutdatedObject = pOutdatedObject.length <= 0 ? {} : JSON.parse(pOutdatedObject)
     const lPackageFile = fs.readFileSync(pPackageInputFileName)
     let lPackageObject = JSON.parse(lPackageFile)
-    const lOutdatedObject = up.filterOutdatedPackages(pOutdatedObject, lPackageObject)
+    const lOutdatedObject = core.filterOutdatedPackages(pOutdatedObject, lPackageObject)
 
     if (Object.keys(pOutdatedObject).length <= 0) {
       return {
@@ -24,7 +24,7 @@ module.exports = (pPackageInputFileName, pOutdatedObject, pPackageOutputFileName
     }
 
     try {
-      fs.writeFileSync(pPackageOutputFileName, JSON.stringify(up.updateAllDeps(lPackageObject, lOutdatedObject), null, 2))
+      fs.writeFileSync(pPackageOutputFileName, JSON.stringify(core.updateAllDeps(lPackageObject, lOutdatedObject), null, 2))
       return {
         OK: true,
         message: `  Up'em just updated all dependencies in package.json to latest\n\n`
