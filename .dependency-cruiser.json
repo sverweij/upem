@@ -130,17 +130,6 @@
       "to": {
         "moreThanOneDependencyType": true
       }
-    },
-    {
-      "name": "no-file-access",
-      "comment": "file access only from the bin (and not in src)",
-      "severity": "error",
-      "from": {
-        "path": "src"
-      },
-      "to": {
-        "path": "^fs$"
-      }
     }
   ],
   "options": {
