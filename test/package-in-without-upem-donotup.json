@@ -1,0 +1,143 @@
+{
+  "name": "mscgenjs",
+  "version": "2.1.0-beta-0",
+  "description": "Sequence chart rendering library",
+  "main": "dist/index.js",
+  "dependencies": {
+    "lodash.assign": "4.2.0",
+    "lodash.clonedeep": "4.5.0",
+    "lodash.flatten": "4.4.0",
+    "lodash.memoize": "4.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "10.5.1",
+    "chai": "4.1.2",
+    "chai-xml": "0.3.2",
+    "dependency-cruiser": "4.1.0",
+    "jest": "23.2.0",
+    "jest-json-schema": "2.0.0",
+    "js-makedepend": "3.0.1",
+    "jsdom": "11.11.0",
+    "npm-check-updates": "2.14.2",
+    "npm-run-all": "4.1.3",
+    "nsp": "3.2.1",
+    "pegjs": "0.10.0",
+    "requirejs": "2.3.5",
+    "shx": "0.3.1",
+    "ts-jest": "22.4.6",
+    "ts-loader": "4.4.2",
+    "tslint": "5.10.0",
+    "typescript": "2.9.2",
+    "webpack": "4.14.0",
+    "webpack-cli": "3.0.8"
+  },
+  "scripts": {
+    "build": "npm-run-all build:clean build:compile:pegjs build:csstemplates build:copy build:compile:typescript build:bundle",
+    "build:bundle": "webpack",
+    "build:clean": "npm-run-all --parallel build:clean:dist build:clean:parse build:clean:csstemplates",
+    "build:clean:csstemplates": "shx rm -f src/render/graphics/csstemplates.ts",
+    "build:clean:dist": "shx rm -rf dist/*",
+    "build:clean:parse": "shx rm -rf src/parse/*parser.js",
+    "build:csstemplates": "node utl/to-csstemplates-js.utility.js > src/render/graphics/csstemplates.ts",
+    "build:compile:typescript": "tsc --project src",
+    "build:compile:pegjs": "npm-run-all --parallel build:compile:pegjs:mscgen build:compile:pegjs:msgenny build:compile:pegjs:xu",
+    "build:compile:pegjs:mscgen": "pegjs --extra-options-file config/.pegjs-config.json -o src/parse/mscgenparser.js src/parse/peg/mscgenparser.pegjs",
+    "build:compile:pegjs:msgenny": "pegjs --extra-options-file config/.pegjs-config.json -o src/parse/msgennyparser.js src/parse/peg/msgennyparser.pegjs",
+    "build:compile:pegjs:xu": "pegjs --extra-options-file config/.pegjs-config.json -o src/parse/xuparser.js src/parse/peg/xuparser.pegjs",
+    "build:copy": "npm-run-all build:copy:mkdir build:copy:copy",
+    "build:copy:mkdir": "shx mkdir -p dist/parse",
+    "build:copy:copy": "shx cp src/parse/*.js* dist/parse",
+    "check": "npm-run-all depcruise lint test:all",
+    "check:ci": "npm-run-all depcruise lint test:all:ci",
+    "check:full": "npm-run-all --parallel depcruise lint nsp test:cover",
+    "depcruise": "depcruise --validate -- src test",
+    "depcruise:graph": "depcruise --validate --do-not-follow \"node_modules|lib\" --module-systems es6,cjs --output-type dot src | dot -T svg > tmp_deps.svg",
+    "lint": "tslint --project .",
+    "lint:fix": "tslint --fix --project .",
+    "npm-check-updates": "ncu --upgrade",
+    "npm-install": "npm install",
+    "nsp": "nsp check",
+    "test": "jest --onlyChanged --collectCoverage false",
+    "test:all": "jest --collectCoverage false",
+    "test:all:ci": "jest --collectCoverage false --runInBand # runInBand (=sequentially) so node 6 on travis doesn't hang",
+    "test:cover": "jest",
+    "update-dependencies": "npm-run-all npm-check-updates npm-install build lint:fix check:full",
+    "watch": "tsc --project src --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mscgenjs/mscgenjs-core"
+  },
+  "author": "Sander Verweij",
+  "license": "GPL-3.0",
+  "keywords": [
+    "mscgen",
+    "sequence chart",
+    "sequence diagram",
+    "xu",
+    "msgenny"
+  ],
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      "\\.(ts)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "test.*\\.spec\\.(ts|js)$",
+    "collectCoverage": true,
+    "coverageReporters": [
+      "text-summary",
+      "html",
+      "lcov"
+    ],
+    "collectCoverageFrom": [
+      "src/index.ts",
+      "src/index-lazy.ts",
+      "src/main/**/*.ts",
+      "src/parse/**/*.ts",
+      "src/render/**/*.ts"
+    ],
+    "coveragePathIgnorePatterns": [
+      ".+\\.d\\.ts$",
+      "src/render/graphics/styling",
+      "src/render/graphics/svgelementfactory/wobbly",
+      "src/parse/.+parser\\.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 99.8,
+        "branches": 93.8,
+        "functions": 100,
+        "lines": 99.8
+      },
+      "src/main": {
+        "statements": 100,
+        "branches": 97.3,
+        "functions": 100,
+        "lines": 100
+      },
+      "src/render": {
+        "statements": 99.8,
+        "branches": 93.2,
+        "functions": 100,
+        "lines": 99.8
+      },
+      "src/parse": {
+        "statements": 100,
+        "branches": 100,
+        "functions": 100,
+        "lines": 100
+      }
+    }
+  },
+  "engines": {
+    "node": ">=6.0"
+  },
+  "types": "./types/mscgen.d.ts",
+  "bugs": {
+    "url": "https://github.com/mscgenjs/mscgenjs-core/issues"
+  },
+  "homepage": "https://github.com/mscgenjs/mscgenjs-core"
+}
