@@ -1,57 +1,44 @@
-const _get = require('lodash.get')
+const fs = require('fs')
+const up = require('./core')
 
-function updateDeps (pDependencyObject, pOutdatedPackagesObject) {
-  return Object.assign(
-    {},
-    pDependencyObject,
-    Object.keys(pDependencyObject)
-      .filter(pDep => Object.keys(pOutdatedPackagesObject).some(pPkg => pPkg === pDep))
-      .reduce(
-        (pAll, pThis) => {
-          pAll[pThis] = pOutdatedPackagesObject[pThis].latest
-          return pAll
-        },
-        {}
-      )
-  )
-}
+/* eslint complexity:0 */
+module.exports = (pPackageInputFileName, pOutdatedObject, pPackageOutputFileName = pPackageInputFileName) => {
+  try {
+    pOutdatedObject = pOutdatedObject.length <= 0 ? {} : JSON.parse(pOutdatedObject)
+    const lPackageFile = fs.readFileSync(pPackageInputFileName)
+    let lPackageObject = JSON.parse(lPackageFile)
+    const lOutdatedObject = up.filterOutdatedPackages(pOutdatedObject, lPackageObject)
 
-function filterOutdatedPackages (pOutdatedObject, pPackageObject) {
-  const lDoNotUpArray = _get(pPackageObject, 'upem.donotup', [])
-  const lRetval = Object.assign({}, pOutdatedObject)
+    if (Object.keys(pOutdatedObject).length <= 0) {
+      return {
+        OK: true,
+        message: `  Up'em says: Everything seems to be up to date already.\n\n`
+      }
+    }
 
-  Object.keys(lRetval)
-    .filter(pKey => lDoNotUpArray.includes(pKey))
-    .forEach(pKey => delete lRetval[pKey])
-  return lRetval
-}
-/**
- * Updates all dependencies in the passed package.json that match a key in the
- * passed outdated object to the _latest_ in that object, ignoring the
- * packages mentioned in the upem.donotup key.
- *
- * @param {any} pPackageObject - the contents of a package.json in object format
- * @param {any} pOutdatedObject - the output of npm outdated --json, in object format
- *
- * @return {any} - the transformed pPackageObject
- */
-function updateAllDeps (pPackageObject, pOutdatedPackages = {}) {
-  return Object.assign(
-    {},
-    pPackageObject,
-    Object.keys(pPackageObject)
-      .filter(pPkgKey => pPkgKey.includes('ependencies'))
-      .reduce(
-        (pAll, pDepKey) => {
-          pAll[pDepKey] = updateDeps(pPackageObject[pDepKey], pOutdatedPackages)
-          return pAll
-        },
-        {}
-      )
-  )
-}
-module.exports = {
-  filterOutdatedPackages,
-  updateDeps,
-  updateAllDeps
+    if (Object.keys(lOutdatedObject).length <= 0) {
+      return {
+        OK: true,
+        message: `  Up'em says: Everything not in 'upem.donotup' seems to be up to date already.\n\n`
+      }
+    }
+
+    try {
+      fs.writeFileSync(pPackageOutputFileName, JSON.stringify(up.updateAllDeps(lPackageObject, lOutdatedObject), null, 2))
+      return {
+        OK: true,
+        message: `  Up'em just updated all dependencies in package.json to latest\n\n`
+      }
+    } catch (pPackageWriteError) {
+      return {
+        OK: false,
+        message: `  Up'em encountered a hitch when updating package.json:\n${pPackageWriteError}\n\n`
+      }
+    }
+  } catch (pPackageReadError) {
+    return {
+      OK: false,
+      message: `  Up'em encountered a hitch:\n${pPackageReadError}\n\n`
+    }
+  }
 }
