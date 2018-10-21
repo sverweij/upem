@@ -32,7 +32,9 @@ describe('#upppity', () => {
       }
     }
     `
-    const lResult = uppity(path.join(__dirname, 'package-in-readonly.json'), OUTDATED_JSON)
+    const READONLY_INPUT_FILENAME = path.join(__dirname, 'package-in-readonly.json')
+    fs.chmodSync(READONLY_INPUT_FILENAME, '400')
+    const lResult = uppity(READONLY_INPUT_FILENAME, OUTDATED_JSON)
     expect(lResult.OK).toEqual(false)
     expect(lResult.message).toContain(`Up'em encountered a hitch when updating package.json:`)
   })
