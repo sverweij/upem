@@ -12,7 +12,8 @@ try {
 
   readFromStream().then(pInput => {
     if (pInput.length > 0) {
-      const gOutdatedObject = JSON.parse(pInput)
+      const gOutdatedObject = up.filterOutdatedPackages(JSON.parse(pInput), $package)
+
       try {
         fs.writeFileSync(
           PACKAGE_FILE_NAME,

@@ -48,13 +48,39 @@ describe('#updateAllDeps', () => {
     expect(up.updateAllDeps({}, ['aap', 'noot', 'mies'])).toEqual({})
   })
 
-  test('empty package.json, several outdated yield input', () => {
+  test('real package.json, several outdated yield updated output', () => {
     expect(
       up.updateAllDeps(
         require('./package-in.json'),
-        require('./outdated.json')
+        require('./outdated-filtered.json')
       )
     ).toEqual(require('./package-out.json'))
+  })
+})
+
+describe('#filterOutdatedPackages', () => {
+  test('empty outdated + empty package => empty outdated', () => {
+    expect(
+      up.filterOutdatedPackages({}, {})
+    ).toEqual({})
+  })
+
+  test('empty outdated + package => empty outdated', () => {
+    expect(
+      up.filterOutdatedPackages({}, require('./package-in.json'))
+    ).toEqual({})
+  })
+
+  test('outdated + package wit upem.donotup => outdated without the upem.donotup', () => {
+    expect(
+      up.filterOutdatedPackages(require('./outdated.json'), require('./package-in.json'))
+    ).toEqual(require('./outdated-filtered.json'))
+  })
+
+  test('outdated + package wit upem.donotup => outdated without the upem.donotup', () => {
+    expect(
+      up.filterOutdatedPackages(require('./outdated.json'), require('./package-in-without-upem-donotup.json'))
+    ).toEqual(require('./outdated.json'))
   })
 })
 /* global describe, test, expect */

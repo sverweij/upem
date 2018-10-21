@@ -16,7 +16,7 @@ function updateDeps (pDependencyObject, pOutdatedPackagesObject) {
   )
 }
 
-function getOutdatedPackages (pOutdatedObject, pPackageObject) {
+function filterOutdatedPackages (pOutdatedObject, pPackageObject) {
   const lDoNotUpArray = _get(pPackageObject, 'upem.donotup', [])
   const lRetval = Object.assign({}, pOutdatedObject)
 
@@ -35,9 +35,7 @@ function getOutdatedPackages (pOutdatedObject, pPackageObject) {
  *
  * @return {any} - the transformed pPackageObject
  */
-function updateAllDeps (pPackageObject, pOutdatedObject = {}) {
-  const lOutdatedPackages = getOutdatedPackages(pOutdatedObject, pPackageObject)
-
+function updateAllDeps (pPackageObject, pOutdatedPackages = {}) {
   return Object.assign(
     {},
     pPackageObject,
@@ -45,7 +43,7 @@ function updateAllDeps (pPackageObject, pOutdatedObject = {}) {
       .filter(pPkgKey => pPkgKey.includes('ependencies'))
       .reduce(
         (pAll, pDepKey) => {
-          pAll[pDepKey] = updateDeps(pPackageObject[pDepKey], lOutdatedPackages)
+          pAll[pDepKey] = updateDeps(pPackageObject[pDepKey], pOutdatedPackages)
           return pAll
         },
         {}
@@ -53,6 +51,7 @@ function updateAllDeps (pPackageObject, pOutdatedObject = {}) {
   )
 }
 module.exports = {
+  filterOutdatedPackages,
   updateDeps,
   updateAllDeps
 }
