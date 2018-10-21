@@ -48,15 +48,19 @@
     "lodash.get": "4.4.2"
   },
   "scripts": {
+    "build": "npm-run-all depcruise:graph:doc",
+    "build:stage": "git add .",
     "check": "npm-run-all --parallel depcruise lint test",
     "depcruise": "depcruise --validate -- bin src test",
     "depcruise:graph": "depcruise --validate --output-type rcdot -- bin src | dot -T svg > tmp_deps.svg",
+    "depcruise:graph:doc": "depcruise --validate --output-type rcdot --prefix https://github.com/sverweij/upem/blob/develop -- bin src | dot -T svg > docs/dependencygraph.svg",
     "lint": "eslint bin src test",
     "lint:fix": "eslint --fix bin src test",
     "test": "jest --collectCoverage",
     "update-dependencies": "npm-run-all upem:update upem:install lint:fix check",
     "upem:update": "npm outdated --json | bin/upem.js",
-    "upem:install": "npm install"
+    "upem:install": "npm install",
+    "version": "npm-run-all build check build:stage"
   },
   "eslintConfig": {
     "extends": "standard",
