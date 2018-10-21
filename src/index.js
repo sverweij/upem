@@ -1,30 +1,42 @@
 const fs = require('fs')
 const core = require('./core')
 
-/* eslint complexity:0 */
+function determineOutdated (pOutdatedObject, pPackageObject) {
+  pOutdatedObject = pOutdatedObject.length <= 0 ? {} : JSON.parse(pOutdatedObject)
+  const lOutdatedObject = core.filterOutdatedPackages(pOutdatedObject, pPackageObject)
+
+  if (Object.keys(pOutdatedObject).length <= 0) {
+    return {
+      OK: true,
+      message: `  Up'em says: Everything seems to be up to date already.\n\n`
+    }
+  }
+
+  if (Object.keys(lOutdatedObject).length <= 0) {
+    return {
+      OK: true,
+      message: `  Up'em says: Everything not in 'upem.donotup' seems to be up to date already.\n\n`
+    }
+  }
+
+  return {
+    OK: true,
+    outdatedObject: lOutdatedObject
+  }
+}
+
 module.exports = (pPackageInputFileName, pOutdatedObject, pPackageOutputFileName = pPackageInputFileName) => {
   try {
-    pOutdatedObject = pOutdatedObject.length <= 0 ? {} : JSON.parse(pOutdatedObject)
     const lPackageFile = fs.readFileSync(pPackageInputFileName)
     let lPackageObject = JSON.parse(lPackageFile)
-    const lOutdatedObject = core.filterOutdatedPackages(pOutdatedObject, lPackageObject)
 
-    if (Object.keys(pOutdatedObject).length <= 0) {
-      return {
-        OK: true,
-        message: `  Up'em says: Everything seems to be up to date already.\n\n`
-      }
-    }
-
-    if (Object.keys(lOutdatedObject).length <= 0) {
-      return {
-        OK: true,
-        message: `  Up'em says: Everything not in 'upem.donotup' seems to be up to date already.\n\n`
-      }
+    const lOutdatedResult = determineOutdated(pOutdatedObject, lPackageObject)
+    if (!lOutdatedResult.outdatedObject) {
+      return lOutdatedResult
     }
 
     try {
-      fs.writeFileSync(pPackageOutputFileName, JSON.stringify(core.updateAllDeps(lPackageObject, lOutdatedObject), null, 2))
+      fs.writeFileSync(pPackageOutputFileName, JSON.stringify(core.updateAllDeps(lPackageObject, lOutdatedResult.outdatedObject), null, 2))
       return {
         OK: true,
         message: `  Up'em just updated all dependencies in package.json to latest\n\n`
