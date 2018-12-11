@@ -33,8 +33,8 @@
     "url": "https://github.com/sverweij/upem/issues"
   },
   "devDependencies": {
-    "dependency-cruiser": "4.6.3",
-    "eslint": "5.9.0",
+    "dependency-cruiser": "4.8.0",
+    "eslint": "5.10.0",
     "eslint-config-standard": "12.0.0",
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-node": "8.0.0",
