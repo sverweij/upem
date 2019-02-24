@@ -42,9 +42,9 @@ There's no warning system for major version upgrades. I've found the most
 reliable way to find out if nothing breaks is to run your automated QA
 after updates. 
 
-### `save-exact` and `save-prefix`
+### Heeding `save-exact` and `save-prefix`, though
 From version 2.0.0 _up'em_ heeds the `save-exact` and `save-prefix` npm config
-settings:
+settings, just like `npm --save` and `npm --save-dev` would do:
 - if `save-exact = true` it will pin the version. In the above example it will
   pin `midash` to `2.0.1`
 - if `save-exact = false` it will look at `save-prefix` in your npm config:
@@ -52,11 +52,9 @@ settings:
     the version: `^2.0.1`
   - if `save-prefix = '~'` it'll tilde-prefix the version: `~2.0.1`
 
-This is also how `npm --save` and `npm --save-dev` currently operate.
-
 
 ## Typical use
-You'd typically run the output from `npm outdated --json` through it. When it's done
+Run the output from `npm outdated --json` through it. When it's done
 `npm install` and re-run your automated quality checks before checking the
 changes in. I have some npm scripts set up so I can just `npm run upem`
 and watch cat videos in the mean time:
