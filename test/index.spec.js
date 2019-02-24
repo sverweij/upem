@@ -61,7 +61,7 @@ describe('#upppity', () => {
     const OUTPUT_FILENAME = path.join(__dirname, 'tmp_package-out.json')
     const FIXTURE_FILENAME = path.join(__dirname, 'package-out.json')
 
-    const lResult = up(INPUT_FILENAME, OUTDATED_JSON, OUTPUT_FILENAME)
+    const lResult = up(INPUT_FILENAME, OUTDATED_JSON, OUTPUT_FILENAME, { saveExact: true })
 
     expect(lResult.OK).toEqual(true)
     expect(lResult.message).toContain(`Up'em just updated all dependencies in package.json to latest`)

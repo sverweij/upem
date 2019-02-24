@@ -15,15 +15,11 @@ is not.
 
 _up'em_ updates your dependencies to latest, so you don't have to manually.
 
-### Opinionated
-After processing all versions are 'pinned'. Sure, you could use package-lock
-for that too, sort of. But still if your package.json contains "^1.0.0" of
-a package, do you know what you're using?
 
 ### Respectless
 _up'em_ does not respect your current version preferences. `^`, `~`, `*` =>
-they all get pinned.
-
+they all get updated to the _latest_ version. It will leave the `^` and `~`
+in place as per your `npm config` settings, though.
 
 If `npm outdated` says:
 ```
@@ -31,24 +27,56 @@ Package    Current  Wanted  Latest  Location
 midash       1.8.2  ^1.8.0   2.0.1  your-golden-package
 ```
 
-running `npm outdated --json | upem` will set midash' version to 2.0.1
+With the default `npm config`, running `npm outdated --json | upem` will
+set midash' version to ^2.0.1
 
 ```json
 "dependencies"{
   ...
-  "midash": "2.0.1"
+  "midash": "^2.0.1"
   ...
 }
 ```
 
 There's no warning system for major version upgrades. I've found the most
 reliable way to find out if nothing breaks is to run your automated QA
-after updates.
+after updates. 
+
+### Heeding `save-exact` and `save-prefix`, though
+From version 2.0.0 _up'em_ heeds the `save-exact` and `save-prefix` npm config
+settings, just like `npm --save` and `npm --save-dev` would do:
+- if `save-exact = true` it will pin the version. In the above example it will
+  pin `midash` to `2.0.1`
+- if `save-exact = false` it will look at `save-prefix` in your npm config:
+  - if `save-prefix = '^'` or save-prefix isn't specified, it'll caret-prefix
+    the version: `^2.0.1`
+  - if `save-prefix = '~'` it'll tilde-prefix the version: `~2.0.1`
+
+
+### Advice: commit an `.npmrc` to the root of your repo
+Commit the relevant parts of the npm config in an `.npmrc` in the root of your
+repo. That way both _up'em_ and the `npm` (or `yarn`) install/ add commands
+will always heed it - and other collaborators will automatically follow your
+standards. E.g. most of my repos have this:
+
+```ini
+save-exact = true
+```
+
+If you want to be sure of npm's 'default' behaviour over all machines
+and collaborators, use this one:
+
+```ini
+save-exact = true
+save-prefix = '^'
+```
 
 ## Typical use
-You'd typically run the output from `npm outdated --json` through it. When it's done
-`npm install` and re-run your automated quality checks before checking the
-changes in. I have some npm scripts set up so I can just `npm run upem`
+- Run the output from `npm outdated --json` through _up'em_. 
+- When it's done `npm install` and re-run your automated quality 
+- Check the changes in.
+
+I have some npm scripts set up so I can just `npm run upem`
 and watch cat videos in the mean time:
 
 ```json
