@@ -67,7 +67,7 @@ If you want to be sure of npm's 'default' behaviour over all machines
 and collaborators, use this one:
 
 ```ini
-save-exact = true
+save-exact = false
 save-prefix = '^'
 ```
 
