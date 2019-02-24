@@ -15,15 +15,11 @@ is not.
 
 _up'em_ updates your dependencies to latest, so you don't have to manually.
 
-### Opinionated
-After processing all versions are 'pinned'. Sure, you could use package-lock
-for that too, sort of. But still if your package.json contains "^1.0.0" of
-a package, do you know what you're using?
 
 ### Respectless
 _up'em_ does not respect your current version preferences. `^`, `~`, `*` =>
-they all get pinned.
-
+they all get updated to the _latest_ version. It will leave the `^` and `~`
+in place as per your `npm config` settings, though.
 
 If `npm outdated` says:
 ```
@@ -31,19 +27,33 @@ Package    Current  Wanted  Latest  Location
 midash       1.8.2  ^1.8.0   2.0.1  your-golden-package
 ```
 
-running `npm outdated --json | upem` will set midash' version to 2.0.1
+With the default `npm config`, running `npm outdated --json | upem` will
+set midash' version to ^2.0.1
 
 ```json
 "dependencies"{
   ...
-  "midash": "2.0.1"
+  "midash": "^2.0.1"
   ...
 }
 ```
 
 There's no warning system for major version upgrades. I've found the most
 reliable way to find out if nothing breaks is to run your automated QA
-after updates.
+after updates. 
+
+### `save-exact` and `save-prefix`
+From version 2.0.0 _up'em_ heeds the `save-exact` and `save-prefix` npm config
+settings:
+- if `save-exact = true` it will pin the version. In the above example it will
+  pin `midash` to `2.0.1`
+- if `save-exact = false` it will look at `save-prefix` in your npm config:
+  - if `save-prefix = '^'` or save-prefix isn't specified, it'll caret-prefix
+    the version: `^2.0.1`
+  - if `save-prefix = '~'` it'll tilde-prefix the version: `~2.0.1`
+
+This is also how `npm --save` and `npm --save-dev` currently operate.
+
 
 ## Typical use
 You'd typically run the output from `npm outdated --json` through it. When it's done

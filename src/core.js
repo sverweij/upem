@@ -1,6 +1,8 @@
 const _get = require('lodash.get')
 
-function updateDeps (pDependencyObject, pOutdatedPackagesObject) {
+function updateDeps (pDependencyObject, pOutdatedPackagesObject, pOptions = {}) {
+  const lSavePrefix = pOptions.saveExact ? '' : pOptions.savePrefix || '^'
+
   return Object.assign(
     {},
     pDependencyObject,
@@ -8,7 +10,7 @@ function updateDeps (pDependencyObject, pOutdatedPackagesObject) {
       .filter(pDep => Object.keys(pOutdatedPackagesObject).some(pPkg => pPkg === pDep))
       .reduce(
         (pAll, pThis) => {
-          pAll[pThis] = pOutdatedPackagesObject[pThis].latest
+          pAll[pThis] = `${lSavePrefix}${pOutdatedPackagesObject[pThis].latest}`
           return pAll
         },
         {}
@@ -32,10 +34,12 @@ function filterOutdatedPackages (pOutdatedObject, pPackageObject) {
  *
  * @param {any} pPackageObject - the contents of a package.json in object format
  * @param {any} pOutdatedObject - the output of npm outdated --json, in object format
+ * @param {string} pSavePrefix - how updated packages get prefixed; either '~',
+ *                              '^' or '' (the default)
  *
  * @return {any} - the transformed pPackageObject
  */
-function updateAllDeps (pPackageObject, pOutdatedPackages = {}) {
+function updateAllDeps (pPackageObject, pOutdatedPackages = {}, pOptions = {}) {
   return Object.assign(
     {},
     pPackageObject,
@@ -43,7 +47,7 @@ function updateAllDeps (pPackageObject, pOutdatedPackages = {}) {
       .filter(pPkgKey => pPkgKey.includes('ependencies'))
       .reduce(
         (pAll, pDepKey) => {
-          pAll[pDepKey] = updateDeps(pPackageObject[pDepKey], pOutdatedPackages)
+          pAll[pDepKey] = updateDeps(pPackageObject[pDepKey], pOutdatedPackages, pOptions)
           return pAll
         },
         {}

@@ -4,10 +4,20 @@ const DEPS_FIXTURE = {
   'outdated-one': '2.0.0',
   'outdated-possibly-pinned': '3.1.4'
 }
-const DEPS_UPDATED_FIXTURE = {
+const DEPS_UPDATED_PINNED_FIXTURE = {
   'not-outdated': '1.0.0',
   'outdated-one': '3.0.2',
   'outdated-possibly-pinned': '4.1.1'
+}
+const DEPS_UPDATED_CARET_FIXTURE = {
+  'not-outdated': '1.0.0',
+  'outdated-one': '^3.0.2',
+  'outdated-possibly-pinned': '^4.1.1'
+}
+const DEPS_UPDATED_TILDE_FIXTURE = {
+  'not-outdated': '1.0.0',
+  'outdated-one': '~3.0.2',
+  'outdated-possibly-pinned': '~4.1.1'
 }
 const OUTDATED_FIXTURE = {
   'outdated-one': {
@@ -33,8 +43,20 @@ describe('#updateDeps', () => {
   test('deps, no outdated yield input', () => {
     expect(up.updateDeps(DEPS_FIXTURE, {})).toEqual(DEPS_FIXTURE)
   })
-  test('deps, outdated yields updated deps', () => {
-    expect(up.updateDeps(DEPS_FIXTURE, OUTDATED_FIXTURE)).toEqual(DEPS_UPDATED_FIXTURE)
+  test('deps, outdated yields updated deps, prefixed with carets', () => {
+    expect(up.updateDeps(DEPS_FIXTURE, OUTDATED_FIXTURE)).toEqual(DEPS_UPDATED_CARET_FIXTURE)
+  })
+  test('deps, outdated with saveExact yields updated deps, pinned', () => {
+    expect(up.updateDeps(DEPS_FIXTURE, OUTDATED_FIXTURE, { saveExact: true })).toEqual(DEPS_UPDATED_PINNED_FIXTURE)
+  })
+  test('deps, outdated with saveExact yields updated deps, pinned even when savePrefix ^ is provided', () => {
+    expect(up.updateDeps(DEPS_FIXTURE, OUTDATED_FIXTURE, { saveExact: true, savePrefix: '^' })).toEqual(DEPS_UPDATED_PINNED_FIXTURE)
+  })
+  test('deps, outdated with saveExact false yields updated deps, caret prefixed', () => {
+    expect(up.updateDeps(DEPS_FIXTURE, OUTDATED_FIXTURE, { saveExact: false })).toEqual(DEPS_UPDATED_CARET_FIXTURE)
+  })
+  test('deps, outdated with savePrefix ~ yields updated deps, tilde prefixed', () => {
+    expect(up.updateDeps(DEPS_FIXTURE, OUTDATED_FIXTURE, { savePrefix: '~' })).toEqual(DEPS_UPDATED_TILDE_FIXTURE)
   })
 })
 
@@ -52,7 +74,10 @@ describe('#updateAllDeps', () => {
     expect(
       up.updateAllDeps(
         require('./package-in.json'),
-        require('./outdated-filtered.json')
+        require('./outdated-filtered.json'),
+        {
+          saveExact: true
+        }
       )
     ).toEqual(require('./package-out.json'))
   })

@@ -25,7 +25,7 @@ function determineOutdated (pOutdatedObject, pPackageObject) {
   }
 }
 
-module.exports = (pPackageInputFileName, pOutdatedObject, pPackageOutputFileName = pPackageInputFileName) => {
+module.exports = (pPackageInputFileName, pOutdatedObject, pPackageOutputFileName = pPackageInputFileName, pOptions) => {
   try {
     const lPackageFile = fs.readFileSync(pPackageInputFileName)
     let lPackageObject = JSON.parse(lPackageFile)
@@ -36,7 +36,7 @@ module.exports = (pPackageInputFileName, pOutdatedObject, pPackageOutputFileName
     }
 
     try {
-      fs.writeFileSync(pPackageOutputFileName, JSON.stringify(core.updateAllDeps(lPackageObject, lOutdatedResult.outdatedObject), null, 2))
+      fs.writeFileSync(pPackageOutputFileName, JSON.stringify(core.updateAllDeps(lPackageObject, lOutdatedResult.outdatedObject, pOptions), null, 2))
       return {
         OK: true,
         message: `  Up'em just updated all dependencies in package.json to latest\n\n`
