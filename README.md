@@ -53,10 +53,30 @@ settings, just like `npm --save` and `npm --save-dev` would do:
   - if `save-prefix = '~'` it'll tilde-prefix the version: `~2.0.1`
 
 
+### Advice: commit an `.npmrc` to the root of your repo
+Commit the relevant parts of the npm config in an `.npmrc` in the root of your
+repo. That way both _up'em_ and the `npm` (or `yarn`) install/ add commands
+will always heed it - and other collaborators will automatically follow your
+standards. E.g. most of my repos have this:
+
+```ini
+save-exact = true
+```
+
+If you want to be sure of npm's 'default' behaviour over all machines
+and collaborators, use this one:
+
+```ini
+save-exact = true
+save-prefix = '^'
+```
+
 ## Typical use
-Run the output from `npm outdated --json` through it. When it's done
-`npm install` and re-run your automated quality checks before checking the
-changes in. I have some npm scripts set up so I can just `npm run upem`
+- Run the output from `npm outdated --json` through _up'em_. 
+- When it's done `npm install` and re-run your automated quality 
+- Check the changes in.
+
+I have some npm scripts set up so I can just `npm run upem`
 and watch cat videos in the mean time:
 
 ```json
