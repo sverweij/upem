@@ -49,12 +49,11 @@
     "lodash.get": "4.4.2"
   },
   "scripts": {
-    "build": "npm-run-all depcruise:graph:doc",
+    "build": "npm-run-all depcruise:graph",
     "build:stage": "git add .",
     "check": "npm-run-all --parallel depcruise lint test",
     "depcruise": "depcruise --validate -- bin src test",
-    "depcruise:graph": "depcruise --validate --output-type rcdot -- bin src | dot -T svg > tmp_deps.svg",
-    "depcruise:graph:doc": "depcruise --validate --output-type rcdot -- bin src | dot -T svg > docs/dependencygraph.svg",
+    "depcruise:graph": "depcruise --validate --output-type dot -- bin src | dot -T svg | cat docs/assets/depcruise-graph-head.snippet.html - docs/assets/depcruise-graph-foot.snippet.html > docs/dependencygraph.html",
     "lint": "eslint bin src test",
     "lint:fix": "eslint --fix bin src test",
     "test": "jest --collectCoverage",
