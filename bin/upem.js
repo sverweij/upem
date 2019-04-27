@@ -2,11 +2,11 @@
 const path = require('path')
 const libNpmConfig = require('libnpmconfig')
 const up = require('../src')
-const readFromStream = require('../src/readFromStream')
+const getStdin = require('get-stdin')
 
 const PACKAGE_FILE_NAME = path.join(process.cwd(), 'package.json')
 
-readFromStream()
+getStdin()
   .then(pOutdatedObject => {
     const lResult = up(
       PACKAGE_FILE_NAME,
