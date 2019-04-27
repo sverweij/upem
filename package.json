@@ -1,6 +1,6 @@
 {
   "name": "upem",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Ups your package.json dependencies to latest. Opinionated. Respectless.",
   "bin": {
     "upem": "./bin/upem.js"
