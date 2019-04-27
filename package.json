@@ -98,5 +98,8 @@
       "html"
     ],
     "testEnvironment": "node"
+  },
+  "engines": {
+    "node": ">=6"
   }
 }
