@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an idea for upem
+about: Suggest an idea for 'upem'
 title: ''
 labels: ''
 assignees: ''
