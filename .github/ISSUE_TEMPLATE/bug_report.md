@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve _upem_
+about: Create a report to help us improve 'upem'
 title: ''
 labels: ''
 assignees: ''
