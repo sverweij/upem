@@ -1,38 +1,39 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Create a report to help us improve _upem_
 title: ''
 labels: ''
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+<!--- Provide a general summary of the issue in the Title above -->
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+### Expected Behavior
+<!--- Tell us what you expect should happen -->
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+### Current Behavior
+<!--- Tell us what happens instead of the expected behavior -->
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+### Possible Solution
+<!--- Not obligatory, but suggest a fix/reason for the bug, -->
+<!--- or ideas how to implement the addition or change -->
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+### Steps to Reproduce (for bugs)
+<!--- Provide a link to a live example, or an unambiguous set of steps to -->
+<!--- reproduce this bug. Include code to reproduce, if relevant -->
+1.
+2.
+3.
+4.
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+### Context
+<!--- How has this issue affected you? What are you trying to accomplish? -->
+<!--- Providing context helps us understand better, which will likely result in better, faster, stronger fixes -->
 
-**Additional context**
-Add any other context about the problem here.
+### Your Environment
+<!--- Include as many relevant details about the environment you experienced the bug in -->
+* Version used:
+* Node version:
+* Operating System and version:
+* Link to your project:
