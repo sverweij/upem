@@ -1,20 +1,24 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
+about: Suggest an idea for upem
 title: ''
 labels: ''
 assignees: ''
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+<!--- Provide a general summary of the issue in the Title above -->
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+### Context
+<!--- How does this issue affected you? What are you trying to accomplish? -->
+<!--- Providing context helps us better understand the issue - which makes for better solutions  -->
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+### Proposed Behavior
+<!--- Tell us how you think it should work -->
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+### Current Behavior
+<!--- Explain the difference from current behavior (if any) -->
+
+### Considered alternatives
+<!--- If you tried alternatives, let us know! -->
+
