@@ -102,7 +102,19 @@ want to upgrade e.g.
 ```json
   ...
   "upem": {
-    "donotup": ["ts-jest"]
+    "donotup": ["glowdash"]
+  }
+  ...
+```
+
+You might want to document why you don't up a package. You can do that like this:
+```json
+  ...
+  "upem": {
+    "donotup": [{
+      "package": "glowdash",
+      "because": "version >2 of glowdash doesn't support node 6 anymmore, but we still have to"
+    }]
   }
   ...
 ```

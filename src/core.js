@@ -18,15 +18,21 @@ function updateDeps (pDependencyObject, pOutdatedPackagesObject, pOptions = {}) 
   )
 }
 
+function getDoNotUpArray (pPackageObject) {
+  return _get(pPackageObject, 'upem.donotup', [])
+    .map(pPackage => typeof pPackage === 'string' ? pPackage : _get(pPackage, 'package'))
+    .filter(pPackage => Boolean(pPackage))
+}
+
 function filterOutdatedPackages (pOutdatedObject, pPackageObject) {
-  const lDoNotUpArray = _get(pPackageObject, 'upem.donotup', [])
   const lRetval = Object.assign({}, pOutdatedObject)
 
   Object.keys(lRetval)
-    .filter(pKey => lDoNotUpArray.includes(pKey))
+    .filter(pKey => getDoNotUpArray(pPackageObject).includes(pKey))
     .forEach(pKey => delete lRetval[pKey])
   return lRetval
 }
+
 /**
  * Updates all dependencies in the passed package.json that match a key in the
  * passed outdated object to the _latest_ in that object, ignoring the
@@ -39,6 +45,7 @@ function filterOutdatedPackages (pOutdatedObject, pPackageObject) {
  *
  * @return {any} - the transformed pPackageObject
  */
+
 function updateAllDeps (pPackageObject, pOutdatedPackages = {}, pOptions = {}) {
   return Object.assign(
     {},
@@ -54,6 +61,7 @@ function updateAllDeps (pPackageObject, pOutdatedPackages = {}, pOptions = {}) {
       )
   )
 }
+
 module.exports = {
   filterOutdatedPackages,
   updateDeps,

@@ -96,15 +96,27 @@ describe('#filterOutdatedPackages', () => {
     ).toEqual({})
   })
 
-  test('outdated + package wit upem.donotup => outdated without the upem.donotup', () => {
+  test('outdated + package with upem.donotup => outdated without the upem.donotup', () => {
     expect(
       up.filterOutdatedPackages(require('./outdated.json'), require('./package-in.json'))
     ).toEqual(require('./outdated-filtered.json'))
   })
 
-  test('outdated + package wit upem.donotup => outdated without the upem.donotup', () => {
+  test('outdated + package with upem.donotup objects => outdated without the upem.donotup', () => {
+    expect(
+      up.filterOutdatedPackages(require('./outdated.json'), require('./package-in-with-donotup-object.json'))
+    ).toEqual(require('./outdated-filtered.json'))
+  })
+
+  test('outdated + package with upem.donotup => outdated without the upem.donotup', () => {
     expect(
       up.filterOutdatedPackages(require('./outdated.json'), require('./package-in-without-upem-donotup.json'))
+    ).toEqual(require('./outdated.json'))
+  })
+
+  test('outdated + package with upem.donotup => outdated with erroneous upem.donotup', () => {
+    expect(
+      up.filterOutdatedPackages(require('./outdated.json'), require('./package-in-with-erroneous-upem-donotup.json'))
     ).toEqual(require('./outdated.json'))
   })
 })
