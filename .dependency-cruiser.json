@@ -75,6 +75,28 @@
                     "npm-peer"
                 ]
             }
+        },
+        {
+            "name": "no-unreachable",
+            "severity": "error",
+            "from": {
+                "path": "bin/upem.js"
+            },
+            "to": {
+                "path": "src/",
+                "reachable":false
+            }
+        },
+        {
+            "name": "no-non-test-coverage",
+            "severity": "error",
+            "from": {
+                "path": "test/[^\\.]+\\.spec\\.js$"
+            },
+            "to": {
+                "path": "src/",
+                "reachable":false
+            }
         }
     ],
     "options": {
