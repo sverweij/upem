@@ -28,7 +28,7 @@ function determineOutdated (pOutdatedObject, pPackageObject) {
 module.exports = (pPackageInputFileName, pOutdatedObject, pPackageOutputFileName = pPackageInputFileName, pOptions) => {
   try {
     const lPackageFile = fs.readFileSync(pPackageInputFileName)
-    let lPackageObject = JSON.parse(lPackageFile)
+    const lPackageObject = JSON.parse(lPackageFile)
 
     const lOutdatedResult = determineOutdated(pOutdatedObject, lPackageObject)
     if (!lOutdatedResult.outdatedObject) {

@@ -21,16 +21,16 @@ const DEPS_UPDATED_TILDE_FIXTURE = {
 }
 const OUTDATED_FIXTURE = {
   'outdated-one': {
-    'current': '2.0.0',
-    'wanted': '2.0.1',
-    'latest': '3.0.2',
-    'location': 'node_modules/not-outdated'
+    current: '2.0.0',
+    wanted: '2.0.1',
+    latest: '3.0.2',
+    location: 'node_modules/not-outdated'
   },
   'outdated-possibly-pinned': {
-    'current': '3.1.4',
-    'wanted': '3.1.4',
-    'latest': '4.1.1',
-    'location': 'node_modules/outdated-possibly-pinned'
+    current: '3.1.4',
+    wanted: '3.1.4',
+    latest: '4.1.1',
+    location: 'node_modules/outdated-possibly-pinned'
   }
 }
 describe('#updateDeps', () => {

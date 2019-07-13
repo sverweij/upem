@@ -33,9 +33,9 @@
     "url": "https://github.com/sverweij/upem/issues"
   },
   "devDependencies": {
-    "dependency-cruiser": "4.26.0",
+    "dependency-cruiser": "4.27.1",
     "eslint": "6.0.1",
-    "eslint-config-standard": "12.0.0",
+    "eslint-config-standard": "13.0.1",
     "eslint-plugin-import": "2.18.0",
     "eslint-plugin-node": "9.1.0",
     "eslint-plugin-promise": "4.2.1",
@@ -43,13 +43,21 @@
     "eslint-plugin-standard": "4.0.0",
     "husky": "3.0.0",
     "jest": "24.8.0",
-    "lint-staged": "9.1.0",
+    "lint-staged": "9.2.0",
     "npm-run-all": "4.1.5"
   },
   "dependencies": {
-    "get-stdin": "7.0.0",
+    "get-stdin": "6.0.0",
     "libnpmconfig": "1.2.1",
     "lodash.get": "4.4.2"
+  },
+  "upem": {
+    "donotup": [
+      {
+        "package": "get-stdin",
+        "because": "version 7 doesn't run under node 6, whereas this package officially still does as per its engines"
+      }
+    ]
   },
   "scripts": {
     "build": "npm-run-all depcruise:graph",
