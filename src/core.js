@@ -3,10 +3,9 @@ const _get = require('lodash.get')
 function updateDeps (pDependencyObject, pOutdatedPackagesObject, pOptions = {}) {
   const lSavePrefix = pOptions.saveExact ? '' : pOptions.savePrefix || '^'
 
-  return Object.assign(
-    {},
-    pDependencyObject,
-    Object.keys(pDependencyObject)
+  return {
+    ...pDependencyObject,
+    ...Object.keys(pDependencyObject)
       .filter(pDep => Object.keys(pOutdatedPackagesObject).some(pPkg => pPkg === pDep))
       .reduce(
         (pAll, pThis) => {
@@ -15,7 +14,7 @@ function updateDeps (pDependencyObject, pOutdatedPackagesObject, pOptions = {}) 
         },
         {}
       )
-  )
+  }
 }
 
 function getDoNotUpArray (pPackageObject) {
@@ -25,7 +24,7 @@ function getDoNotUpArray (pPackageObject) {
 }
 
 function filterOutdatedPackages (pOutdatedObject, pPackageObject) {
-  const lRetval = Object.assign({}, pOutdatedObject)
+  const lRetval = { ...pOutdatedObject }
 
   Object.keys(lRetval)
     .filter(pKey => getDoNotUpArray(pPackageObject).includes(pKey))
@@ -40,17 +39,18 @@ function filterOutdatedPackages (pOutdatedObject, pPackageObject) {
  *
  * @param {any} pPackageObject - the contents of a package.json in object format
  * @param {any} pOutdatedObject - the output of npm outdated --json, in object format
- * @param {string} pSavePrefix - how updated packages get prefixed; either '~',
- *                              '^' or '' (the default)
+ * @param {any} pOptions -
+ *       saveExact  - how updated packages get prefixed if true:'', if false or left out
+ *                    (the default): savePrefix
+ *       savePrefix - how updated packages get prefixed; either '~', '^' or '' (the default)
  *
  * @return {any} - the transformed pPackageObject
  */
 
 function updateAllDeps (pPackageObject, pOutdatedPackages = {}, pOptions = {}) {
-  return Object.assign(
-    {},
-    pPackageObject,
-    Object.keys(pPackageObject)
+  return {
+    ...pPackageObject,
+    ...Object.keys(pPackageObject)
       .filter(pPkgKey => pPkgKey.includes('ependencies'))
       .reduce(
         (pAll, pDepKey) => {
@@ -59,7 +59,7 @@ function updateAllDeps (pPackageObject, pOutdatedPackages = {}, pOptions = {}) {
         },
         {}
       )
-  )
+  }
 }
 
 module.exports = {
