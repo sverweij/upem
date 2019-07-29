@@ -64,7 +64,8 @@ describe('#upppity', () => {
     const lResult = up(INPUT_FILENAME, OUTDATED_JSON, OUTPUT_FILENAME, { saveExact: true })
 
     expect(lResult.OK).toEqual(true)
-    expect(lResult.message).toContain(`Up'em just updated all dependencies in package.json to latest`)
+    expect(lResult.message).toContain(`Up'em just updated all outdated dependencies in package.json to latest`)
+    expect(lResult.message).toContain(`@types/node, dependency-cruiser, jest, webpack`)
     expect(JSON.parse(fs.readFileSync(OUTPUT_FILENAME))).toEqual(JSON.parse(fs.readFileSync(FIXTURE_FILENAME)))
   })
 })
