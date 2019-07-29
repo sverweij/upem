@@ -39,7 +39,7 @@ module.exports = (pPackageInputFileName, pOutdatedObject, pPackageOutputFileName
       fs.writeFileSync(pPackageOutputFileName, JSON.stringify(core.updateAllDeps(lPackageObject, lOutdatedResult.outdatedObject, pOptions), null, 2))
       return {
         OK: true,
-        message: `  Up'em just updated all dependencies in package.json to latest\n\n`
+        message: `  Up'em just updated all outdated dependencies in package.json to latest:\n\n    ${Object.keys(lOutdatedResult.outdatedObject).join(', ')}\n\n`
       }
     } catch (pPackageWriteError) {
       return {
