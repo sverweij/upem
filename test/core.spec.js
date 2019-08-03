@@ -102,6 +102,12 @@ describe('#filterOutdatedPackages', () => {
     ).toEqual(require('./outdated-filtered.json'))
   })
 
+  test('outdated + package with upem.donotup as a string => outdated without the upem.donotup', () => {
+    expect(
+      up.filterOutdatedPackages(require('./outdated.json'), require('./package-with-donotup-string.json'))
+    ).toEqual(require('./outdated-filtered.json'))
+  })
+
   test('outdated + package with upem.donotup objects => outdated without the upem.donotup', () => {
     expect(
       up.filterOutdatedPackages(require('./outdated.json'), require('./package-in-with-donotup-object.json'))
