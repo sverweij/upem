@@ -17,8 +17,12 @@ function updateDeps (pDependencyObject, pOutdatedPackagesObject, pOptions = {}) 
   }
 }
 
+function arrayify (pThing) {
+  return Array.isArray(pThing) ? pThing : [pThing]
+}
+
 function getDoNotUpArray (pPackageObject) {
-  return _get(pPackageObject, 'upem.donotup', [])
+  return arrayify(_get(pPackageObject, 'upem.donotup', []))
     .map(pPackage => typeof pPackage === 'string' ? pPackage : _get(pPackage, 'package'))
     .filter(pPackage => Boolean(pPackage))
 }
