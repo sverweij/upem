@@ -8,14 +8,14 @@ function determineOutdated (pOutdatedObject, pPackageObject) {
   if (Object.keys(pOutdatedObject).length <= 0) {
     return {
       OK: true,
-      message: `  Up'em says: Everything seems to be up to date already.\n\n`
+      message: '  Up\'em says: Everything seems to be up to date already.\n\n'
     }
   }
 
   if (Object.keys(lOutdatedObject).length <= 0) {
     return {
       OK: true,
-      message: `  Up'em says: Everything not in 'upem.donotup' seems to be up to date already.\n\n`
+      message: '  Up\'em says: Everything not in \'upem.donotup\' seems to be up to date already.\n\n'
     }
   }
 
