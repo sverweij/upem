@@ -35,6 +35,7 @@
   "devDependencies": {
     "dependency-cruiser": "5.1.0",
     "eslint": "6.2.2",
+    "eslint-config-prettier": "6.1.0",
     "eslint-config-standard": "14.0.1",
     "eslint-plugin-import": "2.18.2",
     "eslint-plugin-node": "9.1.0",
@@ -44,7 +45,8 @@
     "husky": "3.0.4",
     "jest": "24.9.0",
     "lint-staged": "9.2.4",
-    "npm-run-all": "4.1.5"
+    "npm-run-all": "4.1.5",
+    "prettier": "1.18.2"
   },
   "dependencies": {
     "get-stdin": "7.0.0",
@@ -59,8 +61,12 @@
     "depcruise:graph": "npm-run-all depcruise:graph:*",
     "depcruise:graph:html": "depcruise --validate --output-type dot -- bin src | dot -T svg | cat docs/assets/depcruise-graph-head.snippet.html - docs/assets/depcruise-graph-foot.snippet.html > docs/dependencygraph.html",
     "depcruise:graph:png": "depcruise --validate --output-type dot -- bin src | dot -Gdpi=192 -T png | pngquant - > docs/dependencygraph.png",
-    "lint": "eslint bin src test",
-    "lint:fix": "eslint --fix bin src test",
+    "lint": "npm-run-all lint:eslint lint:prettier",
+    "lint:eslint": "eslint bin src test",
+    "lint:prettier": "prettier --check {bin,src,test}/\\*\\*/\\*.js *.{json,yml,md}",
+    "lint:fix": "npm-run-all lint:fix:eslint lint:fix:prettier",
+    "lint:fix:eslint": "eslint --fix bin src test",
+    "lint:fix:prettier": "prettier --loglevel warn --write {bin,src,test}/\\*\\*/\\*.js *.{json,yml,md}",
     "test": "jest --collectCoverage",
     "update-dependencies": "npm-run-all upem:update upem:install lint:fix check",
     "upem:update": "npm outdated --json | bin/upem.js",
@@ -68,7 +74,10 @@
     "version": "npm-run-all build check build:stage"
   },
   "eslintConfig": {
-    "extends": "standard",
+    "extends": [
+      "standard",
+      "prettier"
+    ],
     "plugins": [
       "security"
     ],
@@ -110,9 +119,13 @@
     }
   },
   "lint-staged": {
-    "*.js": [
+    "{bin,src,test}/**/*.js": [
       "depcruise --validate -- bin src test",
       "eslint --fix",
+      "git add"
+    ],
+    "*.{js,json,md,yml}": [
+      "prettier --write",
       "git add"
     ]
   }

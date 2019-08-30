@@ -15,4 +15,3 @@ exclude_patterns:
   - "utl/"
   - "**/node_modules/"
   - "**/*.d.ts"
-
