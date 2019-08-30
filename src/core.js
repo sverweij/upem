@@ -1,39 +1,40 @@
-const _get = require('lodash.get')
+const _get = require("lodash.get");
 
-function updateDeps (pDependencyObject, pOutdatedPackagesObject, pOptions = {}) {
-  const lSavePrefix = pOptions.saveExact ? '' : pOptions.savePrefix || '^'
+function updateDeps(pDependencyObject, pOutdatedPackagesObject, pOptions = {}) {
+  const lSavePrefix = pOptions.saveExact ? "" : pOptions.savePrefix || "^";
 
   return {
     ...pDependencyObject,
     ...Object.keys(pDependencyObject)
-      .filter(pDep => Object.keys(pOutdatedPackagesObject).some(pPkg => pPkg === pDep))
-      .reduce(
-        (pAll, pThis) => {
-          pAll[pThis] = `${lSavePrefix}${pOutdatedPackagesObject[pThis].latest}`
-          return pAll
-        },
-        {}
+      .filter(pDep =>
+        Object.keys(pOutdatedPackagesObject).some(pPkg => pPkg === pDep)
       )
-  }
+      .reduce((pAll, pThis) => {
+        pAll[pThis] = `${lSavePrefix}${pOutdatedPackagesObject[pThis].latest}`;
+        return pAll;
+      }, {})
+  };
 }
 
-function arrayify (pThing) {
-  return Array.isArray(pThing) ? pThing : [pThing]
+function arrayify(pThing) {
+  return Array.isArray(pThing) ? pThing : [pThing];
 }
 
-function getDoNotUpArray (pPackageObject) {
-  return arrayify(_get(pPackageObject, 'upem.donotup', []))
-    .map(pPackage => typeof pPackage === 'string' ? pPackage : _get(pPackage, 'package'))
-    .filter(pPackage => Boolean(pPackage))
+function getDoNotUpArray(pPackageObject) {
+  return arrayify(_get(pPackageObject, "upem.donotup", []))
+    .map(pPackage =>
+      typeof pPackage === "string" ? pPackage : _get(pPackage, "package")
+    )
+    .filter(pPackage => Boolean(pPackage));
 }
 
-function filterOutdatedPackages (pOutdatedObject, pPackageObject) {
-  const lRetval = { ...pOutdatedObject }
+function filterOutdatedPackages(pOutdatedObject, pPackageObject) {
+  const lRetval = { ...pOutdatedObject };
 
   Object.keys(lRetval)
     .filter(pKey => getDoNotUpArray(pPackageObject).includes(pKey))
-    .forEach(pKey => delete lRetval[pKey])
-  return lRetval
+    .forEach(pKey => delete lRetval[pKey]);
+  return lRetval;
 }
 
 /**
@@ -51,23 +52,24 @@ function filterOutdatedPackages (pOutdatedObject, pPackageObject) {
  * @return {any} - the transformed pPackageObject
  */
 
-function updateAllDeps (pPackageObject, pOutdatedPackages = {}, pOptions = {}) {
+function updateAllDeps(pPackageObject, pOutdatedPackages = {}, pOptions = {}) {
   return {
     ...pPackageObject,
     ...Object.keys(pPackageObject)
-      .filter(pPkgKey => pPkgKey.includes('ependencies'))
-      .reduce(
-        (pAll, pDepKey) => {
-          pAll[pDepKey] = updateDeps(pPackageObject[pDepKey], pOutdatedPackages, pOptions)
-          return pAll
-        },
-        {}
-      )
-  }
+      .filter(pPkgKey => pPkgKey.includes("ependencies"))
+      .reduce((pAll, pDepKey) => {
+        pAll[pDepKey] = updateDeps(
+          pPackageObject[pDepKey],
+          pOutdatedPackages,
+          pOptions
+        );
+        return pAll;
+      }, {})
+  };
 }
 
 module.exports = {
   filterOutdatedPackages,
   updateDeps,
   updateAllDeps
-}
+};
