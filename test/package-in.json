@@ -73,28 +73,15 @@
   },
   "author": "Sander Verweij",
   "license": "GPL-3.0",
-  "keywords": [
-    "mscgen",
-    "sequence chart",
-    "sequence diagram",
-    "xu",
-    "msgenny"
-  ],
+  "keywords": ["mscgen", "sequence chart", "sequence diagram", "xu", "msgenny"],
   "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
+    "moduleFileExtensions": ["ts", "js"],
     "transform": {
       "\\.(ts)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "test.*\\.spec\\.(ts|js)$",
     "collectCoverage": true,
-    "coverageReporters": [
-      "text-summary",
-      "html",
-      "lcov"
-    ],
+    "coverageReporters": ["text-summary", "html", "lcov"],
     "collectCoverageFrom": [
       "src/index.ts",
       "src/index-lazy.ts",
