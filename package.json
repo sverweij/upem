@@ -51,6 +51,7 @@
   "dependencies": {
     "get-stdin": "7.0.0",
     "libnpmconfig": "1.2.1",
+    "lodash.castarray": "4.4.0",
     "lodash.get": "4.4.2"
   },
   "scripts": {

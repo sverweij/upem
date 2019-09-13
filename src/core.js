@@ -1,3 +1,4 @@
+const _castArray = require("lodash.castarray");
 const _get = require("lodash.get");
 
 function updateDeps(pDependencyObject, pOutdatedPackagesObject, pOptions = {}) {
@@ -16,12 +17,8 @@ function updateDeps(pDependencyObject, pOutdatedPackagesObject, pOptions = {}) {
   };
 }
 
-function arrayify(pThing) {
-  return Array.isArray(pThing) ? pThing : [pThing];
-}
-
 function getDoNotUpArray(pPackageObject) {
-  return arrayify(_get(pPackageObject, "upem.donotup", []))
+  return _castArray(_get(pPackageObject, "upem.donotup", []))
     .map(pPackage =>
       typeof pPackage === "string" ? pPackage : _get(pPackage, "package")
     )
