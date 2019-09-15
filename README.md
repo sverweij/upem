@@ -139,6 +139,9 @@ my own would only take a sunday afternoon...
 
 ## Alternatives
 
+- If you're using [yarn](https://yarnpkg.com) and its lock feature you should probably look into using the
+  [yarn upgrade --latest](https://yarnpkg.com/lang/en/docs/cli/upgrade/) or
+  [yarn upgrade-interactive --latest](https://yarnpkg.com/lang/en/docs/cli/upgrade-interactive/) commands.
 - [npm-check-updates](https://github.com/tjunnone/npm-check-updates) - use that if you
   need something more feature rich and less opinionated and don't mind the outdated
   (/ insecure) dependencies.
