@@ -99,7 +99,12 @@ module.exports = {
   ],
   options: {
     /* prefix for links in html and svg output (e.g. https://github.com/you/yourrepo/blob/develop/) */
-    prefix: "https://github.com/sverweij/upem/blob/master/"
+    prefix: "https://github.com/sverweij/upem/blob/master/",
+    reporterOptions: {
+      dot: {
+        collapsePattern: "node_modules/[^/]+"
+      }
+    }
   }
 };
 // generated: dependency-cruiser@4.11.0 on 2019-01-08T19:24:33.102Z
