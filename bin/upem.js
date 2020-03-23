@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 const path = require("path");
 const libNpmConfig = require("libnpmconfig");
-const up = require("../src");
 const getStdin = require("get-stdin");
+const up = require("../src");
 
 const PACKAGE_FILE_NAME = path.join(process.cwd(), "package.json");
 

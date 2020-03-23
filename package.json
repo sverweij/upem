@@ -33,15 +33,16 @@
     "url": "https://github.com/sverweij/upem/issues"
   },
   "devDependencies": {
-    "dependency-cruiser": "8.0.0",
+    "dependency-cruiser": "8.0.2",
     "eslint": "6.8.0",
-    "eslint-config-prettier": "6.10.0",
-    "eslint-config-standard": "14.1.0",
+    "eslint-config-moving-meadow": "1.2.0",
+    "eslint-config-prettier": "6.10.1",
+    "eslint-plugin-budapestian": "1.1.1",
     "eslint-plugin-import": "2.20.1",
+    "eslint-plugin-jest": "23.8.2",
     "eslint-plugin-node": "11.0.0",
-    "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-security": "1.4.0",
-    "eslint-plugin-standard": "4.0.1",
+    "eslint-plugin-unicorn": "15.0.1",
     "husky": "3.1.0",
     "jest": "24.9.0",
     "lint-staged": "9.5.0",
@@ -77,45 +78,52 @@
   "upem": {
     "donotup": [
       {
+        "package": "eslint-plugin-unicorn",
+        "because": "eslint-plugin-unicorn 16 and up don't support node 8 anymore while up'em still does."
+      },
+      {
         "package": "husky",
         "because": "husky 4 doesn't support node 8 anymore while up'em still does."
+      },
+      {
+        "package": "jest",
+        "because": "due to bug https://github.com/facebook/jest/issues/9450 - jest inadvertently breaks on node 8"
       },
       {
         "package": "lint-staged",
         "because": "lint-staged 10 doesn't support node 8 anymore while up'em still does."
       },
       {
-        "package": "jest",
-        "because": "due to bug https://github.com/facebook/jest/issues/9450 - jest inadvertently breaks on node 8"
+        "package": "prettier",
+        "because": "prettier 2 doesn't support node 8 anymore while up'em still does."
       }
     ]
   },
   "eslintConfig": {
     "extends": [
-      "standard",
-      "prettier"
-    ],
-    "plugins": [
-      "security"
+      "moving-meadow"
     ],
     "rules": {
       "complexity": [
         "warn",
         4
       ],
-      "security/detect-unsafe-regex": "error",
-      "security/detect-buffer-noassert": "error",
-      "security/detect-child-process": "error",
-      "security/detect-disable-mustache-escape": "error",
-      "security/detect-eval-with-expression": "error",
-      "security/detect-no-csrf-before-method-override": "error",
       "security/detect-non-literal-fs-filename": "off",
-      "security/detect-non-literal-regexp": "error",
-      "security/detect-non-literal-require": "error",
-      "security/detect-object-injection": "off",
-      "security/detect-possible-timing-attacks": "error",
-      "security/detect-pseudoRandomBytes": "error"
-    }
+      "security/detect-object-injection": "off"
+    },
+    "overrides": [
+      {
+        "files": [
+          "test/**/*.js"
+        ],
+        "env": {
+          "jest": true
+        },
+        "rules": {
+          "global-require": "off"
+        }
+      }
+    ]
   },
   "jest": {
     "clearMocks": true,
@@ -128,7 +136,7 @@
     "testEnvironment": "node"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=8.3"
   },
   "husky": {
     "hooks": {

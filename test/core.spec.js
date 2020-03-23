@@ -1,4 +1,5 @@
 const up = require("../src/core");
+
 const DEPS_FIXTURE = {
   "not-outdated": "1.0.0",
   "outdated-one": "2.0.0",
@@ -33,57 +34,55 @@ const OUTDATED_FIXTURE = {
     location: "node_modules/outdated-possibly-pinned"
   }
 };
+
 describe("#updateDeps", () => {
-  test("empty deps, no outdated yield input", () => {
-    expect(up.updateDeps({}, [])).toEqual({});
+  it("empty deps, no outdated yield input", () => {
+    expect(up.updateDeps({}, [])).toStrictEqual({});
   });
-  test("deps, no outdated yield input", () => {
-    expect(up.updateDeps(DEPS_FIXTURE, {})).toEqual(DEPS_FIXTURE);
+  it("deps, no outdated yield input", () => {
+    expect(up.updateDeps(DEPS_FIXTURE, {})).toStrictEqual(DEPS_FIXTURE);
   });
-  test("deps, no outdated yield input", () => {
-    expect(up.updateDeps(DEPS_FIXTURE, {})).toEqual(DEPS_FIXTURE);
-  });
-  test("deps, outdated yields updated deps, prefixed with carets", () => {
-    expect(up.updateDeps(DEPS_FIXTURE, OUTDATED_FIXTURE)).toEqual(
+  it("deps, outdated yields updated deps, prefixed with carets", () => {
+    expect(up.updateDeps(DEPS_FIXTURE, OUTDATED_FIXTURE)).toStrictEqual(
       DEPS_UPDATED_CARET_FIXTURE
     );
   });
-  test("deps, outdated with saveExact yields updated deps, pinned", () => {
+  it("deps, outdated with saveExact yields updated deps, pinned", () => {
     expect(
       up.updateDeps(DEPS_FIXTURE, OUTDATED_FIXTURE, { saveExact: true })
-    ).toEqual(DEPS_UPDATED_PINNED_FIXTURE);
+    ).toStrictEqual(DEPS_UPDATED_PINNED_FIXTURE);
   });
-  test("deps, outdated with saveExact yields updated deps, pinned even when savePrefix ^ is provided", () => {
+  it("deps, outdated with saveExact yields updated deps, pinned even when savePrefix ^ is provided", () => {
     expect(
       up.updateDeps(DEPS_FIXTURE, OUTDATED_FIXTURE, {
         saveExact: true,
         savePrefix: "^"
       })
-    ).toEqual(DEPS_UPDATED_PINNED_FIXTURE);
+    ).toStrictEqual(DEPS_UPDATED_PINNED_FIXTURE);
   });
-  test("deps, outdated with saveExact false yields updated deps, caret prefixed", () => {
+  it("deps, outdated with saveExact false yields updated deps, caret prefixed", () => {
     expect(
       up.updateDeps(DEPS_FIXTURE, OUTDATED_FIXTURE, { saveExact: false })
-    ).toEqual(DEPS_UPDATED_CARET_FIXTURE);
+    ).toStrictEqual(DEPS_UPDATED_CARET_FIXTURE);
   });
-  test("deps, outdated with savePrefix ~ yields updated deps, tilde prefixed", () => {
+  it("deps, outdated with savePrefix ~ yields updated deps, tilde prefixed", () => {
     expect(
       up.updateDeps(DEPS_FIXTURE, OUTDATED_FIXTURE, { savePrefix: "~" })
-    ).toEqual(DEPS_UPDATED_TILDE_FIXTURE);
+    ).toStrictEqual(DEPS_UPDATED_TILDE_FIXTURE);
   });
 });
 
 describe("#updateAllDeps", () => {
-  test("empty package.json, no outdated yield input", () => {
-    expect(up.updateAllDeps({}, {})).toEqual({});
-    expect(up.updateAllDeps({})).toEqual({});
+  it("empty package.json, no outdated yield input", () => {
+    expect(up.updateAllDeps({}, {})).toStrictEqual({});
+    expect(up.updateAllDeps({})).toStrictEqual({});
   });
 
-  test("empty package.json, several outdated yield input", () => {
-    expect(up.updateAllDeps({}, ["aap", "noot", "mies"])).toEqual({});
+  it("empty package.json, several outdated yield input", () => {
+    expect(up.updateAllDeps({}, ["aap", "noot", "mies"])).toStrictEqual({});
   });
 
-  test("real package.json, several outdated yield updated output", () => {
+  it("real package.json, several outdated yield updated output", () => {
     expect(
       up.updateAllDeps(
         require("./package-in.json"),
@@ -92,64 +91,63 @@ describe("#updateAllDeps", () => {
           saveExact: true
         }
       )
-    ).toEqual(require("./package-out.json"));
+    ).toStrictEqual(require("./package-out.json"));
   });
 });
 
 describe("#filterOutdatedPackages", () => {
-  test("empty outdated + empty package => empty outdated", () => {
-    expect(up.filterOutdatedPackages({}, {})).toEqual({});
+  it("empty outdated + empty package => empty outdated", () => {
+    expect(up.filterOutdatedPackages({}, {})).toStrictEqual({});
   });
 
-  test("empty outdated + package => empty outdated", () => {
-    expect(up.filterOutdatedPackages({}, require("./package-in.json"))).toEqual(
-      {}
-    );
+  it("empty outdated + package => empty outdated", () => {
+    expect(
+      up.filterOutdatedPackages({}, require("./package-in.json"))
+    ).toStrictEqual({});
   });
 
-  test("outdated + package with upem.donotup => outdated without the upem.donotup", () => {
+  it("outdated + package with upem.donotup => outdated without the upem.donotup", () => {
     expect(
       up.filterOutdatedPackages(
         require("./outdated.json"),
         require("./package-in.json")
       )
-    ).toEqual(require("./outdated-filtered.json"));
+    ).toStrictEqual(require("./outdated-filtered.json"));
   });
 
-  test("outdated + package with upem.donotup as a string => outdated without the upem.donotup", () => {
+  it("outdated + package with upem.donotup as a string => outdated without the upem.donotup", () => {
     expect(
       up.filterOutdatedPackages(
         require("./outdated.json"),
         require("./package-with-donotup-string.json")
       )
-    ).toEqual(require("./outdated-filtered.json"));
+    ).toStrictEqual(require("./outdated-filtered.json"));
   });
 
-  test("outdated + package with upem.donotup objects => outdated without the upem.donotup", () => {
+  it("outdated + package with upem.donotup objects => outdated without the upem.donotup", () => {
     expect(
       up.filterOutdatedPackages(
         require("./outdated.json"),
         require("./package-in-with-donotup-object.json")
       )
-    ).toEqual(require("./outdated-filtered.json"));
+    ).toStrictEqual(require("./outdated-filtered.json"));
   });
 
-  test("outdated + package with upem.donotup => outdated without the upem.donotup", () => {
+  it("outdated + package without upem.donotup => outdated without the upem.donotup", () => {
     expect(
       up.filterOutdatedPackages(
         require("./outdated.json"),
         require("./package-in-without-upem-donotup.json")
       )
-    ).toEqual(require("./outdated.json"));
+    ).toStrictEqual(require("./outdated.json"));
   });
 
-  test("outdated + package with upem.donotup => outdated with erroneous upem.donotup", () => {
+  it("outdated + package with upem.donotup => outdated with erroneous upem.donotup", () => {
     expect(
       up.filterOutdatedPackages(
         require("./outdated.json"),
         require("./package-in-with-erroneous-upem-donotup.json")
       )
-    ).toEqual(require("./outdated.json"));
+    ).toStrictEqual(require("./outdated.json"));
   });
 });
-/* global describe, test, expect */

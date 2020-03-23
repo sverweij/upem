@@ -3,29 +3,32 @@ const path = require("path");
 const up = require("../src");
 
 describe("#upppity", () => {
-  test("non-existing package.json errors", () => {
+  it("non-existing package.json errors", () => {
     const lResult = up("thisfiledoesnotexist", "");
-    expect(lResult.OK).toEqual(false);
+
+    expect(lResult.OK).toStrictEqual(false);
     expect(lResult.message).toContain("Up'em encountered a hitch:");
   });
 
-  test('empty string dependency JSON yields "nothing to update"', () => {
+  it('empty string dependency JSON yields "nothing to update"', () => {
     const lResult = up(path.join(__dirname, "package-in.json"), "");
-    expect(lResult.OK).toEqual(true);
+
+    expect(lResult.OK).toStrictEqual(true);
     expect(lResult.message).toContain(
       "Up'em says: Everything seems to be up to date already."
     );
   });
 
-  test('{} dependency JSON yields "nothing to update"', () => {
+  it('{} dependency JSON yields "nothing to update"', () => {
     const lResult = up(path.join(__dirname, "package-in.json"), "{}");
-    expect(lResult.OK).toEqual(true);
+
+    expect(lResult.OK).toStrictEqual(true);
     expect(lResult.message).toContain(
       "Up'em says: Everything seems to be up to date already."
     );
   });
 
-  test("read only package.json yields a 'can't update", () => {
+  it("read only package.json yields a 'can't update", () => {
     const OUTDATED_JSON = `
     {
       "lodash.assign": {
@@ -40,15 +43,17 @@ describe("#upppity", () => {
       __dirname,
       "package-in-readonly.json"
     );
+
     fs.chmodSync(READONLY_INPUT_FILENAME, "400");
     const lResult = up(READONLY_INPUT_FILENAME, OUTDATED_JSON);
-    expect(lResult.OK).toEqual(false);
+
+    expect(lResult.OK).toStrictEqual(false);
     expect(lResult.message).toContain(
       "Up'em encountered a hitch when updating package.json:"
     );
   });
 
-  test("if upem.donotup encompasses the outdated object yields that in a message", () => {
+  it("if upem.donotup encompasses the outdated object yields that in a message", () => {
     const OUTDATED_JSON = `
     {
       "ts-jest": {
@@ -60,13 +65,14 @@ describe("#upppity", () => {
     }
     `;
     const lResult = up(path.join(__dirname, "package-in.json"), OUTDATED_JSON);
-    expect(lResult.OK).toEqual(true);
+
+    expect(lResult.OK).toStrictEqual(true);
     expect(lResult.message).toContain(
       "Up'em says: Everything not in 'upem.donotup' seems to be up to date already."
     );
   });
 
-  test("happy day: dependencies updated with stuff in an outdated.json", () => {
+  it("happy day: dependencies updated with stuff in an outdated.json", () => {
     const OUTDATED_JSON = fs.readFileSync(
       path.join(__dirname, "outdated.json")
     );
@@ -78,17 +84,15 @@ describe("#upppity", () => {
       saveExact: true
     });
 
-    expect(lResult.OK).toEqual(true);
+    expect(lResult.OK).toStrictEqual(true);
     expect(lResult.message).toContain(
       "Up'em just updated all outdated dependencies in package.json to latest"
     );
     expect(lResult.message).toContain(
       "@types/node, dependency-cruiser, jest, webpack"
     );
-    expect(JSON.parse(fs.readFileSync(OUTPUT_FILENAME))).toEqual(
+    expect(JSON.parse(fs.readFileSync(OUTPUT_FILENAME))).toStrictEqual(
       JSON.parse(fs.readFileSync(FIXTURE_FILENAME))
     );
   });
 });
-
-/* global describe, test, expect */

@@ -1,6 +1,8 @@
 const fs = require("fs");
 const core = require("./core");
 
+const INDENT = 2;
+
 function determineOutdated(pOutdatedObject, pPackageObject) {
   pOutdatedObject =
     pOutdatedObject.length <= 0 ? {} : JSON.parse(pOutdatedObject);
@@ -41,6 +43,7 @@ module.exports = (
     const lPackageObject = JSON.parse(lPackageFile);
 
     const lOutdatedResult = determineOutdated(pOutdatedObject, lPackageObject);
+
     if (!lOutdatedResult.outdatedObject) {
       return lOutdatedResult;
     }
@@ -55,7 +58,7 @@ module.exports = (
             pOptions
           ),
           null,
-          2
+          INDENT
         )
       );
       return {
@@ -64,16 +67,16 @@ module.exports = (
           lOutdatedResult.outdatedObject
         ).join(", ")}\n\n`
       };
-    } catch (pPackageWriteError) {
+    } catch (pError) {
       return {
         OK: false,
-        message: `  Up'em encountered a hitch when updating package.json:\n${pPackageWriteError}\n\n`
+        message: `  Up'em encountered a hitch when updating package.json:\n${pError}\n\n`
       };
     }
-  } catch (pPackageReadError) {
+  } catch (pError) {
     return {
       OK: false,
-      message: `  Up'em encountered a hitch:\n${pPackageReadError}\n\n`
+      message: `  Up'em encountered a hitch:\n${pError}\n\n`
     };
   }
 };
