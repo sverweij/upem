@@ -8,7 +8,7 @@ function updateDeps(pDependencyObject, pOutdatedPackagesObject, pOptions = {}) {
     ...pDependencyObject,
     ...Object.keys(pDependencyObject)
       .filter(pDep =>
-        Object.keys(pOutdatedPackagesObject).some(pPkg => pPkg === pDep)
+        Object.keys(pOutdatedPackagesObject).some(pPackage => pPackage === pDep)
       )
       .reduce((pAll, pThis) => {
         pAll[pThis] = `${lSavePrefix}${pOutdatedPackagesObject[pThis].latest}`;
@@ -26,12 +26,12 @@ function getDoNotUpArray(pPackageObject) {
 }
 
 function filterOutdatedPackages(pOutdatedObject, pPackageObject) {
-  const lRetval = { ...pOutdatedObject };
+  const lReturnValue = { ...pOutdatedObject };
 
-  Object.keys(lRetval)
+  Object.keys(lReturnValue)
     .filter(pKey => getDoNotUpArray(pPackageObject).includes(pKey))
-    .forEach(pKey => delete lRetval[pKey]);
-  return lRetval;
+    .forEach(pKey => Reflect.deleteProperty(lReturnValue, pKey));
+  return lReturnValue;
 }
 
 /**
@@ -53,7 +53,7 @@ function updateAllDeps(pPackageObject, pOutdatedPackages = {}, pOptions = {}) {
   return {
     ...pPackageObject,
     ...Object.keys(pPackageObject)
-      .filter(pPkgKey => pPkgKey.includes("ependencies"))
+      .filter(pPackageKey => pPackageKey.includes("ependencies"))
       .reduce((pAll, pDepKey) => {
         pAll[pDepKey] = updateDeps(
           pPackageObject[pDepKey],
