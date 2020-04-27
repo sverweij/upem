@@ -3,36 +3,36 @@ const up = require("../src/core");
 const DEPS_FIXTURE = {
   "not-outdated": "1.0.0",
   "outdated-one": "2.0.0",
-  "outdated-possibly-pinned": "3.1.4"
+  "outdated-possibly-pinned": "3.1.4",
 };
 const DEPS_UPDATED_PINNED_FIXTURE = {
   "not-outdated": "1.0.0",
   "outdated-one": "3.0.2",
-  "outdated-possibly-pinned": "4.1.1"
+  "outdated-possibly-pinned": "4.1.1",
 };
 const DEPS_UPDATED_CARET_FIXTURE = {
   "not-outdated": "1.0.0",
   "outdated-one": "^3.0.2",
-  "outdated-possibly-pinned": "^4.1.1"
+  "outdated-possibly-pinned": "^4.1.1",
 };
 const DEPS_UPDATED_TILDE_FIXTURE = {
   "not-outdated": "1.0.0",
   "outdated-one": "~3.0.2",
-  "outdated-possibly-pinned": "~4.1.1"
+  "outdated-possibly-pinned": "~4.1.1",
 };
 const OUTDATED_FIXTURE = {
   "outdated-one": {
     current: "2.0.0",
     wanted: "2.0.1",
     latest: "3.0.2",
-    location: "node_modules/not-outdated"
+    location: "node_modules/not-outdated",
   },
   "outdated-possibly-pinned": {
     current: "3.1.4",
     wanted: "3.1.4",
     latest: "4.1.1",
-    location: "node_modules/outdated-possibly-pinned"
-  }
+    location: "node_modules/outdated-possibly-pinned",
+  },
 };
 
 describe("#updateDeps", () => {
@@ -56,7 +56,7 @@ describe("#updateDeps", () => {
     expect(
       up.updateDeps(DEPS_FIXTURE, OUTDATED_FIXTURE, {
         saveExact: true,
-        savePrefix: "^"
+        savePrefix: "^",
       })
     ).toStrictEqual(DEPS_UPDATED_PINNED_FIXTURE);
   });
@@ -88,7 +88,7 @@ describe("#updateAllDeps", () => {
         require("./package-in.json"),
         require("./outdated-filtered.json"),
         {
-          saveExact: true
+          saveExact: true,
         }
       )
     ).toStrictEqual(require("./package-out.json"));

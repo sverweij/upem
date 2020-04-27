@@ -7,30 +7,32 @@ function updateDeps(pDependencyObject, pOutdatedPackagesObject, pOptions = {}) {
   return {
     ...pDependencyObject,
     ...Object.keys(pDependencyObject)
-      .filter(pDep =>
-        Object.keys(pOutdatedPackagesObject).some(pPackage => pPackage === pDep)
+      .filter((pDep) =>
+        Object.keys(pOutdatedPackagesObject).some(
+          (pPackage) => pPackage === pDep
+        )
       )
       .reduce((pAll, pThis) => {
         pAll[pThis] = `${lSavePrefix}${pOutdatedPackagesObject[pThis].latest}`;
         return pAll;
-      }, {})
+      }, {}),
   };
 }
 
 function getDoNotUpArray(pPackageObject) {
   return _castArray(_get(pPackageObject, "upem.donotup", []))
-    .map(pPackage =>
+    .map((pPackage) =>
       typeof pPackage === "string" ? pPackage : _get(pPackage, "package")
     )
-    .filter(pPackage => Boolean(pPackage));
+    .filter((pPackage) => Boolean(pPackage));
 }
 
 function filterOutdatedPackages(pOutdatedObject, pPackageObject) {
   const lReturnValue = { ...pOutdatedObject };
 
   Object.keys(lReturnValue)
-    .filter(pKey => getDoNotUpArray(pPackageObject).includes(pKey))
-    .forEach(pKey => Reflect.deleteProperty(lReturnValue, pKey));
+    .filter((pKey) => getDoNotUpArray(pPackageObject).includes(pKey))
+    .forEach((pKey) => Reflect.deleteProperty(lReturnValue, pKey));
   return lReturnValue;
 }
 
@@ -53,7 +55,7 @@ function updateAllDeps(pPackageObject, pOutdatedPackages = {}, pOptions = {}) {
   return {
     ...pPackageObject,
     ...Object.keys(pPackageObject)
-      .filter(pPackageKey => pPackageKey.includes("ependencies"))
+      .filter((pPackageKey) => pPackageKey.includes("ependencies"))
       .reduce((pAll, pDepKey) => {
         pAll[pDepKey] = updateDeps(
           pPackageObject[pDepKey],
@@ -61,12 +63,12 @@ function updateAllDeps(pPackageObject, pOutdatedPackages = {}, pOptions = {}) {
           pOptions
         );
         return pAll;
-      }, {})
+      }, {}),
   };
 }
 
 module.exports = {
   filterOutdatedPackages,
   updateDeps,
-  updateAllDeps
+  updateAllDeps,
 };

@@ -12,17 +12,17 @@ jobs:
       fail-fast: false
       matrix:
         node-version:
-          - ^8.12
           - 10.x
           - 12.x
           - 13.x
+          - 14.x
         platform:
           - ubuntu-latest
           - windows-latest
         exclude:
-          - node-version: ^8.12
-            platform: windows-latest
           - node-version: 10.x
+            platform: windows-latest
+          - node-version: 12.x
             platform: windows-latest
           - node-version: 13.x
             platform: windows-latest
@@ -47,7 +47,7 @@ jobs:
         run: |
           node --version
           npm run lint
-        if: matrix.platform == 'ubuntu-latest' && matrix.node-version == '13.x'
+        if: matrix.platform == 'ubuntu-latest' && matrix.node-version == '14.x'
         shell: bash
         env:
           CI: true

@@ -81,7 +81,7 @@ describe("#upppity", () => {
     const FIXTURE_FILENAME = path.join(__dirname, "package-out.json");
 
     const lResult = up(INPUT_FILENAME, OUTDATED_JSON, OUTPUT_FILENAME, {
-      saveExact: true
+      saveExact: true,
     });
 
     expect(lResult.OK).toStrictEqual(true);

@@ -33,21 +33,21 @@
     "url": "https://github.com/sverweij/upem/issues"
   },
   "devDependencies": {
-    "dependency-cruiser": "8.0.2",
+    "dependency-cruiser": "9.0.0",
     "eslint": "6.8.0",
-    "eslint-config-moving-meadow": "1.2.0",
-    "eslint-config-prettier": "6.10.1",
-    "eslint-plugin-budapestian": "1.1.1",
-    "eslint-plugin-import": "2.20.1",
+    "eslint-config-moving-meadow": "2.0.0",
+    "eslint-config-prettier": "6.11.0",
+    "eslint-plugin-budapestian": "2.0.0",
+    "eslint-plugin-import": "2.20.2",
     "eslint-plugin-jest": "23.8.2",
-    "eslint-plugin-node": "11.0.0",
+    "eslint-plugin-node": "11.1.0",
     "eslint-plugin-security": "1.4.0",
-    "eslint-plugin-unicorn": "15.0.1",
-    "husky": "3.1.0",
-    "jest": "24.9.0",
-    "lint-staged": "9.5.0",
+    "eslint-plugin-unicorn": "19.0.1",
+    "husky": "4.2.5",
+    "jest": "25.4.0",
+    "lint-staged": "10.1.7",
     "npm-run-all": "4.1.5",
-    "prettier": "1.19.1"
+    "prettier": "2.0.5"
   },
   "dependencies": {
     "get-stdin": "7.0.0",
@@ -65,39 +65,15 @@
     "depcruise:graph:svg": "depcruise --validate --output-type dot -- bin src | dot -T svg > docs/dependencygraph.svg",
     "lint": "npm-run-all lint:eslint lint:prettier",
     "lint:eslint": "eslint bin src test",
-    "lint:prettier": "prettier --check {bin,src,test}/\\*\\*/\\*.js *.{json,yml,md}",
+    "lint:prettier": "prettier --check {bin,src,test}/**/*.js *.{json,yml,md} .github",
     "lint:fix": "npm-run-all lint:fix:eslint lint:fix:prettier",
     "lint:fix:eslint": "eslint --fix bin src test",
-    "lint:fix:prettier": "prettier --loglevel warn --write {bin,src,test}/\\*\\*/\\*.js *.{json,yml,md}",
+    "lint:fix:prettier": "prettier --write {bin,src,test}/**/*.js *.{json,yml,md} .github",
     "test": "jest --collectCoverage",
     "update-dependencies": "npm-run-all upem:update upem:install lint:fix check",
     "upem:update": "npm outdated --json | bin/upem.js",
     "upem:install": "npm install",
     "version": "npm-run-all build check build:stage"
-  },
-  "upem": {
-    "donotup": [
-      {
-        "package": "eslint-plugin-unicorn",
-        "because": "eslint-plugin-unicorn 16 and up don't support node 8 anymore while up'em still does."
-      },
-      {
-        "package": "husky",
-        "because": "husky 4 doesn't support node 8 anymore while up'em still does."
-      },
-      {
-        "package": "jest",
-        "because": "due to bug https://github.com/facebook/jest/issues/9450 - jest inadvertently breaks on node 8"
-      },
-      {
-        "package": "lint-staged",
-        "because": "lint-staged 10 doesn't support node 8 anymore while up'em still does."
-      },
-      {
-        "package": "prettier",
-        "because": "prettier 2 doesn't support node 8 anymore while up'em still does."
-      }
-    ]
   },
   "eslintConfig": {
     "extends": [
@@ -120,7 +96,8 @@
           "jest": true
         },
         "rules": {
-          "global-require": "off"
+          "node/global-require": "off",
+          "max-lines-per-function": "off"
         }
       }
     ]
@@ -136,7 +113,7 @@
     "testEnvironment": "node"
   },
   "engines": {
-    "node": ">=8.3"
+    "node": "^10||^12||>=13"
   },
   "husky": {
     "hooks": {
@@ -146,12 +123,10 @@
   "lint-staged": {
     "{bin,src,test}/**/*.js": [
       "depcruise --validate -- bin src test",
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ],
     "*.{js,json,md,yml}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   }
 }

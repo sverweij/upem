@@ -14,7 +14,7 @@ function determineOutdated(pOutdatedObject, pPackageObject) {
   if (Object.keys(pOutdatedObject).length <= 0) {
     return {
       OK: true,
-      message: "  Up'em says: Everything seems to be up to date already.\n\n"
+      message: "  Up'em says: Everything seems to be up to date already.\n\n",
     };
   }
 
@@ -22,13 +22,13 @@ function determineOutdated(pOutdatedObject, pPackageObject) {
     return {
       OK: true,
       message:
-        "  Up'em says: Everything not in 'upem.donotup' seems to be up to date already.\n\n"
+        "  Up'em says: Everything not in 'upem.donotup' seems to be up to date already.\n\n",
     };
   }
 
   return {
     OK: true,
-    outdatedObject: lOutdatedObject
+    outdatedObject: lOutdatedObject,
   };
 }
 
@@ -57,6 +57,7 @@ module.exports = (
             lOutdatedResult.outdatedObject,
             pOptions
           ),
+          // eslint-disable-next-line unicorn/no-null
           null,
           INDENT
         )
@@ -65,18 +66,18 @@ module.exports = (
         OK: true,
         message: `  Up'em just updated all outdated dependencies in package.json to latest:\n\n    ${Object.keys(
           lOutdatedResult.outdatedObject
-        ).join(", ")}\n\n`
+        ).join(", ")}\n\n`,
       };
     } catch (pError) {
       return {
         OK: false,
-        message: `  Up'em encountered a hitch when updating package.json:\n${pError}\n\n`
+        message: `  Up'em encountered a hitch when updating package.json:\n${pError}\n\n`,
       };
     }
   } catch (pError) {
     return {
       OK: false,
-      message: `  Up'em encountered a hitch:\n${pError}\n\n`
+      message: `  Up'em encountered a hitch:\n${pError}\n\n`,
     };
   }
 };
