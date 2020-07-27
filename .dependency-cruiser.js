@@ -25,11 +25,11 @@ module.exports = {
       comment: "Don't allow dependencies from outside the test folder to test",
       severity: "error",
       from: {
-        pathNot: "^test"
+        pathNot: "^test",
       },
       to: {
-        path: "^test"
-      }
+        path: "^test",
+      },
     },
     {
       name: "not-to-spec",
@@ -38,8 +38,8 @@ module.exports = {
       severity: "error",
       from: {},
       to: {
-        path: "\\.spec\\.js$"
-      }
+        path: "\\.spec\\.js$",
+      },
     },
     {
       name: "not-to-dev-dep",
@@ -48,11 +48,11 @@ module.exports = {
         "Don't allow dependencies from src/app/lib to a development only package",
       from: {
         path: "^src",
-        pathNot: "\\.spec\\.js$"
+        pathNot: "\\.spec\\.js$",
       },
       to: {
-        dependencyTypes: ["npm-dev"]
-      }
+        dependencyTypes: ["npm-dev"],
+      },
     },
     {
       name: "optional-deps-used",
@@ -61,8 +61,8 @@ module.exports = {
         "Inform when using an optional dependency. It might not be wrong - but it's not typicaly either",
       from: {},
       to: {
-        dependencyTypes: ["npm-optional"]
-      }
+        dependencyTypes: ["npm-optional"],
+      },
     },
     {
       name: "peer-deps-used",
@@ -71,40 +71,41 @@ module.exports = {
       severity: "error",
       from: {},
       to: {
-        dependencyTypes: ["npm-peer"]
-      }
+        dependencyTypes: ["npm-peer"],
+      },
     },
     {
       name: "no-unreachable",
       severity: "error",
       from: {
-        path: "bin/upem.js"
+        path: "bin/upem.js",
       },
       to: {
         path: "src/",
-        reachable: false
-      }
+        reachable: false,
+      },
     },
     {
       name: "no-non-test-coverage",
       severity: "error",
       from: {
-        path: "test/[^\\.]+\\.spec\\.js$"
+        path: "test/[^\\.]+\\.spec\\.js$",
       },
       to: {
         path: "src/",
-        reachable: false
-      }
-    }
+        reachable: false,
+      },
+    },
   ],
   options: {
+    progress: { type: "performance-log" },
     /* prefix for links in html and svg output (e.g. https://github.com/you/yourrepo/blob/develop/) */
     prefix: "https://github.com/sverweij/upem/blob/master/",
     reporterOptions: {
       dot: {
-        collapsePattern: "node_modules/[^/]+"
-      }
-    }
-  }
+        collapsePattern: "node_modules/[^/]+",
+      },
+    },
+  },
 };
 // generated: dependency-cruiser@4.11.0 on 2019-01-08T19:24:33.102Z
