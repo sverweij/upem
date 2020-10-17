@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const up = require("../src");
 
-describe("#upppity", () => {
+describe("#upem", () => {
   it("non-existing package.json errors", () => {
     const lResult = up("thisfiledoesnotexist", "");
 
@@ -90,6 +90,125 @@ describe("#upppity", () => {
     );
     expect(lResult.message).toContain(
       "@types/node, dependency-cruiser, jest, webpack"
+    );
+    expect(JSON.parse(fs.readFileSync(OUTPUT_FILENAME))).toStrictEqual(
+      JSON.parse(fs.readFileSync(FIXTURE_FILENAME))
+    );
+  });
+
+  it("happy day: don't up peerDependencies when told not to", () => {
+    const OUTDATED = JSON.stringify({
+      "prod-dep": {
+        current: "1.2.3",
+        wanted: "1.2.3",
+        latest: "1.3.0",
+        location: "node_modules/prod-dep",
+      },
+      "prod-dep-two": {
+        current: "4.5.6",
+        wanted: "4.5.6",
+        latest: "5.0.0",
+        location: "node_modules/prod-dep-two",
+      },
+      "dev-dep": {
+        current: "1.2.3",
+        wanted: "1.2.3",
+        latest: "1.3.0",
+        location: "node_modules/dev-dep",
+      },
+      "dev-and-peer-dep": {
+        current: "4.5.6",
+        wanted: "4.5.6",
+        latest: "4.6.0",
+        location: "node_modules/dev-and-peer-dep",
+      },
+      "peer-only-dep": {
+        current: "4.8.1",
+        wanted: ">=4.8.1",
+        latest: "4.9.0",
+        location: "node_modules/peer-only-dep",
+      },
+    });
+    const INPUT_FILENAME = path.join(
+      __dirname,
+      "package-in-with-peer-deps.json"
+    );
+    const OUTPUT_FILENAME = path.join(__dirname, "tmp_package-out.json");
+    const FIXTURE_FILENAME = path.join(
+      __dirname,
+      "package-out-with-peer-deps-not-updated.json"
+    );
+
+    const lResult = up(INPUT_FILENAME, OUTDATED, OUTPUT_FILENAME, {
+      saveExact: true,
+      skipDependencyTypes: ["peerDependencies"],
+    });
+
+    expect(lResult.OK).toStrictEqual(true);
+    expect(lResult.message).toContain(
+      "Up'em just updated all outdated dependencies in package.json to latest"
+    );
+    expect(lResult.message).toContain(
+      "prod-dep, prod-dep-two, dev-dep, dev-and-peer-dep"
+    );
+    expect(JSON.parse(fs.readFileSync(OUTPUT_FILENAME))).toStrictEqual(
+      JSON.parse(fs.readFileSync(FIXTURE_FILENAME))
+    );
+  });
+
+  it("happy day: do up peerDependencies when not told not to", () => {
+    const OUTDATED = JSON.stringify({
+      "prod-dep": {
+        current: "1.2.3",
+        wanted: "1.2.3",
+        latest: "1.3.0",
+        location: "node_modules/prod-dep",
+      },
+      "prod-dep-two": {
+        current: "4.5.6",
+        wanted: "4.5.6",
+        latest: "5.0.0",
+        location: "node_modules/prod-dep-two",
+      },
+      "dev-dep": {
+        current: "1.2.3",
+        wanted: "1.2.3",
+        latest: "1.3.0",
+        location: "node_modules/dev-dep",
+      },
+      "dev-and-peer-dep": {
+        current: "4.5.6",
+        wanted: "4.5.6",
+        latest: "4.6.0",
+        location: "node_modules/dev-and-peer-dep",
+      },
+      "peer-only-dep": {
+        current: "4.8.1",
+        wanted: ">=4.8.1",
+        latest: "4.9.0",
+        location: "node_modules/peer-only-dep",
+      },
+    });
+    const INPUT_FILENAME = path.join(
+      __dirname,
+      "package-in-with-peer-deps.json"
+    );
+    const OUTPUT_FILENAME = path.join(__dirname, "tmp_package-out.json");
+    const FIXTURE_FILENAME = path.join(
+      __dirname,
+      "package-out-with-peer-deps-updated.json"
+    );
+
+    const lResult = up(INPUT_FILENAME, OUTDATED, OUTPUT_FILENAME, {
+      saveExact: true,
+    });
+
+    expect(lResult.OK).toStrictEqual(true);
+    expect(lResult.message).toContain(
+      "Up'em just updated all outdated dependencies in package.json to latest"
+    );
+    expect(lResult.message).toContain(
+      "prod-dep, prod-dep-two, dev-dep, dev-and-peer-dep, peer-only-dep"
     );
     expect(JSON.parse(fs.readFileSync(OUTPUT_FILENAME))).toStrictEqual(
       JSON.parse(fs.readFileSync(FIXTURE_FILENAME))
