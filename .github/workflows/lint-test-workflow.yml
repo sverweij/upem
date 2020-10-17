@@ -14,7 +14,6 @@ jobs:
         node-version:
           - 10.x
           - 12.x
-          - 13.x
           - 14.x
         platform:
           - ubuntu-latest
@@ -23,8 +22,6 @@ jobs:
           - node-version: 10.x
             platform: windows-latest
           - node-version: 12.x
-            platform: windows-latest
-          - node-version: 13.x
             platform: windows-latest
 
     runs-on: ${{matrix.platform}}

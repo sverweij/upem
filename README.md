@@ -99,6 +99,22 @@ save-prefix = '^'
 Whatever your preferences: commit a `.npmrc` at the root of all your repos so
 npm, yarn and upem behavior is the same accross all machines and collaborators.
 
+### Not updating peerDependencies
+
+As of version 5.0.0 _Up'em_ leaves peerDependencies alone. Typically you'll use
+ranges for peerDependencies (`>=3` or `>=1.0.0 <3.0.0`). Those have different
+requirements from your regular dependencies. They can either be more lenient,
+or more strict.
+
+An example where you might want to be more lenient is when in your devDependencies
+want to use latest TypeScript, but you still might want to support TypeScript 3
+and up. In that case you will want to keep the `"typescript": ">=3"` in your
+peer dependencies.
+
+An example where you might want to be more strict is setting an upper limit to
+your peer dependencies version e.g. because you don't support beyond that version
+or don't know whether you can (`"typescript": ">=3.0.0 <6.0.0"`).
+
 ## Why?
 
 I've been a happy user of [npm-check-updates](https://github.com/tjunnone/npm-check-updates)

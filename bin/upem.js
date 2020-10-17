@@ -11,6 +11,7 @@ getStdin()
     const lResult = up(PACKAGE_FILE_NAME, pOutdatedObject, PACKAGE_FILE_NAME, {
       saveExact: libNpmConfig.read().get("save-exact") || false,
       savePrefix: libNpmConfig.read().get("save-prefix") || "^",
+      skipDependencyTypes: ["peerDependencies"],
     });
 
     if (lResult.OK) {

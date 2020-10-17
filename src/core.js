@@ -55,7 +55,11 @@ function updateAllDeps(pPackageObject, pOutdatedPackages = {}, pOptions = {}) {
   return {
     ...pPackageObject,
     ...Object.keys(pPackageObject)
-      .filter((pPackageKey) => pPackageKey.includes("ependencies"))
+      .filter(
+        (pPackageKey) =>
+          pPackageKey.includes("ependencies") &&
+          !_get(pOptions, "skipDependencyTypes", []).includes(pPackageKey)
+      )
       .reduce((pAll, pDepKey) => {
         pAll[pDepKey] = updateDeps(
           pPackageObject[pDepKey],
