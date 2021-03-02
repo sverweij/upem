@@ -7,11 +7,7 @@ function updateDeps(pDependencyObject, pOutdatedPackagesObject, pOptions = {}) {
   return {
     ...pDependencyObject,
     ...Object.keys(pDependencyObject)
-      .filter((pDep) =>
-        Object.keys(pOutdatedPackagesObject).some(
-          (pPackage) => pPackage === pDep
-        )
-      )
+      .filter((pDep) => Object.keys(pOutdatedPackagesObject).includes(pDep))
       .reduce((pAll, pThis) => {
         pAll[pThis] = `${lSavePrefix}${pOutdatedPackagesObject[pThis].latest}`;
         return pAll;
