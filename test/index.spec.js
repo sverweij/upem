@@ -1,6 +1,9 @@
-const fs = require("fs");
-const path = require("path");
-const up = require("../src");
+import { fileURLToPath } from "url";
+import fs from "fs";
+import path from "path";
+import up from "../src/index.js";
+
+const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 describe("#upem", () => {
   it("non-existing package.json errors", () => {

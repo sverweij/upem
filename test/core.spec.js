@@ -1,4 +1,7 @@
-const up = require("../src/core");
+import { createRequire } from "module";
+import up from "../src/core.js";
+
+const require = createRequire(import.meta.url);
 
 const DEPS_FIXTURE = {
   "not-outdated": "1.0.0",

@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-const path = require("path");
-const libNpmConfig = require("libnpmconfig");
-const getStdin = require("get-stdin");
-const up = require("../src");
+// eslint-disable-next-line node/no-missing-import, node/no-unpublished-import
+import path from "node:path";
+import libNpmConfig from "libnpmconfig";
+import getStdin from "get-stdin";
+import up from "../src/index.js";
 
 const PACKAGE_FILE_NAME = path.join(process.cwd(), "package.json");
 
