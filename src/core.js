@@ -1,5 +1,5 @@
-const _castArray = require("lodash.castarray");
-const _get = require("lodash.get");
+import castArray from "lodash.castarray";
+import get from "lodash.get";
 
 function updateDeps(pDependencyObject, pOutdatedPackagesObject, pOptions = {}) {
   const lSavePrefix = pOptions.saveExact ? "" : pOptions.savePrefix || "^";
@@ -16,9 +16,9 @@ function updateDeps(pDependencyObject, pOutdatedPackagesObject, pOptions = {}) {
 }
 
 function getDoNotUpArray(pPackageObject) {
-  return _castArray(_get(pPackageObject, "upem.donotup", []))
+  return castArray(get(pPackageObject, "upem.donotup", []))
     .map((pPackage) =>
-      typeof pPackage === "string" ? pPackage : _get(pPackage, "package")
+      typeof pPackage === "string" ? pPackage : get(pPackage, "package")
     )
     .filter((pPackage) => Boolean(pPackage));
 }
@@ -54,7 +54,7 @@ function updateAllDeps(pPackageObject, pOutdatedPackages = {}, pOptions = {}) {
       .filter(
         (pPackageKey) =>
           pPackageKey.includes("ependencies") &&
-          !_get(pOptions, "skipDependencyTypes", []).includes(pPackageKey)
+          !get(pOptions, "skipDependencyTypes", []).includes(pPackageKey)
       )
       .reduce((pAll, pDepKey) => {
         pAll[pDepKey] = updateDeps(
@@ -67,7 +67,7 @@ function updateAllDeps(pPackageObject, pOutdatedPackages = {}, pOptions = {}) {
   };
 }
 
-module.exports = {
+export default {
   filterOutdatedPackages,
   updateDeps,
   updateAllDeps,

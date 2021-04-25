@@ -1,11 +1,14 @@
 {
   "name": "upem",
   "version": "5.0.0",
+  "type": "module",
   "description": "Ups your package.json dependencies to latest. Opinionated. Respectless.",
   "bin": {
     "upem": "bin/upem.js"
   },
-  "main": "index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
   "files": [
     "src/**/*.js",
     "bin/**/*.js",
@@ -33,16 +36,16 @@
     "url": "https://github.com/sverweij/upem/issues"
   },
   "devDependencies": {
-    "dependency-cruiser": "9.23.2",
-    "eslint": "7.21.0",
+    "dependency-cruiser": "9.26.0",
+    "eslint": "7.25.0",
     "eslint-config-moving-meadow": "2.0.9",
-    "eslint-config-prettier": "8.1.0",
+    "eslint-config-prettier": "8.3.0",
     "eslint-plugin-budapestian": "2.3.0",
     "eslint-plugin-import": "2.22.1",
-    "eslint-plugin-jest": "24.1.5",
+    "eslint-plugin-jest": "24.3.5",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-security": "1.4.0",
-    "eslint-plugin-unicorn": "28.0.2",
+    "eslint-plugin-unicorn": "31.0.0",
     "husky": "4.3.8",
     "jest": "26.6.3",
     "lint-staged": "10.5.4",
@@ -50,7 +53,7 @@
     "prettier": "2.2.1"
   },
   "dependencies": {
-    "get-stdin": "8.0.0",
+    "get-stdin": "9.0.0",
     "libnpmconfig": "1.2.1",
     "lodash.castarray": "4.4.0",
     "lodash.get": "4.4.2"
@@ -69,7 +72,7 @@
     "lint:fix": "npm-run-all lint:fix:eslint lint:fix:prettier",
     "lint:fix:eslint": "eslint --fix bin src test",
     "lint:fix:prettier": "prettier --write {bin,src,test}/**/*.js *.{json,yml,md} .github",
-    "test": "jest --collectCoverage",
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --collectCoverage",
     "update-dependencies": "npm-run-all upem:update upem:install lint:fix check",
     "upem:update": "npm outdated --json | bin/upem.js",
     "upem:install": "npm install",
@@ -87,13 +90,19 @@
     "extends": [
       "moving-meadow"
     ],
+    "parserOptions": {
+      "ecmaVersion": 2020
+    },
     "rules": {
       "complexity": [
         "warn",
         4
       ],
       "security/detect-non-literal-fs-filename": "off",
-      "security/detect-object-injection": "off"
+      "security/detect-object-injection": "off",
+      "node/no-unsupported-features/es-syntax": "off",
+      "sort-imports": "off",
+      "import/no-relative-parent-imports": "off"
     },
     "overrides": [
       {
@@ -118,10 +127,11 @@
       "lcov",
       "html"
     ],
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "transform": {}
   },
   "engines": {
-    "node": "^10||^12||>=13"
+    "node": "^12.20||^14||>=16"
   },
   "husky": {
     "hooks": {

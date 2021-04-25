@@ -1,5 +1,6 @@
-const fs = require("fs");
-const core = require("./core");
+// eslint-disable-next-line import/no-unresolved
+import fs from "fs";
+import core from "./core.js";
 
 const INDENT = 2;
 
@@ -32,12 +33,12 @@ function determineOutdated(pOutdatedObject, pPackageObject) {
   };
 }
 
-module.exports = (
+export default function upem(
   pPackageInputFileName,
   pOutdatedObject,
   pPackageOutputFileName = pPackageInputFileName,
   pOptions
-) => {
+) {
   try {
     const lPackageFile = fs.readFileSync(pPackageInputFileName);
     const lPackageObject = JSON.parse(lPackageFile);
@@ -80,4 +81,4 @@ module.exports = (
       message: `  Up'em encountered a hitch:\n${pError}\n\n`,
     };
   }
-};
+}
