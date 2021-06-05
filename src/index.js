@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unresolved
 import fs from "fs";
 import core from "./core.js";
 
