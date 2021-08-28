@@ -32,14 +32,15 @@ do the trick as well.
 ## Options
 
 If you want to keep versions untouched by _up'em_, put an `upem` section
-in your `package.json` with a `donotup` key, listing the stuff you don't
-want to upgrade e.g.
+in your `package.json` with a `policies` key, listing the stuff you don't
+want to upgrade. Currently this only supports the `pin` policy:
 
 ```json
   ...
   "upem": {
-    "donotup": [{
+    "policies": [{
       "package": "glowdash",
+      "policy": "pin",
       "because": "version >2 of glowdash doesn't support node 6 anymmore, but we still have to"
     }]
   }
@@ -81,8 +82,11 @@ after updates.
 _Up'em_ does respect the `save-exact` and `save-prefix` npm config
 settings, just like `npm --save` and `npm --save-dev` would do:
 
-- if `save-exact = true` it will pin the version. In the above example it will
-  pin `midash` to `2.0.1`
+- when `save-exact = true` and the dependency doesn't have a range prefix
+  it will pin the version.
+- when `save-exact = true` and the dependency _does_ have a range prefix
+  it will retain that prefix. In the above example it will set the version of
+  `midash` to `^2.0.1`.
 - if `save-exact = false` it will look at `save-prefix` in your npm config:
   - if `save-prefix = '^'` or save-prefix isn't specified, it'll caret-prefix
     the version: `^2.0.1`

@@ -79,9 +79,10 @@
     "version": "npm-run-all build check build:stage"
   },
   "upem": {
-    "donotup": [
+    "policies": [
       {
         "package": "husky",
+        "policy": "pin",
         "because": "husky's api changed from 4 => 5 and I don't want to invest in upgrading it right now"
       }
     ]

@@ -71,7 +71,7 @@ describe("#upem", () => {
 
     expect(lResult.OK).toStrictEqual(true);
     expect(lResult.message).toContain(
-      "Up'em says: Everything not in 'upem.donotup' seems to be up to date already."
+      "Up'em says: Everything not pinned in 'upem.policies' seems to be up to date already."
     );
   });
 

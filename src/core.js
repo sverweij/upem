@@ -1,4 +1,3 @@
-import castArray from "lodash.castarray";
 import get from "lodash.get";
 
 function getRangePrefix(pVersionRangeString) {
@@ -33,19 +32,17 @@ function updateDeps(pDependencyObject, pOutdatedPackagesObject, pOptions = {}) {
   };
 }
 
-function getDoNotUpArray(pPackageObject) {
-  return castArray(get(pPackageObject, "upem.donotup", []))
-    .map((pPackage) =>
-      typeof pPackage === "string" ? pPackage : get(pPackage, "package")
-    )
-    .filter((pPackage) => Boolean(pPackage));
+function getPinnedArray(pPackageObject) {
+  return get(pPackageObject, "upem.policies", [])
+    .filter((pPolicy) => pPolicy.policy === "pin")
+    .map((pPolicy) => get(pPolicy, "package"));
 }
 
 function filterOutdatedPackages(pOutdatedObject, pPackageObject) {
   const lReturnValue = { ...pOutdatedObject };
 
   Object.keys(lReturnValue)
-    .filter((pKey) => getDoNotUpArray(pPackageObject).includes(pKey))
+    .filter((pKey) => getPinnedArray(pPackageObject).includes(pKey))
     .forEach((pKey) => Reflect.deleteProperty(lReturnValue, pKey));
   return lReturnValue;
 }
