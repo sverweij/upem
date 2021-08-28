@@ -12,7 +12,7 @@
     "dev-and-peer-dep": "4.6.0"
   },
   "peerDependencies": {
-    "dev-and-peer-dep": "4.6.0",
-    "peer-only-dep": "4.9.0"
+    "dev-and-peer-dep": ">=4.6.0",
+    "peer-only-dep": ">=4.9.0"
   }
 }
