@@ -1,15 +1,33 @@
 import castArray from "lodash.castarray";
 import get from "lodash.get";
 
-function updateDeps(pDependencyObject, pOutdatedPackagesObject, pOptions = {}) {
-  const lSavePrefix = pOptions.saveExact ? "" : pOptions.savePrefix || "^";
+function getRangePrefix(pVersionRangeString) {
+  return (
+    // eslint-disable-next-line security/detect-unsafe-regex
+    pVersionRangeString.match(/^(?<prefix>[^0-9]{0,2}).+/).groups.prefix || ""
+  );
+}
 
+function determineSavePrefix(pVersionRangeString, pOptions) {
+  const lIndividualRangePrefix = getRangePrefix(pVersionRangeString);
+
+  if (pOptions.saveExact && lIndividualRangePrefix) {
+    return lIndividualRangePrefix;
+  }
+
+  return pOptions.saveExact ? "" : pOptions.savePrefix || "^";
+}
+
+function updateDeps(pDependencyObject, pOutdatedPackagesObject, pOptions = {}) {
   return {
     ...pDependencyObject,
     ...Object.keys(pDependencyObject)
       .filter((pDep) => Object.keys(pOutdatedPackagesObject).includes(pDep))
       .reduce((pAll, pThis) => {
-        pAll[pThis] = `${lSavePrefix}${pOutdatedPackagesObject[pThis].latest}`;
+        pAll[pThis] = `${determineSavePrefix(
+          pDependencyObject[pThis],
+          pOptions
+        )}${pOutdatedPackagesObject[pThis].latest}`;
         return pAll;
       }, {}),
   };

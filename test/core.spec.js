@@ -38,6 +38,17 @@ const OUTDATED_FIXTURE = {
   },
 };
 
+const DEPS_CARET_FIXTURE = {
+  "not-outdated": "1.0.0",
+  "outdated-one": "^2.0.0",
+  "outdated-possibly-pinned": "3.1.4",
+};
+const DEPS_CARET_UPDATED_LATEST_FIXTURE = {
+  "not-outdated": "1.0.0",
+  "outdated-one": "^3.0.2",
+  "outdated-possibly-pinned": "4.1.1",
+};
+
 describe("#updateDeps", () => {
   it("empty deps, no outdated yield input", () => {
     expect(up.updateDeps({}, [])).toStrictEqual({});
@@ -72,6 +83,11 @@ describe("#updateDeps", () => {
     expect(
       up.updateDeps(DEPS_FIXTURE, OUTDATED_FIXTURE, { savePrefix: "~" })
     ).toStrictEqual(DEPS_UPDATED_TILDE_FIXTURE);
+  });
+  it("deps, outdated with individual prefix, and saveExact: true, updates to latest and leaves prefix in place", () => {
+    expect(
+      up.updateDeps(DEPS_CARET_FIXTURE, OUTDATED_FIXTURE, { saveExact: true })
+    ).toStrictEqual(DEPS_CARET_UPDATED_LATEST_FIXTURE);
   });
 });
 
