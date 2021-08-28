@@ -5,6 +5,16 @@ function getRangePrefix(pVersionRangeString) {
   );
 }
 
+export function determineSavePrefix(pVersionRangeString, pOptions) {
+  const lIndividualRangePrefix = getRangePrefix(pVersionRangeString);
+
+  if (pOptions?.saveExact && lIndividualRangePrefix) {
+    return lIndividualRangePrefix;
+  }
+
+  return pOptions?.saveExact ? "" : pOptions?.savePrefix || "^";
+}
+
 export function getPolicyOverrides(pPackageObject, pPolicyToFilter) {
   return (pPackageObject?.upem?.policies ?? [])
     .filter(
@@ -12,14 +22,4 @@ export function getPolicyOverrides(pPackageObject, pPolicyToFilter) {
         pPolicy.policy === pPolicyToFilter && Boolean(pPolicy.package)
     )
     .map((pPolicy) => pPolicy.package);
-}
-
-export function determineSavePrefix(pVersionRangeString, pOptions) {
-  const lIndividualRangePrefix = getRangePrefix(pVersionRangeString);
-
-  if (pOptions.saveExact && lIndividualRangePrefix) {
-    return lIndividualRangePrefix;
-  }
-
-  return pOptions.saveExact ? "" : pOptions.savePrefix || "^";
 }
