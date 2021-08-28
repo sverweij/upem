@@ -33,7 +33,18 @@ do the trick as well.
 
 If you want to keep versions untouched by _up'em_, put an `upem` section
 in your `package.json` with a `policies` key, listing the stuff you don't
-want to upgrade. Currently this only supports the `pin` policy:
+want to upgrade. It supports thes policies:
+
+- `pin` - to keep the dependency on exactly the specified version),
+- `wanted` - so it respects any version ranges you specified in the \*dependencies
+  fields) and
+- latest` - where it takes the most recent version, regardless what is specified
+  in \*dependencies fields.
+
+`latest` is also the default - that's what you'll get when no policy is defined
+or when there's no `upem` section in package.json.
+
+Example:
 
 ```json
   ...
