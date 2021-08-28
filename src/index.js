@@ -22,7 +22,7 @@ function determineOutdated(pOutdatedObject, pPackageObject) {
     return {
       OK: true,
       message:
-        "  Up'em says: Everything not in 'upem.donotup' seems to be up to date already.\n\n",
+        "  Up'em says: Everything not pinned in 'upem.policies' seems to be up to date already.\n\n",
     };
   }
 

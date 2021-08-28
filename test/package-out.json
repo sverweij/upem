@@ -65,7 +65,12 @@
     "watch": "tsc --project src --watch"
   },
   "upem": {
-    "donotup": ["ts-jest"]
+    "policies": [
+      {
+        "package": "ts-jest",
+        "policy": "pin"
+      }
+    ]
   },
   "repository": {
     "type": "git",

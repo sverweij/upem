@@ -65,9 +65,10 @@
     "watch": "tsc --project src --watch"
   },
   "upem": {
-    "donotup": [
+    "policies": [
       {
         "akeybutitsnotnamedpackage": "ts-jest",
+        "policy": "pin",
         "because": "there's some incompatibilities we need to sort out still"
       }
     ]

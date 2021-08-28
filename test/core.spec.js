@@ -134,15 +134,6 @@ describe("#filterOutdatedPackages", () => {
     ).toStrictEqual(require("./outdated-filtered.json"));
   });
 
-  it("outdated + package with upem.donotup as a string => outdated without the upem.donotup", () => {
-    expect(
-      up.filterOutdatedPackages(
-        require("./outdated.json"),
-        require("./package-with-donotup-string.json")
-      )
-    ).toStrictEqual(require("./outdated-filtered.json"));
-  });
-
   it("outdated + package with upem.donotup objects => outdated without the upem.donotup", () => {
     expect(
       up.filterOutdatedPackages(
