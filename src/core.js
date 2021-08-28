@@ -1,21 +1,15 @@
-function getRangePrefix(pVersionRangeString) {
-  return (
-    // eslint-disable-next-line security/detect-unsafe-regex
-    pVersionRangeString.match(/^(?<prefix>[^0-9]{0,2}).+/).groups.prefix || ""
-  );
+import { determineSavePrefix, getPolicyOverrides } from "./core-helpers.js";
+
+function getUpdatePolicy(pDependency, pWantedArray) {
+  return pWantedArray.includes(pDependency) ? "wanted" : "latest";
 }
 
-function determineSavePrefix(pVersionRangeString, pOptions) {
-  const lIndividualRangePrefix = getRangePrefix(pVersionRangeString);
-
-  if (pOptions.saveExact && lIndividualRangePrefix) {
-    return lIndividualRangePrefix;
-  }
-
-  return pOptions.saveExact ? "" : pOptions.savePrefix || "^";
-}
-
-function updateDeps(pDependencyObject, pOutdatedPackagesObject, pOptions = {}) {
+function updateDeps(
+  pDependencyObject,
+  pOutdatedPackagesObject,
+  pOptions = {},
+  pWantedArray = []
+) {
   return {
     ...pDependencyObject,
     ...Object.keys(pDependencyObject)
@@ -24,22 +18,19 @@ function updateDeps(pDependencyObject, pOutdatedPackagesObject, pOptions = {}) {
         pAll[pThis] = `${determineSavePrefix(
           pDependencyObject[pThis],
           pOptions
-        )}${pOutdatedPackagesObject[pThis].latest}`;
+        )}${
+          pOutdatedPackagesObject[pThis][getUpdatePolicy(pThis, pWantedArray)]
+        }`;
         return pAll;
       }, {}),
   };
-}
-function getPinnedArray(pPackageObject) {
-  return (pPackageObject?.upem?.policies ?? [])
-    .filter((pPolicy) => pPolicy.policy === "pin" && Boolean(pPolicy.package))
-    .map((pPolicy) => pPolicy.package);
 }
 
 function filterOutdatedPackages(pOutdatedObject, pPackageObject) {
   const lReturnValue = { ...pOutdatedObject };
 
   Object.keys(lReturnValue)
-    .filter((pKey) => getPinnedArray(pPackageObject).includes(pKey))
+    .filter((pKey) => getPolicyOverrides(pPackageObject, "pin").includes(pKey))
     .forEach((pKey) => Reflect.deleteProperty(lReturnValue, pKey));
   return lReturnValue;
 }
@@ -60,6 +51,7 @@ function filterOutdatedPackages(pOutdatedObject, pPackageObject) {
  */
 
 function updateAllDeps(pPackageObject, pOutdatedPackages = {}, pOptions = {}) {
+  const lWantedArray = getPolicyOverrides(pPackageObject, "wanted");
   return {
     ...pPackageObject,
     ...Object.keys(pPackageObject)
@@ -72,7 +64,8 @@ function updateAllDeps(pPackageObject, pOutdatedPackages = {}, pOptions = {}) {
         pAll[pDepKey] = updateDeps(
           pPackageObject[pDepKey],
           pOutdatedPackages,
-          pOptions
+          pOptions,
+          lWantedArray
         );
         return pAll;
       }, {}),
