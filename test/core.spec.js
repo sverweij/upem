@@ -48,6 +48,11 @@ const DEPS_CARET_UPDATED_LATEST_FIXTURE = {
   "outdated-one": "^3.0.2",
   "outdated-possibly-pinned": "4.1.1",
 };
+const DEPS_CARET_UPDATED_WANTED_FIXTURE = {
+  "not-outdated": "1.0.0",
+  "outdated-one": "^2.0.1",
+  "outdated-possibly-pinned": "4.1.1",
+};
 
 describe("#updateDeps", () => {
   it("empty deps, no outdated yield input", () => {
@@ -88,6 +93,13 @@ describe("#updateDeps", () => {
     expect(
       up.updateDeps(DEPS_CARET_FIXTURE, OUTDATED_FIXTURE, { saveExact: true })
     ).toStrictEqual(DEPS_CARET_UPDATED_LATEST_FIXTURE);
+  });
+  it("hoppa", () => {
+    expect(
+      up.updateDeps(DEPS_CARET_FIXTURE, OUTDATED_FIXTURE, { saveExact: true }, [
+        "outdated-one",
+      ])
+    ).toStrictEqual(DEPS_CARET_UPDATED_WANTED_FIXTURE);
   });
 });
 
