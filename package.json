@@ -54,9 +54,7 @@
   },
   "dependencies": {
     "get-stdin": "^9.0.0",
-    "libnpmconfig": "^1.2.1",
-    "lodash.castarray": "4.4.0",
-    "lodash.get": "4.4.2"
+    "libnpmconfig": "^1.2.1"
   },
   "scripts": {
     "build": "npm-run-all depcruise:graph",
@@ -72,7 +70,7 @@
     "lint:fix": "npm-run-all lint:fix:eslint lint:fix:prettier",
     "lint:fix:eslint": "eslint --fix bin src test",
     "lint:fix:prettier": "prettier --write {bin,src,test}/**/*.js *.{json,yml,md} .github",
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --collectCoverage",
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --all --collectCoverage",
     "update-dependencies": "npm-run-all upem:update upem:install lint:fix check",
     "upem:update": "npm outdated --json | bin/upem.js",
     "upem:install": "npm install",
@@ -132,7 +130,7 @@
     "transform": {}
   },
   "engines": {
-    "node": "^12.20||^14.13.1||>=16"
+    "node": "^14.13.1||>=16"
   },
   "husky": {
     "hooks": {

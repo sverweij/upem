@@ -1,5 +1,3 @@
-import get from "lodash.get";
-
 function getRangePrefix(pVersionRangeString) {
   return (
     // eslint-disable-next-line security/detect-unsafe-regex
@@ -31,11 +29,10 @@ function updateDeps(pDependencyObject, pOutdatedPackagesObject, pOptions = {}) {
       }, {}),
   };
 }
-
 function getPinnedArray(pPackageObject) {
-  return get(pPackageObject, "upem.policies", [])
-    .filter((pPolicy) => pPolicy.policy === "pin")
-    .map((pPolicy) => get(pPolicy, "package"));
+  return (pPackageObject?.upem?.policies ?? [])
+    .filter((pPolicy) => pPolicy.policy === "pin" && Boolean(pPolicy.package))
+    .map((pPolicy) => pPolicy.package);
 }
 
 function filterOutdatedPackages(pOutdatedObject, pPackageObject) {
@@ -69,7 +66,7 @@ function updateAllDeps(pPackageObject, pOutdatedPackages = {}, pOptions = {}) {
       .filter(
         (pPackageKey) =>
           pPackageKey.includes("ependencies") &&
-          !get(pOptions, "skipDependencyTypes", []).includes(pPackageKey)
+          !(pOptions?.skipDependencyTypes ?? []).includes(pPackageKey)
       )
       .reduce((pAll, pDepKey) => {
         pAll[pDepKey] = updateDeps(
