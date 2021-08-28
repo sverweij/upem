@@ -12,15 +12,12 @@ jobs:
       fail-fast: false
       matrix:
         node-version:
-          - 12.x
           - 14.x
           - 16.x
         platform:
           - ubuntu-latest
           - windows-latest
         exclude:
-          - node-version: 12.x
-            platform: windows-latest
           - node-version: 14.x
             platform: windows-latest
 
