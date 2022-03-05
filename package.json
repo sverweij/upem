@@ -36,19 +36,19 @@
     "url": "https://github.com/sverweij/upem/issues"
   },
   "devDependencies": {
-    "dependency-cruiser": "^10.0.4",
-    "eslint": "7.32.0",
+    "dependency-cruiser": "^11.3.1",
+    "eslint": "^7.32.0",
     "eslint-config-moving-meadow": "2.0.9",
-    "eslint-config-prettier": "8.3.0",
-    "eslint-plugin-budapestian": "2.3.0",
-    "eslint-plugin-import": "2.24.2",
-    "eslint-plugin-jest": "24.4.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-budapestian": "3.0.1",
+    "eslint-plugin-import": "2.25.4",
+    "eslint-plugin-jest": "26.1.1",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-security": "1.4.0",
-    "eslint-plugin-unicorn": "35.0.0",
+    "eslint-plugin-unicorn": "^35.0.0",
     "husky": "^4.3.8",
-    "jest": "27.1.0",
-    "lint-staged": "^11.0.0",
+    "jest": "27.5.1",
+    "lint-staged": "^12.3.5",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.3.2"
   },
@@ -58,6 +58,16 @@
   },
   "upem": {
     "policies": [
+      {
+        "package": "eslint",
+        "policy": "wanted",
+        "because": "some configs/ plugin aren't ready for eslint 8 yet (peer require ^7)"
+      },
+      {
+        "package": "eslint-plugin-unicorn",
+        "policy": "wanted",
+        "because": "later versions peer require eslint 8 - which we're not on yet (see above)"
+      },
       {
         "package": "husky",
         "policy": "wanted",
@@ -75,10 +85,10 @@
     "depcruise:graph:svg": "depcruise --validate --output-type dot -- bin src | dot -T svg > docs/dependencygraph.svg",
     "lint": "npm-run-all lint:eslint lint:prettier",
     "lint:eslint": "eslint bin src test",
-    "lint:prettier": "prettier --check {bin,src,test}/**/*.js *.{json,yml,md} .github",
+    "lint:prettier": "prettier --check \"{bin,src,test}/**/*.js\" \"*.{json,yml,md}\" .github",
     "lint:fix": "npm-run-all lint:fix:eslint lint:fix:prettier",
     "lint:fix:eslint": "eslint --fix bin src test",
-    "lint:fix:prettier": "prettier --write {bin,src,test}/**/*.js *.{json,yml,md} .github",
+    "lint:fix:prettier": "prettier --write \"{bin,src,test}/**/*.js\" \"*.{json,yml,md}\" .github",
     "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --all --collectCoverage",
     "update-dependencies": "npm-run-all upem:update upem:install lint:fix check",
     "upem:update": "npm outdated --json | bin/upem.js",
@@ -101,7 +111,8 @@
       "security/detect-object-injection": "off",
       "node/no-unsupported-features/es-syntax": "off",
       "sort-imports": "off",
-      "import/no-relative-parent-imports": "off"
+      "import/no-relative-parent-imports": "off",
+      "jest/require-hook": "off"
     },
     "overrides": [
       {

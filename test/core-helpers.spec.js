@@ -5,28 +5,24 @@ import {
 
 describe("#core-helpers - determineSavePrefix", () => {
   it("without options, regardless, returns ^ (no prefix case)", () => {
-    expect(determineSavePrefix("0.0.0")).toStrictEqual("^");
+    expect(determineSavePrefix("0.0.0")).toBe("^");
   });
   it("without options, regardless, returns ^ (>= case)", () => {
-    expect(determineSavePrefix(">=0.0.0")).toStrictEqual("^");
+    expect(determineSavePrefix(">=0.0.0")).toBe("^");
   });
   it("with only saveExact = false, returns ^ as a prefix", () => {
-    expect(determineSavePrefix(">=0.0.0", { saveExact: false })).toStrictEqual(
-      "^"
-    );
+    expect(determineSavePrefix(">=0.0.0", { saveExact: false })).toBe("^");
   });
   it("with saveExact = false and a savePrefix, returns that savePrefix", () => {
     expect(
       determineSavePrefix(">=0.0.0", { saveExact: false, savePrefix: "~" })
-    ).toStrictEqual("~");
+    ).toBe("~");
   });
   it("with only saveExact = true, and an individual prefix returns that prefix", () => {
-    expect(determineSavePrefix(">=0.0.0", { saveExact: true })).toStrictEqual(
-      ">="
-    );
+    expect(determineSavePrefix(">=0.0.0", { saveExact: true })).toBe(">=");
   });
   it("with only saveExact = true, and no individual prefix returns empty string", () => {
-    expect(determineSavePrefix("0.0.0", { saveExact: true })).toStrictEqual("");
+    expect(determineSavePrefix("0.0.0", { saveExact: true })).toBe("");
   });
 });
 

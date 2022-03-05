@@ -9,14 +9,14 @@ describe("#upem", () => {
   it("non-existing package.json errors", () => {
     const lResult = up("thisfiledoesnotexist", "");
 
-    expect(lResult.OK).toStrictEqual(false);
+    expect(lResult.OK).toBe(false);
     expect(lResult.message).toContain("Up'em encountered a hitch:");
   });
 
   it('empty string dependency JSON yields "nothing to update"', () => {
     const lResult = up(path.join(__dirname, "package-in.json"), "");
 
-    expect(lResult.OK).toStrictEqual(true);
+    expect(lResult.OK).toBe(true);
     expect(lResult.message).toContain(
       "Up'em says: Everything seems to be up to date already."
     );
@@ -25,14 +25,14 @@ describe("#upem", () => {
   it('{} dependency JSON yields "nothing to update"', () => {
     const lResult = up(path.join(__dirname, "package-in.json"), "{}");
 
-    expect(lResult.OK).toStrictEqual(true);
+    expect(lResult.OK).toBe(true);
     expect(lResult.message).toContain(
       "Up'em says: Everything seems to be up to date already."
     );
   });
 
   it("read only package.json yields a 'can't update", () => {
-    const OUTDATED_JSON = `
+    const lOutdatedJson = `
     {
       "lodash.assign": {
         "current": "4.2.0",
@@ -48,16 +48,16 @@ describe("#upem", () => {
     );
 
     fs.chmodSync(READONLY_INPUT_FILENAME, "400");
-    const lResult = up(READONLY_INPUT_FILENAME, OUTDATED_JSON);
+    const lResult = up(READONLY_INPUT_FILENAME, lOutdatedJson);
 
-    expect(lResult.OK).toStrictEqual(false);
+    expect(lResult.OK).toBe(false);
     expect(lResult.message).toContain(
       "Up'em encountered a hitch when updating package.json:"
     );
   });
 
   it("if upem.donotup encompasses the outdated object yields that in a message", () => {
-    const OUTDATED_JSON = `
+    const lOutdatedJson = `
     {
       "ts-jest": {
         "current": "1.8.2",
@@ -67,9 +67,9 @@ describe("#upem", () => {
       }
     }
     `;
-    const lResult = up(path.join(__dirname, "package-in.json"), OUTDATED_JSON);
+    const lResult = up(path.join(__dirname, "package-in.json"), lOutdatedJson);
 
-    expect(lResult.OK).toStrictEqual(true);
+    expect(lResult.OK).toBe(true);
     expect(lResult.message).toContain(
       "Up'em says: Everything not pinned in 'upem.policies' seems to be up to date already."
     );
@@ -87,7 +87,7 @@ describe("#upem", () => {
       saveExact: true,
     });
 
-    expect(lResult.OK).toStrictEqual(true);
+    expect(lResult.OK).toBe(true);
     expect(lResult.message).toContain(
       "Up'em just updated all outdated dependencies in package.json to latest"
     );
@@ -147,7 +147,7 @@ describe("#upem", () => {
       skipDependencyTypes: ["peerDependencies"],
     });
 
-    expect(lResult.OK).toStrictEqual(true);
+    expect(lResult.OK).toBe(true);
     expect(lResult.message).toContain(
       "Up'em just updated all outdated dependencies in package.json to latest"
     );
@@ -206,7 +206,7 @@ describe("#upem", () => {
       saveExact: true,
     });
 
-    expect(lResult.OK).toStrictEqual(true);
+    expect(lResult.OK).toBe(true);
     expect(lResult.message).toContain(
       "Up'em just updated all outdated dependencies in package.json to latest"
     );
