@@ -58,7 +58,7 @@ Example:
   ...
 ```
 
-## So what's this _opionated and respectless_ business?
+## So what's this _opinionated and respectless_ business?
 
 ### Latest is best
 
