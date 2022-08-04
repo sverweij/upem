@@ -1,11 +1,19 @@
 import { fileURLToPath } from "url";
 import fs from "fs";
 import path from "path";
-import up from "../src/index.js";
+import up from "./up.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 describe("#upem", () => {
+  // eslint-disable-next-line jest/no-hooks
+  afterAll(() => {
+    fs.rmSync(path.join(__dirname, "tmp_package-out.json"), {
+      force: true,
+      maxRetries: 3,
+    });
+  });
+
   it("non-existing package.json errors", () => {
     const lResult = up("thisfiledoesnotexist", "");
 
@@ -14,7 +22,10 @@ describe("#upem", () => {
   });
 
   it('empty string dependency JSON yields "nothing to update"', () => {
-    const lResult = up(path.join(__dirname, "package-in.json"), "");
+    const lResult = up(
+      path.join(__dirname, "__mocks__", "package-in.json"),
+      ""
+    );
 
     expect(lResult.OK).toBe(true);
     expect(lResult.message).toContain(
@@ -23,7 +34,10 @@ describe("#upem", () => {
   });
 
   it('{} dependency JSON yields "nothing to update"', () => {
-    const lResult = up(path.join(__dirname, "package-in.json"), "{}");
+    const lResult = up(
+      path.join(__dirname, "__mocks__", "package-in.json"),
+      "{}"
+    );
 
     expect(lResult.OK).toBe(true);
     expect(lResult.message).toContain(
@@ -44,6 +58,7 @@ describe("#upem", () => {
     `;
     const READONLY_INPUT_FILENAME = path.join(
       __dirname,
+      "__mocks__",
       "package-in-readonly.json"
     );
 
@@ -67,7 +82,10 @@ describe("#upem", () => {
       }
     }
     `;
-    const lResult = up(path.join(__dirname, "package-in.json"), lOutdatedJson);
+    const lResult = up(
+      path.join(__dirname, "__mocks__", "package-in.json"),
+      lOutdatedJson
+    );
 
     expect(lResult.OK).toBe(true);
     expect(lResult.message).toContain(
@@ -77,11 +95,15 @@ describe("#upem", () => {
 
   it("happy day: dependencies updated with stuff in an outdated.json", () => {
     const OUTDATED_JSON = fs.readFileSync(
-      path.join(__dirname, "outdated.json")
+      path.join(__dirname, "__mocks__", "outdated.json")
     );
-    const INPUT_FILENAME = path.join(__dirname, "package-in.json");
+    const INPUT_FILENAME = path.join(__dirname, "__mocks__", "package-in.json");
     const OUTPUT_FILENAME = path.join(__dirname, "tmp_package-out.json");
-    const FIXTURE_FILENAME = path.join(__dirname, "package-out.json");
+    const FIXTURE_FILENAME = path.join(
+      __dirname,
+      "__fixtures__",
+      "package-out.json"
+    );
 
     const lResult = up(INPUT_FILENAME, OUTDATED_JSON, OUTPUT_FILENAME, {
       saveExact: true,
@@ -134,11 +156,13 @@ describe("#upem", () => {
     });
     const INPUT_FILENAME = path.join(
       __dirname,
+      "__mocks__",
       "package-in-with-peer-deps.json"
     );
     const OUTPUT_FILENAME = path.join(__dirname, "tmp_package-out.json");
     const FIXTURE_FILENAME = path.join(
       __dirname,
+      "__fixtures__",
       "package-out-with-peer-deps-not-updated.json"
     );
 
@@ -194,11 +218,13 @@ describe("#upem", () => {
     });
     const INPUT_FILENAME = path.join(
       __dirname,
+      "__mocks__",
       "package-in-with-peer-deps.json"
     );
     const OUTPUT_FILENAME = path.join(__dirname, "tmp_package-out.json");
     const FIXTURE_FILENAME = path.join(
       __dirname,
+      "__fixtures__",
       "package-out-with-peer-deps-updated.json"
     );
 

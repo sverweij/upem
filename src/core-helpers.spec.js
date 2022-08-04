@@ -1,7 +1,4 @@
-import {
-  determineSavePrefix,
-  getPolicyOverrides,
-} from "../src/core-helpers.js";
+import { determineSavePrefix, getPolicyOverrides } from "./core-helpers.js";
 
 describe("#core-helpers - determineSavePrefix", () => {
   it("without options, regardless, returns ^ (no prefix case)", () => {

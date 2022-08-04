@@ -8,9 +8,7 @@ plugins:
     enabled: false
 exclude_patterns:
   - ".github/"
-  - "config/"
   - "docs/"
-  - "test/"
-  - "utl/"
+  - "src/**/*.spec.js"
   - "**/node_modules/"
   - "**/*.d.ts"

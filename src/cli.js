@@ -3,7 +3,7 @@
 import path from "node:path";
 import libNpmConfig from "libnpmconfig";
 import getStdin from "get-stdin";
-import up from "../src/index.js";
+import up from "./up.js";
 
 const PACKAGE_FILE_NAME = path.join(process.cwd(), "package.json");
 

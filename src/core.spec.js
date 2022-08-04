@@ -1,7 +1,7 @@
 import { createRequire } from "module";
-import up from "../src/core.js";
+import up from "./core.js";
 
-const require = createRequire(import.meta.url);
+const readJSON = createRequire(import.meta.url);
 
 const DEPS_FIXTURE = {
   "not-outdated": "1.0.0",
@@ -116,13 +116,13 @@ describe("#updateAllDeps", () => {
   it("real package.json, several outdated yield updated output", () => {
     expect(
       up.updateAllDeps(
-        require("./package-in.json"),
-        require("./outdated-filtered.json"),
+        readJSON("./__mocks__/package-in.json"),
+        readJSON("./__mocks__/outdated-filtered.json"),
         {
           saveExact: true,
         }
       )
-    ).toStrictEqual(require("./package-out.json"));
+    ).toStrictEqual(readJSON("./__fixtures__/package-out.json"));
   });
 });
 
@@ -133,43 +133,43 @@ describe("#filterOutdatedPackages", () => {
 
   it("empty outdated + package => empty outdated", () => {
     expect(
-      up.filterOutdatedPackages({}, require("./package-in.json"))
+      up.filterOutdatedPackages({}, readJSON("./__mocks__/package-in.json"))
     ).toStrictEqual({});
   });
 
   it("outdated + package with upem.donotup => outdated without the upem.donotup", () => {
     expect(
       up.filterOutdatedPackages(
-        require("./outdated.json"),
-        require("./package-in.json")
+        readJSON("./__mocks__/outdated.json"),
+        readJSON("./__mocks__/package-in.json")
       )
-    ).toStrictEqual(require("./outdated-filtered.json"));
+    ).toStrictEqual(readJSON("./__fixtures__/outdated-filtered.json"));
   });
 
   it("outdated + package with upem.donotup objects => outdated without the upem.donotup", () => {
     expect(
       up.filterOutdatedPackages(
-        require("./outdated.json"),
-        require("./package-in-with-donotup-object.json")
+        readJSON("./__mocks__/outdated.json"),
+        readJSON("./__mocks__/package-in-with-donotup-object.json")
       )
-    ).toStrictEqual(require("./outdated-filtered.json"));
+    ).toStrictEqual(readJSON("./__fixtures__/outdated-filtered.json"));
   });
 
   it("outdated + package without upem.donotup => outdated without the upem.donotup", () => {
     expect(
       up.filterOutdatedPackages(
-        require("./outdated.json"),
-        require("./package-in-without-upem-donotup.json")
+        readJSON("./__mocks__/outdated.json"),
+        readJSON("./__mocks__/package-in-without-upem-donotup.json")
       )
-    ).toStrictEqual(require("./outdated.json"));
+    ).toStrictEqual(readJSON("./__fixtures__/outdated.json"));
   });
 
   it("outdated + package with upem.donotup => outdated with erroneous upem.donotup", () => {
     expect(
       up.filterOutdatedPackages(
-        require("./outdated.json"),
-        require("./package-in-with-erroneous-upem-donotup.json")
+        readJSON("./__mocks__/outdated.json"),
+        readJSON("./__mocks__/package-in-with-erroneous-upem-donotup.json")
       )
-    ).toStrictEqual(require("./outdated.json"));
+    ).toStrictEqual(readJSON("./__fixtures__/outdated.json"));
   });
 });

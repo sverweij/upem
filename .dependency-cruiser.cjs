@@ -1,3 +1,4 @@
+/** @type {import('dependency-cruiser').IConfiguration} */
 module.exports = {
   extends: "dependency-cruiser/configs/recommended-strict",
   /*
@@ -20,17 +21,6 @@ module.exports = {
        }
      */
   forbidden: [
-    {
-      name: "not-to-test",
-      comment: "Don't allow dependencies from outside the test folder to test",
-      severity: "error",
-      from: {
-        pathNot: "^test",
-      },
-      to: {
-        path: "^test",
-      },
-    },
     {
       name: "not-to-spec",
       comment:
@@ -78,10 +68,11 @@ module.exports = {
       name: "no-unreachable",
       severity: "error",
       from: {
-        path: "bin/upem.js",
+        path: "src/cli.js",
       },
       to: {
         path: "src/",
+        pathNot: ["\\.spec\\.js$"],
         reachable: false,
       },
     },
@@ -89,10 +80,11 @@ module.exports = {
       name: "no-non-test-coverage",
       severity: "error",
       from: {
-        path: "test/[^\\.]+\\.spec\\.js$",
+        path: "src/[^\\.]+\\.spec\\.js$",
       },
       to: {
         path: "src/",
+        pathNot: ["src/cli.js", "\\.spec\\.js$"],
         reachable: false,
       },
     },
@@ -104,6 +96,39 @@ module.exports = {
     reporterOptions: {
       dot: {
         collapsePattern: "node_modules/[^/]+",
+        theme: {
+          graph: {
+            splines: "ortho",
+          },
+          modules: [
+            {
+              criteria: { matchesFocus: true },
+              attributes: { fillcolor: "lime", penwidth: 2 },
+            },
+            {
+              criteria: { matchesReaches: true },
+              attributes: { fillcolor: "lime", penwidth: 2 },
+            },
+            {
+              criteria: { source: ".spec.js" },
+              attributes: { fillcolor: "#ccccff" },
+            },
+          ],
+          dependencies: [
+            {
+              criteria: { "rules[0].severity": "error" },
+              attributes: { fontcolor: "red", color: "red" },
+            },
+            {
+              criteria: { "rules[0].severity": "warn" },
+              attributes: { fontcolor: "orange", color: "orange" },
+            },
+            {
+              criteria: { "rules[0].severity": "info" },
+              attributes: { fontcolor: "blue", color: "blue" },
+            },
+          ],
+        },
       },
     },
   },
