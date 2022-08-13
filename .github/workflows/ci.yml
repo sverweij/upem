@@ -18,7 +18,7 @@ jobs:
           - ubuntu-latest
           - windows-latest
         exclude:
-          - node-version: 14.x
+          - node-version: 16.x
             platform: windows-latest
 
     runs-on: ${{matrix.platform}}
@@ -41,7 +41,7 @@ jobs:
         run: |
           node --version
           npm run lint
-        if: matrix.platform == 'ubuntu-latest' && matrix.node-version == '16.x'
+        if: matrix.platform == 'ubuntu-latest' && matrix.node-version == '18.x'
         shell: bash
         env:
           CI: true

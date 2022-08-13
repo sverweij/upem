@@ -1,24 +1,29 @@
-import fs from "fs";
-import core from "./core.js";
+import { readFileSync, writeFileSync } from "node:fs";
+import { determinePolicies, isUpAble } from "./determine-policies.js";
+import { updateManifest } from "./update-manifest.js";
 
 const INDENT = 2;
 
+/**
+ *
+ * @param {string} pOutdatedObject
+ * @param {import("../types/upem.js").IManifest} pPackageObject
+ * @returns
+ */
 function determineOutdated(pOutdatedObject, pPackageObject) {
-  pOutdatedObject =
+  const lOutdatedObject =
     pOutdatedObject.length <= 0 ? {} : JSON.parse(pOutdatedObject);
-  const lOutdatedObject = core.filterOutdatedPackages(
-    pOutdatedObject,
-    pPackageObject
-  );
+  const lPolicies = pPackageObject?.upem?.policies || [];
+  const lOutdatedList = determinePolicies(lOutdatedObject, lPolicies);
 
-  if (Object.keys(pOutdatedObject).length <= 0) {
+  if (lOutdatedList.length <= 0) {
     return {
       OK: true,
       message: "  Up'em says: Everything seems to be up to date already.\n\n",
     };
   }
 
-  if (Object.keys(lOutdatedObject).length <= 0) {
+  if (lOutdatedList.filter(isUpAble).length <= 0) {
     return {
       OK: true,
       message:
@@ -28,10 +33,17 @@ function determineOutdated(pOutdatedObject, pPackageObject) {
 
   return {
     OK: true,
-    outdatedObject: lOutdatedObject,
+    outdatedList: lOutdatedList,
   };
 }
-
+/**
+ *
+ * @param {string} pPackageInputFileName
+ * @param {import("../types/upem.js").INpmOutdated} pOutdatedObject
+ * @param {string} pPackageOutputFileName
+ * @param {import("../types/upem.js").IUpemOptions} pOptions
+ * @returns {import("../types/upem.js").IUpemReturn}
+ */
 export default function upem(
   pPackageInputFileName,
   pOutdatedObject,
@@ -39,22 +51,21 @@ export default function upem(
   pOptions
 ) {
   try {
-    const lPackageFile = fs.readFileSync(pPackageInputFileName);
+    const lPackageFile = readFileSync(pPackageInputFileName);
     const lPackageObject = JSON.parse(lPackageFile);
-
     const lOutdatedResult = determineOutdated(pOutdatedObject, lPackageObject);
 
-    if (!lOutdatedResult.outdatedObject) {
+    if (!lOutdatedResult.outdatedList) {
       return lOutdatedResult;
     }
 
     try {
-      fs.writeFileSync(
+      writeFileSync(
         pPackageOutputFileName,
         JSON.stringify(
-          core.updateAllDeps(
+          updateManifest(
             lPackageObject,
-            lOutdatedResult.outdatedObject,
+            lOutdatedResult.outdatedList.filter(isUpAble),
             pOptions
           ),
           // eslint-disable-next-line unicorn/no-null
@@ -64,9 +75,10 @@ export default function upem(
       );
       return {
         OK: true,
-        message: `  Up'em just updated all outdated dependencies in package.json to latest:\n\n    ${Object.keys(
-          lOutdatedResult.outdatedObject
-        ).join(", ")}\n\n`,
+        message: `  Up'em just updated all outdated dependencies in package.json to latest:\n\n    ${lOutdatedResult.outdatedList
+          .filter(isUpAble)
+          .map((pOutdatedEntry) => pOutdatedEntry.package)
+          .join(", ")}\n\n`,
       };
     } catch (pError) {
       return {
