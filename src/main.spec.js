@@ -1,31 +1,28 @@
-import { fileURLToPath } from "url";
-import fs from "fs";
-import path from "path";
-import up from "./up.js";
+import { fileURLToPath } from "node:url";
+import { rmSync, chmodSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import upem from "./main.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 describe("#upem", () => {
   // eslint-disable-next-line jest/no-hooks
   afterAll(() => {
-    fs.rmSync(path.join(__dirname, "tmp_package-out.json"), {
+    rmSync(join(__dirname, "tmp_package-out.json"), {
       force: true,
       maxRetries: 3,
     });
   });
 
   it("non-existing package.json errors", () => {
-    const lResult = up("thisfiledoesnotexist", "");
+    const lResult = upem("thisfiledoesnotexist", "");
 
     expect(lResult.OK).toBe(false);
     expect(lResult.message).toContain("Up'em encountered a hitch:");
   });
 
   it('empty string dependency JSON yields "nothing to update"', () => {
-    const lResult = up(
-      path.join(__dirname, "__mocks__", "package-in.json"),
-      ""
-    );
+    const lResult = upem(join(__dirname, "__mocks__", "package-in.json"), "");
 
     expect(lResult.OK).toBe(true);
     expect(lResult.message).toContain(
@@ -34,10 +31,7 @@ describe("#upem", () => {
   });
 
   it('{} dependency JSON yields "nothing to update"', () => {
-    const lResult = up(
-      path.join(__dirname, "__mocks__", "package-in.json"),
-      "{}"
-    );
+    const lResult = upem(join(__dirname, "__mocks__", "package-in.json"), "{}");
 
     expect(lResult.OK).toBe(true);
     expect(lResult.message).toContain(
@@ -56,14 +50,14 @@ describe("#upem", () => {
       }
     }
     `;
-    const READONLY_INPUT_FILENAME = path.join(
+    const READONLY_INPUT_FILENAME = join(
       __dirname,
       "__mocks__",
       "package-in-readonly.json"
     );
 
-    fs.chmodSync(READONLY_INPUT_FILENAME, "400");
-    const lResult = up(READONLY_INPUT_FILENAME, lOutdatedJson);
+    chmodSync(READONLY_INPUT_FILENAME, "400");
+    const lResult = upem(READONLY_INPUT_FILENAME, lOutdatedJson);
 
     expect(lResult.OK).toBe(false);
     expect(lResult.message).toContain(
@@ -82,8 +76,8 @@ describe("#upem", () => {
       }
     }
     `;
-    const lResult = up(
-      path.join(__dirname, "__mocks__", "package-in.json"),
+    const lResult = upem(
+      join(__dirname, "__mocks__", "package-in.json"),
       lOutdatedJson
     );
 
@@ -94,18 +88,18 @@ describe("#upem", () => {
   });
 
   it("happy day: dependencies updated with stuff in an outdated.json", () => {
-    const OUTDATED_JSON = fs.readFileSync(
-      path.join(__dirname, "__mocks__", "outdated.json")
+    const OUTDATED_JSON = readFileSync(
+      join(__dirname, "__mocks__", "outdated.json")
     );
-    const INPUT_FILENAME = path.join(__dirname, "__mocks__", "package-in.json");
-    const OUTPUT_FILENAME = path.join(__dirname, "tmp_package-out.json");
-    const FIXTURE_FILENAME = path.join(
+    const INPUT_FILENAME = join(__dirname, "__mocks__", "package-in.json");
+    const OUTPUT_FILENAME = join(__dirname, "tmp_package-out.json");
+    const FIXTURE_FILENAME = join(
       __dirname,
       "__fixtures__",
       "package-out.json"
     );
 
-    const lResult = up(INPUT_FILENAME, OUTDATED_JSON, OUTPUT_FILENAME, {
+    const lResult = upem(INPUT_FILENAME, OUTDATED_JSON, OUTPUT_FILENAME, {
       saveExact: true,
     });
 
@@ -116,8 +110,8 @@ describe("#upem", () => {
     expect(lResult.message).toContain(
       "@types/node, dependency-cruiser, jest, webpack"
     );
-    expect(JSON.parse(fs.readFileSync(OUTPUT_FILENAME))).toStrictEqual(
-      JSON.parse(fs.readFileSync(FIXTURE_FILENAME))
+    expect(JSON.parse(readFileSync(OUTPUT_FILENAME))).toStrictEqual(
+      JSON.parse(readFileSync(FIXTURE_FILENAME))
     );
   });
 
@@ -154,19 +148,19 @@ describe("#upem", () => {
         location: "node_modules/peer-only-dep",
       },
     });
-    const INPUT_FILENAME = path.join(
+    const INPUT_FILENAME = join(
       __dirname,
       "__mocks__",
       "package-in-with-peer-deps.json"
     );
-    const OUTPUT_FILENAME = path.join(__dirname, "tmp_package-out.json");
-    const FIXTURE_FILENAME = path.join(
+    const OUTPUT_FILENAME = join(__dirname, "tmp_package-out.json");
+    const FIXTURE_FILENAME = join(
       __dirname,
       "__fixtures__",
       "package-out-with-peer-deps-not-updated.json"
     );
 
-    const lResult = up(INPUT_FILENAME, OUTDATED, OUTPUT_FILENAME, {
+    const lResult = upem(INPUT_FILENAME, OUTDATED, OUTPUT_FILENAME, {
       saveExact: true,
       skipDependencyTypes: ["peerDependencies"],
     });
@@ -178,8 +172,8 @@ describe("#upem", () => {
     expect(lResult.message).toContain(
       "prod-dep, prod-dep-two, dev-dep, dev-and-peer-dep"
     );
-    expect(JSON.parse(fs.readFileSync(OUTPUT_FILENAME))).toStrictEqual(
-      JSON.parse(fs.readFileSync(FIXTURE_FILENAME))
+    expect(JSON.parse(readFileSync(OUTPUT_FILENAME))).toStrictEqual(
+      JSON.parse(readFileSync(FIXTURE_FILENAME))
     );
   });
 
@@ -216,19 +210,19 @@ describe("#upem", () => {
         location: "node_modules/peer-only-dep",
       },
     });
-    const INPUT_FILENAME = path.join(
+    const INPUT_FILENAME = join(
       __dirname,
       "__mocks__",
       "package-in-with-peer-deps.json"
     );
-    const OUTPUT_FILENAME = path.join(__dirname, "tmp_package-out.json");
-    const FIXTURE_FILENAME = path.join(
+    const OUTPUT_FILENAME = join(__dirname, "tmp_package-out.json");
+    const FIXTURE_FILENAME = join(
       __dirname,
       "__fixtures__",
       "package-out-with-peer-deps-updated.json"
     );
 
-    const lResult = up(INPUT_FILENAME, OUTDATED, OUTPUT_FILENAME, {
+    const lResult = upem(INPUT_FILENAME, OUTDATED, OUTPUT_FILENAME, {
       saveExact: true,
     });
 
@@ -239,8 +233,8 @@ describe("#upem", () => {
     expect(lResult.message).toContain(
       "prod-dep, prod-dep-two, dev-dep, dev-and-peer-dep, peer-only-dep"
     );
-    expect(JSON.parse(fs.readFileSync(OUTPUT_FILENAME))).toStrictEqual(
-      JSON.parse(fs.readFileSync(FIXTURE_FILENAME))
+    expect(JSON.parse(readFileSync(OUTPUT_FILENAME))).toStrictEqual(
+      JSON.parse(readFileSync(FIXTURE_FILENAME))
     );
   });
 });

@@ -53,7 +53,6 @@
     "prettier": "^2.3.2"
   },
   "dependencies": {
-    "@npmcli/config": "4.1.0",
     "get-stdin": "^9.0.0",
     "libnpmconfig": "^1.2.1"
   },
@@ -80,9 +79,10 @@
     "build": "npm-run-all depcruise:graph",
     "build:stage": "git add .",
     "check": "npm-run-all --parallel depcruise lint test",
-    "depcruise": "depcruise --validate -- src",
-    "depcruise:graph": "npm-run-all depcruise:graph:*",
-    "depcruise:graph:html": "depcruise --validate --output-type dot -- src | dot -T svg | tee docs/dependencygraph.svg | depcruise-wrap-stream-in-html > docs/dependencygraph.html",
+    "depcruise": "depcruise src --validate --cache",
+    "depcruise:graph": "npm-run-all depcruise:graph:html",
+    "depcruise:graph:html": "depcruise src --validate --cache --output-type dot | dot -T svg | tee docs/dependencygraph.svg | depcruise-wrap-stream-in-html > docs/dependencygraph.html",
+    "depcruise:graph:view": "depcruise src --validate --cache --output-type dot --prefix vscode://file/$(pwd)/ | dot -T svg | depcruise-wrap-stream-in-html | browser",
     "lint": "npm-run-all lint:eslint lint:prettier",
     "lint:eslint": "eslint src",
     "lint:prettier": "prettier --check \"src/**/*.js\" \"*.{json,yml,md}\" .github",
