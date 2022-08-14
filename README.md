@@ -33,12 +33,12 @@ do the trick as well.
 
 If you want to keep versions untouched by _up'em_, put an `upem` section
 in your `package.json` with a `policies` key, listing the stuff you don't
-want to upgrade. It supports thes policies:
+want to upgrade. It supports these policies:
 
-- `pin` - to keep the dependency on exactly the specified version),
+- `pin` (or `current`) - to keep the dependency on exactly the specified version,
 - `wanted` - so it respects any version ranges you specified in the \*dependencies
-  fields) and
-- latest` - where it takes the most recent version, regardless what is specified
+  fields and
+- `latest` - where it takes the most recent version, regardless what is specified
   in \*dependencies fields.
 
 `latest` is also the default - that's what you'll get when no policy is defined
@@ -112,7 +112,7 @@ save-prefix = '^'
 ```
 
 Whatever your preferences: commit a `.npmrc` at the root of all your repos so
-npm, yarn and upem behavior is the same accross all machines and collaborators.
+npm, yarn and upem behavior is the same across all machines and collaborators.
 
 ### Not updating peerDependencies
 
