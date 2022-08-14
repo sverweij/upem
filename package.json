@@ -7,7 +7,7 @@
     "upem": "src/cli.js"
   },
   "exports": {
-    ".": "./src/up.js"
+    ".": "./src/main.js"
   },
   "files": [
     "src/**/*.js",
