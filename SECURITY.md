@@ -3,7 +3,7 @@
 ## Supported Versions
 
 At any given time we only support the _latest_ version of upem (as
-reflected in the _master_ branch) with security updates.
+reflected in the _main_ branch) with security updates.
 
 ## Reporting a Vulnerability
 

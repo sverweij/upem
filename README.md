@@ -1,4 +1,4 @@
-<img width="640" alt="Up'em" src="https://raw.githubusercontent.com/sverweij/upem/master/docs/assets/upem-social-card.png">
+<img width="640" alt="Up'em" src="https://raw.githubusercontent.com/sverweij/upem/main/docs/assets/upem-social-card.png">
 
 **Up'em** updates your dependencies to **latest**, so you don't have to.
 
@@ -157,7 +157,7 @@ my own would only take a sunday afternoon...
 
 ## Flare
 
-[![Build Status](https://travis-ci.org/sverweij/upem.svg?branch=master)](https://travis-ci.org/sverweij/upem)
+[![Build Status](https://travis-ci.org/sverweij/upem.svg?branch=main)](https://travis-ci.org/sverweij/upem)
 [![Maintainability](https://api.codeclimate.com/v1/badges/ecd08465c81bc85b83fe/maintainability)](https://codeclimate.com/github/sverweij/upem/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/ecd08465c81bc85b83fe/test_coverage)](https://codeclimate.com/github/sverweij/upem/test_coverage)
 [![npm stable version](https://img.shields.io/npm/v/upem.svg)](https://npmjs.com/package/upem)
