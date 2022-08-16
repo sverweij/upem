@@ -18,7 +18,7 @@
     "location": "node_modules/jest"
   },
   "ts-jest": {
-    "current": "22.4.6",
+    "current": "2.0.0",
     "wanted": "22.4.6",
     "latest": "23.0.0",
     "location": "node_modules/ts-jest"
