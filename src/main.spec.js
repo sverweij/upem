@@ -6,7 +6,40 @@ import upem from "./main.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
-describe("#upem", () => {
+const OUTDATED = JSON.stringify({
+  "prod-dep": {
+    current: "1.2.3",
+    wanted: "1.2.3",
+    latest: "1.3.0",
+    location: "node_modules/prod-dep",
+  },
+  "prod-dep-two": {
+    current: "4.5.6",
+    wanted: "4.5.6",
+    latest: "5.0.0",
+    location: "node_modules/prod-dep-two",
+  },
+  "dev-dep": {
+    current: "1.2.3",
+    wanted: "1.2.3",
+    latest: "1.3.0",
+    location: "node_modules/dev-dep",
+  },
+  "dev-and-peer-dep": {
+    current: "4.5.6",
+    wanted: "4.5.6",
+    latest: "4.6.0",
+    location: "node_modules/dev-and-peer-dep",
+  },
+  "peer-only-dep": {
+    current: "4.8.1",
+    wanted: ">=4.8.1",
+    latest: "4.9.0",
+    location: "node_modules/peer-only-dep",
+  },
+});
+
+describe("main", () => {
   // eslint-disable-next-line jest/no-hooks
   afterAll(() => {
     rmSync(join(__dirname, "tmp_package-out.json"), {
@@ -117,38 +150,6 @@ describe("#upem", () => {
   });
 
   it("happy day: don't up peerDependencies when told not to", () => {
-    const OUTDATED = JSON.stringify({
-      "prod-dep": {
-        current: "1.2.3",
-        wanted: "1.2.3",
-        latest: "1.3.0",
-        location: "node_modules/prod-dep",
-      },
-      "prod-dep-two": {
-        current: "4.5.6",
-        wanted: "4.5.6",
-        latest: "5.0.0",
-        location: "node_modules/prod-dep-two",
-      },
-      "dev-dep": {
-        current: "1.2.3",
-        wanted: "1.2.3",
-        latest: "1.3.0",
-        location: "node_modules/dev-dep",
-      },
-      "dev-and-peer-dep": {
-        current: "4.5.6",
-        wanted: "4.5.6",
-        latest: "4.6.0",
-        location: "node_modules/dev-and-peer-dep",
-      },
-      "peer-only-dep": {
-        current: "4.8.1",
-        wanted: ">=4.8.1",
-        latest: "4.9.0",
-        location: "node_modules/peer-only-dep",
-      },
-    });
     const INPUT_FILENAME = join(
       __dirname,
       "__mocks__",
@@ -183,38 +184,6 @@ describe("#upem", () => {
   });
 
   it("happy day: do up peerDependencies when not told not to", () => {
-    const OUTDATED = JSON.stringify({
-      "prod-dep": {
-        current: "1.2.3",
-        wanted: "1.2.3",
-        latest: "1.3.0",
-        location: "node_modules/prod-dep",
-      },
-      "prod-dep-two": {
-        current: "4.5.6",
-        wanted: "4.5.6",
-        latest: "5.0.0",
-        location: "node_modules/prod-dep-two",
-      },
-      "dev-dep": {
-        current: "1.2.3",
-        wanted: "1.2.3",
-        latest: "1.3.0",
-        location: "node_modules/dev-dep",
-      },
-      "dev-and-peer-dep": {
-        current: "4.5.6",
-        wanted: "4.5.6",
-        latest: "4.6.0",
-        location: "node_modules/dev-and-peer-dep",
-      },
-      "peer-only-dep": {
-        current: "4.8.1",
-        wanted: ">=4.8.1",
-        latest: "4.9.0",
-        location: "node_modules/peer-only-dep",
-      },
-    });
     const INPUT_FILENAME = join(
       __dirname,
       "__mocks__",
@@ -242,6 +211,48 @@ describe("#upem", () => {
         `dev-and-peer-dep  4.5.6   -> 4.6.0   (policy: latest)${EOL}` +
         `peer-only-dep     4.8.1   -> 4.9.0   (policy: latest)`
     );
+    expect(JSON.parse(readFileSync(OUTPUT_FILENAME))).toStrictEqual(
+      JSON.parse(readFileSync(FIXTURE_FILENAME))
+    );
+  });
+
+  it("happy day: don't up pin-policied packages, but do show them in the output", () => {
+    const INPUT_FILENAME = join(
+      __dirname,
+      "__mocks__",
+      "package-in-with-donotup-object.json"
+    );
+    const OUTPUT_FILENAME = join(__dirname, "tmp_package-out.json");
+    const FIXTURE_FILENAME = join(
+      __dirname,
+      "__fixtures__",
+      "package-out.json"
+    );
+    const lOutdated = readFileSync(
+      join(__dirname, "__mocks__", "outdated.json")
+    );
+
+    const lResult = upem(INPUT_FILENAME, lOutdated, OUTPUT_FILENAME, {
+      saveExact: true,
+    });
+
+    expect(lResult.OK).toBe(true);
+    expect(lResult.message).toContain(
+      "Up'em just updated these outdated dependencies in package.json"
+    );
+    expect(lResult.message).toContain(
+      `@types/node         10.5.1   -> 10.5.2   (policy: latest)${EOL}` +
+        `dependency-cruiser  4.1.0    -> 4.1.1    (policy: latest)${EOL}` +
+        `jest                23.2.0   -> 23.3.0   (policy: latest)${EOL}` +
+        `webpack             4.14.0   -> 4.15.1   (policy: latest)`
+    );
+    expect(lResult.message).toContain(
+      "Up'em found these packages were outdated, but did not update them because of policies"
+    );
+    expect(lResult.message).toContain(
+      `ts-jest             2.0.0    (policy: pin)`
+    );
+    // eslint-disable-next-line jest/max-expects
     expect(JSON.parse(readFileSync(OUTPUT_FILENAME))).toStrictEqual(
       JSON.parse(readFileSync(FIXTURE_FILENAME))
     );

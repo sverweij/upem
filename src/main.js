@@ -64,7 +64,7 @@ function constructSuccessMessage(pOutdatedList) {
   const lMaxCurrentLength = getMaxAttributeLength(pOutdatedList, "current");
   const lMaxTargetLength = getMaxAttributeLength(pOutdatedList, "target");
 
-  return `Up'em just updated these outdated dependencies in package.json:${EOL}${EOL}${pOutdatedList
+  let lReturnValue = `Up'em just updated these outdated dependencies in package.json:${EOL}${EOL}${pOutdatedList
     .filter(isUpAble)
     .map(
       (pOutdatedEntry) =>
@@ -77,26 +77,44 @@ function constructSuccessMessage(pOutdatedList) {
         })`
     )
     .join(EOL)}${EOL}${EOL}`;
+
+  const lNotUpdated = pOutdatedList.filter(
+    (pOutdatedEntry) => !isUpAble(pOutdatedEntry)
+  );
+
+  if (lNotUpdated.length > 0) {
+    lReturnValue += `Up'em found these packages were outdated, but did not update them because of policies:${EOL}${EOL}${lNotUpdated
+      .map(
+        (pOutdatedEntry) =>
+          `${pOutdatedEntry.package.padEnd(
+            lMaxPackageLength
+          )}${pOutdatedEntry.current.padEnd(lMaxTargetLength)} (policy: ${
+            pOutdatedEntry.policy
+          })`
+      )
+      .join(EOL)}${EOL}${EOL}`;
+  }
+  return lReturnValue;
 }
 
 /**
  *
  * @param {string} pPackageInputFileName
- * @param {import("../types/upem.js").INpmOutdated} pOutdatedObject
+ * @param {string} pOutdatedJSON
  * @param {string} pPackageOutputFileName
  * @param {import("../types/upem.js").IUpemOptions} pOptions
  * @returns {import("../types/upem.js").IUpemReturn}
  */
 export default function upem(
   pPackageInputFileName,
-  pOutdatedObject,
+  pOutdatedJSON,
   pPackageOutputFileName = pPackageInputFileName,
   pOptions
 ) {
   try {
     const lPackageFile = readFileSync(pPackageInputFileName);
     const lPackageObject = JSON.parse(lPackageFile);
-    const lOutdatedResult = determineOutdated(pOutdatedObject, lPackageObject);
+    const lOutdatedResult = determineOutdated(pOutdatedJSON, lPackageObject);
 
     if (!lOutdatedResult.outdatedList) {
       return lOutdatedResult;
