@@ -125,7 +125,7 @@
     "node": "^14.13.1||>=16"
   },
   "lint-staged": {
-    "{bin,src,test}/**/*.js": [
+    "src/**/*.js": [
       "depcruise --validate -- src",
       "eslint --fix"
     ],
