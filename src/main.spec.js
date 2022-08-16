@@ -1,5 +1,6 @@
 import { fileURLToPath } from "node:url";
 import { rmSync, chmodSync, readFileSync } from "node:fs";
+import { EOL } from "node:os";
 import { join } from "node:path";
 import upem from "./main.js";
 
@@ -105,10 +106,10 @@ describe("#upem", () => {
 
     expect(lResult.OK).toBe(true);
     expect(lResult.message).toContain(
-      "Up'em just updated all outdated dependencies in package.json to latest"
+      "Up'em just updated these outdated dependencies in package.json:"
     );
     expect(lResult.message).toContain(
-      "@types/node, dependency-cruiser, jest, webpack"
+      `@types/node         10.5.1   -> 10.5.2   (policy: latest)${EOL}dependency-cruiser  4.1.0    -> 4.1.1    (policy: latest)${EOL}jest                23.2.0   -> 23.3.0   (policy: latest)${EOL}webpack             4.14.0   -> 4.15.1   (policy: latest)`
     );
     expect(JSON.parse(readFileSync(OUTPUT_FILENAME))).toStrictEqual(
       JSON.parse(readFileSync(FIXTURE_FILENAME))
@@ -167,10 +168,14 @@ describe("#upem", () => {
 
     expect(lResult.OK).toBe(true);
     expect(lResult.message).toContain(
-      "Up'em just updated all outdated dependencies in package.json to latest"
+      "Up'em just updated these outdated dependencies in package.json"
     );
     expect(lResult.message).toContain(
-      "prod-dep, prod-dep-two, dev-dep, dev-and-peer-dep"
+      `prod-dep          1.2.3   -> 1.3.0   (policy: latest)${EOL}` +
+        `prod-dep-two      4.5.6   -> 5.0.0   (policy: latest)${EOL}` +
+        `dev-dep           1.2.3   -> 1.3.0   (policy: latest)${EOL}` +
+        `dev-and-peer-dep  4.5.6   -> 4.6.0   (policy: latest)${EOL}` +
+        `peer-only-dep     4.8.1   -> 4.9.0   (policy: latest)${EOL}`
     );
     expect(JSON.parse(readFileSync(OUTPUT_FILENAME))).toStrictEqual(
       JSON.parse(readFileSync(FIXTURE_FILENAME))
@@ -228,10 +233,14 @@ describe("#upem", () => {
 
     expect(lResult.OK).toBe(true);
     expect(lResult.message).toContain(
-      "Up'em just updated all outdated dependencies in package.json to latest"
+      "Up'em just updated these outdated dependencies in package.json"
     );
     expect(lResult.message).toContain(
-      "prod-dep, prod-dep-two, dev-dep, dev-and-peer-dep, peer-only-dep"
+      `prod-dep          1.2.3   -> 1.3.0   (policy: latest)${EOL}` +
+        `prod-dep-two      4.5.6   -> 5.0.0   (policy: latest)${EOL}` +
+        `dev-dep           1.2.3   -> 1.3.0   (policy: latest)${EOL}` +
+        `dev-and-peer-dep  4.5.6   -> 4.6.0   (policy: latest)${EOL}` +
+        `peer-only-dep     4.8.1   -> 4.9.0   (policy: latest)`
     );
     expect(JSON.parse(readFileSync(OUTPUT_FILENAME))).toStrictEqual(
       JSON.parse(readFileSync(FIXTURE_FILENAME))

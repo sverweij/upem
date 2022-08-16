@@ -1,4 +1,5 @@
 import { readFileSync, writeFileSync } from "node:fs";
+import { EOL } from "node:os";
 import { determinePolicies, isUpAble } from "./determine-policies.js";
 import { updateManifest } from "./update-manifest.js";
 
@@ -36,6 +37,48 @@ function determineOutdated(pOutdatedObject, pPackageObject) {
     outdatedList: lOutdatedList,
   };
 }
+
+/**
+ *
+ * @param {import("../types/upem.js").IUpemOutdated[]} pOutdatedList
+ * @param {string} pAttribute
+ */
+function getMaxAttributeLength(pOutdatedList, pAttribute) {
+  const lExtraPad = 2;
+
+  return (
+    pOutdatedList
+      .map((pOutdatedEntry) => pOutdatedEntry[pAttribute].length)
+      .reduce((pMax, pCurrent) => (pCurrent > pMax ? pCurrent : pMax), 0) +
+    lExtraPad
+  );
+}
+
+/**
+ *
+ * @param {import("../types/upem.js").IUpemOutdated[]} pOutdatedList
+ * @returns {string}
+ */
+function constructSuccessMessage(pOutdatedList) {
+  const lMaxPackageLength = getMaxAttributeLength(pOutdatedList, "package");
+  const lMaxCurrentLength = getMaxAttributeLength(pOutdatedList, "current");
+  const lMaxTargetLength = getMaxAttributeLength(pOutdatedList, "target");
+
+  return `Up'em just updated these outdated dependencies in package.json:${EOL}${EOL}${pOutdatedList
+    .filter(isUpAble)
+    .map(
+      (pOutdatedEntry) =>
+        `${pOutdatedEntry.package.padEnd(
+          lMaxPackageLength
+        )}${pOutdatedEntry.current.padEnd(
+          lMaxCurrentLength
+        )} -> ${pOutdatedEntry.target.padEnd(lMaxTargetLength)} (policy: ${
+          pOutdatedEntry.policy
+        })`
+    )
+    .join(EOL)}${EOL}${EOL}`;
+}
+
 /**
  *
  * @param {string} pPackageInputFileName
@@ -75,10 +118,7 @@ export default function upem(
       );
       return {
         OK: true,
-        message: `  Up'em just updated all outdated dependencies in package.json to latest:\n\n    ${lOutdatedResult.outdatedList
-          .filter(isUpAble)
-          .map((pOutdatedEntry) => pOutdatedEntry.package)
-          .join(", ")}\n\n`,
+        message: constructSuccessMessage(lOutdatedResult.outdatedList),
       };
     } catch (pError) {
       return {
