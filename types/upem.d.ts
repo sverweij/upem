@@ -1,12 +1,15 @@
-export interface INpmOutdatedData {
+export interface INpmOutdatedRecord {
   current: string;
   wanted: string;
   latest: string;
   location: string;
+  dependent?: string;
+  type?: DependenciesTypeType;
+  homepage?: string;
 }
 
 export interface INpmOutdated {
-  [packageName: string]: INpmOutdatedData;
+  [packageName: string]: INpmOutdatedRecord;
 }
 
 export interface IMinimalManifest {
@@ -36,7 +39,7 @@ export type PolicyType =
    */
   | "current";
 
-export interface IUpemOutdated extends INpmOutdatedData {
+export interface IUpemOutdated extends INpmOutdatedRecord {
   /**
    * the name of the package the policy applies to
    */

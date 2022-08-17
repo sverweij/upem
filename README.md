@@ -4,7 +4,7 @@
 
 ## Use
 
-- Pipe `npm outdated --json` through `upem`.
+- Pipe `npm outdated --json --long` through `upem`.
 - When it's done `npm install` and re-run your automated quality checks.
 - Done.
 
@@ -21,7 +21,7 @@ and watch cat videos in the mean time:
     "lint:fix": "eslint --fix src test",
     "test": "jest",
     "upem": "npm-run-all upem:update upem:install lint:fix check",
-    "upem:update": "npm outdated --json | upem",
+    "upem:update": "npm outdated --json --long | upem",
     "upem:install": "npm install"
   }
 ```

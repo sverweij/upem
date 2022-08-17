@@ -1,0 +1,47 @@
+{
+  "@types/node": {
+    "current": "10.5.1",
+    "wanted": "10.5.1",
+    "latest": "10.5.2",
+    "dependent": "tea-time",
+    "location": "node_modules/@types/node",
+    "type": "devDependencies",
+    "homepage": "https://nodejs.org"
+  },
+  "dependency-cruiser": {
+    "current": "4.1.0",
+    "wanted": "4.1.0",
+    "latest": "4.1.1",
+    "dependent": "tea-time",
+    "location": "node_modules/dependency-cruiser",
+    "type": "devDependencies",
+    "homepage": "https://github.com/sverweij/dependency-cruiser"
+  },
+  "jest": {
+    "current": "23.2.0",
+    "wanted": "23.2.0",
+    "latest": "23.3.0",
+    "dependent": "tea-time",
+    "location": "node_modules/jest",
+    "type": "devDependencies",
+    "homepage": "https://jestjs.io"
+  },
+  "ts-jest": {
+    "current": "2.0.0",
+    "wanted": "22.4.6",
+    "latest": "23.0.0",
+    "dependent": "tea-time",
+    "location": "node_modules/ts-jest",
+    "type": "devDependencies",
+    "homepage": "https://kulshekhar.github.io/ts-jest/"
+  },
+  "webpack": {
+    "current": "4.14.0",
+    "wanted": "4.14.0",
+    "latest": "4.15.1",
+    "dependent": "tea-time",
+    "location": "node_modules/webpack",
+    "type": "dependencies",
+    "homepage": "https://webpack.js.org"
+  }
+}
