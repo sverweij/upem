@@ -7,39 +7,6 @@ const INDENT = 2;
 
 /**
  *
- * @param {string} pOutdatedObject
- * @param {import("../types/upem.js").IManifest} pPackageObject
- * @returns
- */
-function determineOutdated(pOutdatedObject, pPackageObject) {
-  const lOutdatedObject =
-    pOutdatedObject.length <= 0 ? {} : JSON.parse(pOutdatedObject);
-  const lPolicies = pPackageObject?.upem?.policies || [];
-  const lOutdatedList = determinePolicies(lOutdatedObject, lPolicies);
-
-  if (lOutdatedList.length <= 0) {
-    return {
-      OK: true,
-      message: "  Up'em says: Everything seems to be up to date already.\n\n",
-    };
-  }
-
-  if (lOutdatedList.filter(isUpAble).length <= 0) {
-    return {
-      OK: true,
-      message:
-        "  Up'em says: Everything not pinned in 'upem.policies' seems to be up to date already.\n\n",
-    };
-  }
-
-  return {
-    OK: true,
-    outdatedList: lOutdatedList,
-  };
-}
-
-/**
- *
  * @param {import("../types/upem.js").IUpemOutdated[]} pOutdatedList
  * @param {string} pAttribute
  */
@@ -60,23 +27,27 @@ function getMaxAttributeLength(pOutdatedList, pAttribute) {
  * @returns {string}
  */
 function constructSuccessMessage(pOutdatedList) {
+  let lReturnValue = "";
   const lMaxPackageLength = getMaxAttributeLength(pOutdatedList, "package");
   const lMaxCurrentLength = getMaxAttributeLength(pOutdatedList, "current");
   const lMaxTargetLength = getMaxAttributeLength(pOutdatedList, "target");
 
-  let lReturnValue = `Up'em just updated these outdated dependencies in package.json:${EOL}${EOL}${pOutdatedList
-    .filter(isUpAble)
-    .map(
-      (pOutdatedEntry) =>
-        `${pOutdatedEntry.package.padEnd(
-          lMaxPackageLength
-        )}${pOutdatedEntry.current.padEnd(
-          lMaxCurrentLength
-        )} -> ${pOutdatedEntry.target.padEnd(lMaxTargetLength)} (policy: ${
-          pOutdatedEntry.policy
-        })`
-    )
-    .join(EOL)}${EOL}${EOL}`;
+  const lUpdated = pOutdatedList.filter(isUpAble);
+
+  if (lUpdated.length > 0) {
+    lReturnValue += `Up'em just updated these outdated dependencies in package.json:${EOL}${EOL}${lUpdated
+      .map(
+        (pOutdatedEntry) =>
+          `${pOutdatedEntry.package.padEnd(
+            lMaxPackageLength
+          )}${pOutdatedEntry.current.padEnd(
+            lMaxCurrentLength
+          )} -> ${pOutdatedEntry.target.padEnd(lMaxTargetLength)} (policy: ${
+            pOutdatedEntry.policy
+          })`
+      )
+      .join(EOL)}${EOL}${EOL}`;
+  }
 
   const lNotUpdated = pOutdatedList.filter(
     (pOutdatedEntry) => !isUpAble(pOutdatedEntry)
@@ -95,6 +66,38 @@ function constructSuccessMessage(pOutdatedList) {
       .join(EOL)}${EOL}${EOL}`;
   }
   return lReturnValue;
+}
+
+/**
+ *
+ * @param {string} pOutdatedObject
+ * @param {import("../types/upem.js").IManifest} pPackageObject
+ * @returns
+ */
+function determineOutdated(pOutdatedObject, pPackageObject) {
+  const lOutdatedObject =
+    pOutdatedObject.length <= 0 ? {} : JSON.parse(pOutdatedObject);
+  const lPolicies = pPackageObject?.upem?.policies || [];
+  const lOutdatedList = determinePolicies(lOutdatedObject, lPolicies);
+
+  if (lOutdatedList.length <= 0) {
+    return {
+      OK: true,
+      message: "  Up'em says: Everything seems to be up to date already.\n\n",
+    };
+  }
+
+  if (lOutdatedList.filter(isUpAble).length <= 0) {
+    return {
+      OK: true,
+      message: constructSuccessMessage(lOutdatedList),
+    };
+  }
+
+  return {
+    OK: true,
+    outdatedList: lOutdatedList,
+  };
 }
 
 /**

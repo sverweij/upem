@@ -117,8 +117,9 @@ describe("main", () => {
 
     expect(lResult.OK).toBe(true);
     expect(lResult.message).toContain(
-      "Up'em says: Everything not pinned in 'upem.policies' seems to be up to date already."
+      "Up'em found these packages were outdated, but did not update them because of policies"
     );
+    expect(lResult.message).toContain("ts-jest  1.8.2   (policy: pin)");
   });
 
   it("happy day: dependencies updated with stuff in an outdated.json", () => {
