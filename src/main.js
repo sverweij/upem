@@ -15,7 +15,7 @@ function getMaxAttributeLength(pOutdatedList, pAttribute) {
 
   return (
     pOutdatedList
-      .map((pOutdatedEntry) => pOutdatedEntry[pAttribute].length)
+      .map((pOutdatedEntry) => pOutdatedEntry[pAttribute]?.length ?? 0)
       .reduce((pMax, pCurrent) => (pCurrent > pMax ? pCurrent : pMax), 0) +
     lExtraPad
   );
@@ -31,6 +31,7 @@ function constructSuccessMessage(pOutdatedList) {
   const lMaxPackageLength = getMaxAttributeLength(pOutdatedList, "package");
   const lMaxCurrentLength = getMaxAttributeLength(pOutdatedList, "current");
   const lMaxTargetLength = getMaxAttributeLength(pOutdatedList, "target");
+  const lMaxTypeLength = getMaxAttributeLength(pOutdatedList, "type");
 
   const lUpdated = pOutdatedList.filter(isUpAble);
 
@@ -42,9 +43,9 @@ function constructSuccessMessage(pOutdatedList) {
             lMaxPackageLength
           )}${pOutdatedEntry.current.padEnd(
             lMaxCurrentLength
-          )} -> ${pOutdatedEntry.target.padEnd(lMaxTargetLength)} (policy: ${
-            pOutdatedEntry.policy
-          })`
+          )} -> ${pOutdatedEntry.target.padEnd(lMaxTargetLength)}${
+            pOutdatedEntry.type?.padEnd(lMaxTypeLength) ?? ""
+          } (policy: ${pOutdatedEntry.policy})`
       )
       .join(EOL)}${EOL}${EOL}`;
   }
@@ -59,9 +60,9 @@ function constructSuccessMessage(pOutdatedList) {
         (pOutdatedEntry) =>
           `${pOutdatedEntry.package.padEnd(
             lMaxPackageLength
-          )}${pOutdatedEntry.current.padEnd(lMaxTargetLength)} (policy: ${
-            pOutdatedEntry.policy
-          })`
+          )}${pOutdatedEntry.current.padEnd(lMaxTargetLength)}${
+            pOutdatedEntry.type?.padEnd(lMaxTypeLength) ?? ""
+          } (policy: ${pOutdatedEntry.policy})`
       )
       .join(EOL)}${EOL}${EOL}`;
   }

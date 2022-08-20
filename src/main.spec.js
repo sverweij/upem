@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { fileURLToPath } from "node:url";
 import { rmSync, chmodSync, readFileSync } from "node:fs";
 import { EOL } from "node:os";
@@ -252,6 +253,48 @@ describe("main", () => {
     );
     expect(lResult.message).toContain(
       `ts-jest             2.0.0    (policy: pin)`
+    );
+    // eslint-disable-next-line jest/max-expects
+    expect(JSON.parse(readFileSync(OUTPUT_FILENAME))).toStrictEqual(
+      JSON.parse(readFileSync(FIXTURE_FILENAME))
+    );
+  });
+
+  it("if 'type' field is available - print it", () => {
+    const INPUT_FILENAME = join(
+      __dirname,
+      "__mocks__",
+      "package-in-with-donotup-object.json"
+    );
+    const OUTPUT_FILENAME = join(__dirname, "tmp_package-out.json");
+    const FIXTURE_FILENAME = join(
+      __dirname,
+      "__fixtures__",
+      "package-out.json"
+    );
+    const lOutdated = readFileSync(
+      join(__dirname, "__mocks__", "outdated-long.json")
+    );
+
+    const lResult = upem(INPUT_FILENAME, lOutdated, OUTPUT_FILENAME, {
+      saveExact: true,
+    });
+
+    expect(lResult.OK).toBe(true);
+    expect(lResult.message).toContain(
+      "Up'em just updated these outdated dependencies in package.json"
+    );
+    expect(lResult.message).toContain(
+      `@types/node         10.5.1   -> 10.5.2  devDependencies   (policy: latest)${EOL}` +
+        `dependency-cruiser  4.1.0    -> 4.1.1   devDependencies   (policy: latest)${EOL}` +
+        `jest                23.2.0   -> 23.3.0  devDependencies   (policy: latest)${EOL}` +
+        `webpack             4.14.0   -> 4.15.1  dependencies      (policy: latest)`
+    );
+    expect(lResult.message).toContain(
+      "Up'em found these packages were outdated, but did not update them because of policies"
+    );
+    expect(lResult.message).toContain(
+      `ts-jest             2.0.0   devDependencies   (policy: pin)`
     );
     // eslint-disable-next-line jest/max-expects
     expect(JSON.parse(readFileSync(OUTPUT_FILENAME))).toStrictEqual(
