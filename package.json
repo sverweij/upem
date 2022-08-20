@@ -71,7 +71,7 @@
     "lint:fix:prettier": "prettier --write \"src/**/*.js\" \"*.{json,yml,md}\" .github",
     "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --all --collectCoverage",
     "update-dependencies": "npm-run-all upem:update upem:install lint:fix check",
-    "upem:update": "npm outdated --json --long | src/cli.js | pbcopy",
+    "upem:update": "npm outdated --json --long | src/cli.js | pbcopy && pbpaste",
     "upem:install": "npm install",
     "version": "npm-run-all build check build:stage",
     "prepare": "husky install"
