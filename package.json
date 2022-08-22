@@ -36,13 +36,13 @@
     "url": "https://github.com/sverweij/upem/issues"
   },
   "devDependencies": {
-    "dependency-cruiser": "11.14.2",
+    "dependency-cruiser": "11.15.0",
     "eslint": "8.22.0",
     "eslint-config-moving-meadow": "3.0.0",
     "eslint-config-prettier": "8.5.0",
-    "eslint-plugin-budapestian": "4.0.0",
+    "eslint-plugin-budapestian": "5.0.0",
     "eslint-plugin-import": "2.26.0",
-    "eslint-plugin-jest": "26.8.4",
+    "eslint-plugin-jest": "26.8.7",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-security": "1.5.0",
     "eslint-plugin-unicorn": "43.0.2",
