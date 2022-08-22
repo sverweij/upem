@@ -125,19 +125,21 @@ export default function upem(
     }
 
     try {
-      writeFileSync(
-        pPackageOutputFileName,
-        JSON.stringify(
-          updateManifest(
-            lPackageObject,
-            lOutdatedResult.outdatedList.filter(isUpAble),
-            pOptions
-          ),
-          // eslint-disable-next-line unicorn/no-null
-          null,
-          INDENT
-        )
-      );
+      if (!pOptions.dryRun) {
+        writeFileSync(
+          pPackageOutputFileName,
+          JSON.stringify(
+            updateManifest(
+              lPackageObject,
+              lOutdatedResult.outdatedList.filter(isUpAble),
+              pOptions
+            ),
+            // eslint-disable-next-line unicorn/no-null
+            null,
+            INDENT
+          )
+        );
+      }
       return {
         OK: true,
         message: constructSuccessMessage(lOutdatedResult.outdatedList),

@@ -23,18 +23,28 @@ function emitGeneralError(pError) {
   process.exitCode = 1;
 }
 
-function executeUpdate() {
-  const lResult = upem(MANIFEST, gBuffer, MANIFEST, UPEM_OPTIONS);
+/**
+ *
+ * @param {string[]} pArguments
+ */
+function executeUpdate(pArguments) {
+  let lUpemOptions = {
+    ...UPEM_OPTIONS,
+    dryRun: pArguments[pArguments.length - 1] === "--dry-run",
+  };
+  return () => {
+    const lResult = upem(MANIFEST, gBuffer, MANIFEST, lUpemOptions);
 
-  if (lResult.OK) {
-    process.stdout.write(lResult.message);
-  } else {
-    process.stderr.write(lResult.message);
-    process.exitCode = 1;
-  }
+    if (lResult.OK) {
+      process.stdout.write(lResult.message);
+    } else {
+      process.stderr.write(lResult.message);
+      process.exitCode = 1;
+    }
+  };
 }
 
 process.stdin
   .on("data", bufferChunk)
-  .on("end", executeUpdate)
+  .on("end", executeUpdate(process.argv))
   .on("error", emitGeneralError);

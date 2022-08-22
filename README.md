@@ -8,6 +8,8 @@
 - When it's done `npm install` and re-run your automated quality checks.
 - Done.
 
+If you just want to see what up'em _would_ update use its `--dry-run` switch.
+
 ## Sample
 
 You can e.g. set up some npm scripts so you can `npm run upem`

@@ -93,6 +93,11 @@ export interface IUpemOptions {
    * sense for peerDependencies, that usually have large ranges in any case
    */
   skipDependencyTypes?: DependenciesTypeType[];
+  /**
+   * if true upem will not update the manifest, but just output what it would've done
+   * in all other cases will also update the manifest
+   */
+  dryRun: boolean;
 }
 
 export interface IUpemReturn {

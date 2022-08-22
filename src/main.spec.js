@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { fileURLToPath } from "node:url";
-import { rmSync, chmodSync, readFileSync } from "node:fs";
+import { rmSync, chmodSync, readFileSync, existsSync } from "node:fs";
 import { EOL } from "node:os";
 import { join } from "node:path";
 import upem from "./main.js";
@@ -300,5 +300,22 @@ describe("main", () => {
     expect(JSON.parse(readFileSync(OUTPUT_FILENAME))).toStrictEqual(
       JSON.parse(readFileSync(FIXTURE_FILENAME))
     );
+  });
+
+  it("doesn't update the specified manifest when dryRun is specified and true", () => {
+    const INPUT_FILENAME = join(
+      __dirname,
+      "__mocks__",
+      "package-in-with-donotup-object.json"
+    );
+    const OUTPUT_FILENAME = join(
+      __dirname,
+      "tmp_this-file-should-not-be-created.json"
+    );
+    const lOutdated = readFileSync(
+      join(__dirname, "__mocks__", "outdated.json")
+    );
+    upem(INPUT_FILENAME, lOutdated, OUTPUT_FILENAME, { dryRun: true });
+    expect(existsSync(OUTPUT_FILENAME)).toBe(false);
   });
 });
