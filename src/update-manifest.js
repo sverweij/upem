@@ -16,7 +16,6 @@ function getUpAbleDependencyKeys(pSkipDependencyTypes) {
  */
 function getRangePrefix(pVersionRangeString) {
   return (
-    // eslint-disable-next-line security/detect-unsafe-regex
     pVersionRangeString.match(/^(?<prefix>[^0-9]{0,2}).+/)?.groups?.prefix ?? ""
   );
 }
