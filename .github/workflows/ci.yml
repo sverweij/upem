@@ -6,6 +6,13 @@ on:
       - main
   pull_request:
 
+env:
+  CI: true
+
+defaults:
+  run:
+    shell: bash
+
 jobs:
   check:
     strategy:
@@ -24,38 +31,12 @@ jobs:
     runs-on: ${{matrix.platform}}
 
     steps:
-      - name: checkout
-        uses: actions/checkout@v1
-      - name: set up node ${{matrix.node-version}}@${{matrix.platform}}
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{matrix.node-version}}
-      - name: install
-        run: |
-          node --version
-          npm install
-        shell: bash
-        env:
-          CI: true
-      - name: lint (run on one platform only)
-        run: |
-          node --version
-          npm run lint
+      - run: npm install
+      - run: npm run lint
         if: matrix.platform == 'ubuntu-latest' && matrix.node-version == '18.x'
-        shell: bash
-        env:
-          CI: true
-      - name: forbidden dependency check
-        run: |
-          node --version
-          npm run depcruise
-        shell: bash
-        env:
-          CI: true
-      - name: test coverage
-        run: |
-          node --version
-          NODE_OPTIONS=--experimental-vm-modules npx jest --collectCoverage
-        shell: bash
-        env:
-          CI: true
+      - run: npm run depcruise
+      - run: npm test

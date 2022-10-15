@@ -16,7 +16,10 @@ function getUpAbleDependencyKeys(pSkipDependencyTypes) {
  */
 function getRangePrefix(pVersionRangeString) {
   return (
+    /* c8 ignore start */
+    /* c8 ignore - as the ?? "" safety valve is never hit */
     pVersionRangeString.match(/^(?<prefix>[^0-9]{0,2}).+/)?.groups?.prefix ?? ""
+    /* c8 ignore stop */
   );
 }
 

@@ -21,7 +21,7 @@ and watch cat videos in the mean time:
     "lint": "eslint src test",
     "lint:archi": "depcruise --validate -- src test",
     "lint:fix": "eslint --fix src test",
-    "test": "jest",
+    "test": "mocha",
     "upem": "npm-run-all upem:update upem:install lint:fix check",
     "upem:update": "npm outdated --json --long | upem",
     "upem:install": "npm install"
