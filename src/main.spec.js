@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { strictEqual, match, deepStrictEqual } from "node:assert";
 import { fileURLToPath } from "node:url";
 import { rmSync, chmodSync, readFileSync, existsSync } from "node:fs";
 import { EOL } from "node:os";
@@ -41,8 +42,7 @@ const OUTDATED = JSON.stringify({
 });
 
 describe("main", () => {
-  // eslint-disable-next-line jest/no-hooks
-  afterAll(() => {
+  after(() => {
     rmSync(join(__dirname, "tmp_package-out.json"), {
       force: true,
       maxRetries: 3,
@@ -52,25 +52,27 @@ describe("main", () => {
   it("non-existing package.json errors", () => {
     const lResult = upem("thisfiledoesnotexist", "");
 
-    expect(lResult.OK).toBe(false);
-    expect(lResult.message).toContain("Up'em encountered a hitch:");
+    strictEqual(lResult.OK, false);
+    match(lResult.message, /Up'em encountered a hitch:/);
   });
 
   it('empty string dependency JSON yields "nothing to update"', () => {
     const lResult = upem(join(__dirname, "__mocks__", "package-in.json"), "");
 
-    expect(lResult.OK).toBe(true);
-    expect(lResult.message).toContain(
-      "Up'em says: Everything seems to be up to date already."
+    strictEqual(lResult.OK, true);
+    match(
+      lResult.message,
+      /Up'em says: Everything seems to be up to date already./
     );
   });
 
   it('{} dependency JSON yields "nothing to update"', () => {
     const lResult = upem(join(__dirname, "__mocks__", "package-in.json"), "{}");
 
-    expect(lResult.OK).toBe(true);
-    expect(lResult.message).toContain(
-      "Up'em says: Everything seems to be up to date already."
+    strictEqual(lResult.OK, true);
+    match(
+      lResult.message,
+      /Up'em says: Everything seems to be up to date already./
     );
   });
 
@@ -94,9 +96,10 @@ describe("main", () => {
     chmodSync(READONLY_INPUT_FILENAME, "400");
     const lResult = upem(READONLY_INPUT_FILENAME, lOutdatedJson);
 
-    expect(lResult.OK).toBe(false);
-    expect(lResult.message).toContain(
-      "Up'em encountered a hitch when updating package.json:"
+    strictEqual(lResult.OK, false);
+    match(
+      lResult.message,
+      /Up'em encountered a hitch when updating package.json:/
     );
   });
 
@@ -116,11 +119,12 @@ describe("main", () => {
       lOutdatedJson
     );
 
-    expect(lResult.OK).toBe(true);
-    expect(lResult.message).toContain(
-      "Up'em found these packages were outdated, but did not update them because of policies"
+    strictEqual(lResult.OK, true);
+    match(
+      lResult.message,
+      /Up'em found these packages were outdated, but did not update them because of policies/
     );
-    expect(lResult.message).toContain("ts-jest  1.8.2   (policy: pin)");
+    match(lResult.message, /ts-jest {2}1.8.2 {3}\(policy: pin\)/);
   });
 
   it("happy day: dependencies updated with stuff in an outdated.json", () => {
@@ -139,14 +143,22 @@ describe("main", () => {
       saveExact: true,
     });
 
-    expect(lResult.OK).toBe(true);
-    expect(lResult.message).toContain(
-      "Up'em just updated these outdated dependencies in package.json:"
+    strictEqual(lResult.OK, true);
+    match(
+      lResult.message,
+      /Up'em just updated these outdated dependencies in package.json:/
     );
-    expect(lResult.message).toContain(
-      `@types/node         10.5.1   -> 10.5.2   (policy: latest)${EOL}dependency-cruiser  4.1.0    -> 4.1.1    (policy: latest)${EOL}jest                23.2.0   -> 23.3.0   (policy: latest)${EOL}webpack             4.14.0   -> 4.15.1   (policy: latest)`
+    strictEqual(
+      lResult.message.includes(
+        `@types/node         10.5.1   -> 10.5.2   (policy: latest)${EOL}` +
+          `dependency-cruiser  4.1.0    -> 4.1.1    (policy: latest)${EOL}` +
+          `jest                23.2.0   -> 23.3.0   (policy: latest)${EOL}` +
+          `webpack             4.14.0   -> 4.15.1   (policy: latest)`
+      ),
+      true
     );
-    expect(JSON.parse(readFileSync(OUTPUT_FILENAME))).toStrictEqual(
+    deepStrictEqual(
+      JSON.parse(readFileSync(OUTPUT_FILENAME)),
       JSON.parse(readFileSync(FIXTURE_FILENAME))
     );
   });
@@ -169,18 +181,23 @@ describe("main", () => {
       skipDependencyTypes: ["peerDependencies"],
     });
 
-    expect(lResult.OK).toBe(true);
-    expect(lResult.message).toContain(
-      "Up'em just updated these outdated dependencies in package.json"
+    strictEqual(lResult.OK, true);
+    match(
+      lResult.message,
+      /Up'em just updated these outdated dependencies in package.json/
     );
-    expect(lResult.message).toContain(
-      `prod-dep          1.2.3   -> 1.3.0   (policy: latest)${EOL}` +
-        `prod-dep-two      4.5.6   -> 5.0.0   (policy: latest)${EOL}` +
-        `dev-dep           1.2.3   -> 1.3.0   (policy: latest)${EOL}` +
-        `dev-and-peer-dep  4.5.6   -> 4.6.0   (policy: latest)${EOL}` +
-        `peer-only-dep     4.8.1   -> 4.9.0   (policy: latest)${EOL}`
+    strictEqual(
+      lResult.message.includes(
+        `prod-dep          1.2.3   -> 1.3.0   (policy: latest)${EOL}` +
+          `prod-dep-two      4.5.6   -> 5.0.0   (policy: latest)${EOL}` +
+          `dev-dep           1.2.3   -> 1.3.0   (policy: latest)${EOL}` +
+          `dev-and-peer-dep  4.5.6   -> 4.6.0   (policy: latest)${EOL}` +
+          `peer-only-dep     4.8.1   -> 4.9.0   (policy: latest)${EOL}`
+      ),
+      true
     );
-    expect(JSON.parse(readFileSync(OUTPUT_FILENAME))).toStrictEqual(
+    deepStrictEqual(
+      JSON.parse(readFileSync(OUTPUT_FILENAME)),
       JSON.parse(readFileSync(FIXTURE_FILENAME))
     );
   });
@@ -202,18 +219,23 @@ describe("main", () => {
       saveExact: true,
     });
 
-    expect(lResult.OK).toBe(true);
-    expect(lResult.message).toContain(
-      "Up'em just updated these outdated dependencies in package.json"
+    strictEqual(lResult.OK, true);
+    match(
+      lResult.message,
+      /Up'em just updated these outdated dependencies in package.json/
     );
-    expect(lResult.message).toContain(
-      `prod-dep          1.2.3   -> 1.3.0   (policy: latest)${EOL}` +
-        `prod-dep-two      4.5.6   -> 5.0.0   (policy: latest)${EOL}` +
-        `dev-dep           1.2.3   -> 1.3.0   (policy: latest)${EOL}` +
-        `dev-and-peer-dep  4.5.6   -> 4.6.0   (policy: latest)${EOL}` +
-        `peer-only-dep     4.8.1   -> 4.9.0   (policy: latest)`
+    strictEqual(
+      lResult.message.includes(
+        `prod-dep          1.2.3   -> 1.3.0   (policy: latest)${EOL}` +
+          `prod-dep-two      4.5.6   -> 5.0.0   (policy: latest)${EOL}` +
+          `dev-dep           1.2.3   -> 1.3.0   (policy: latest)${EOL}` +
+          `dev-and-peer-dep  4.5.6   -> 4.6.0   (policy: latest)${EOL}` +
+          `peer-only-dep     4.8.1   -> 4.9.0   (policy: latest)`
+      ),
+      true
     );
-    expect(JSON.parse(readFileSync(OUTPUT_FILENAME))).toStrictEqual(
+    deepStrictEqual(
+      JSON.parse(readFileSync(OUTPUT_FILENAME)),
       JSON.parse(readFileSync(FIXTURE_FILENAME))
     );
   });
@@ -238,24 +260,27 @@ describe("main", () => {
       saveExact: true,
     });
 
-    expect(lResult.OK).toBe(true);
-    expect(lResult.message).toContain(
-      "Up'em just updated these outdated dependencies in package.json"
+    strictEqual(lResult.OK, true);
+    match(
+      lResult.message,
+      /Up'em just updated these outdated dependencies in package.json/
     );
-    expect(lResult.message).toContain(
-      `@types/node         10.5.1   -> 10.5.2   (policy: latest)${EOL}` +
-        `dependency-cruiser  4.1.0    -> 4.1.1    (policy: latest)${EOL}` +
-        `jest                23.2.0   -> 23.3.0   (policy: latest)${EOL}` +
-        `webpack             4.14.0   -> 4.15.1   (policy: latest)`
+    strictEqual(
+      lResult.message.includes(
+        `@types/node         10.5.1   -> 10.5.2   (policy: latest)${EOL}` +
+          `dependency-cruiser  4.1.0    -> 4.1.1    (policy: latest)${EOL}` +
+          `jest                23.2.0   -> 23.3.0   (policy: latest)${EOL}` +
+          `webpack             4.14.0   -> 4.15.1   (policy: latest)`
+      ),
+      true
     );
-    expect(lResult.message).toContain(
-      "Up'em found these packages were outdated, but did not update them because of policies"
+    match(
+      lResult.message,
+      /Up'em found these packages were outdated, but did not update them because of policies/
     );
-    expect(lResult.message).toContain(
-      `ts-jest             2.0.0    (policy: pin)`
-    );
-    // eslint-disable-next-line jest/max-expects
-    expect(JSON.parse(readFileSync(OUTPUT_FILENAME))).toStrictEqual(
+    match(lResult.message, /ts-jest {13}2.0.0 {4}\(policy: pin\)/);
+    deepStrictEqual(
+      JSON.parse(readFileSync(OUTPUT_FILENAME)),
       JSON.parse(readFileSync(FIXTURE_FILENAME))
     );
   });
@@ -280,24 +305,30 @@ describe("main", () => {
       saveExact: true,
     });
 
-    expect(lResult.OK).toBe(true);
-    expect(lResult.message).toContain(
-      "Up'em just updated these outdated dependencies in package.json"
+    strictEqual(lResult.OK, true);
+    match(
+      lResult.message,
+      /Up'em just updated these outdated dependencies in package.json/
     );
-    expect(lResult.message).toContain(
-      `@types/node         10.5.1   -> 10.5.2  devDependencies   (policy: latest)${EOL}` +
-        `dependency-cruiser  4.1.0    -> 4.1.1   devDependencies   (policy: latest)${EOL}` +
-        `jest                23.2.0   -> 23.3.0  devDependencies   (policy: latest)${EOL}` +
-        `webpack             4.14.0   -> 4.15.1  dependencies      (policy: latest)`
+    strictEqual(
+      lResult.message.includes(
+        `@types/node         10.5.1   -> 10.5.2  devDependencies   (policy: latest)${EOL}` +
+          `dependency-cruiser  4.1.0    -> 4.1.1   devDependencies   (policy: latest)${EOL}` +
+          `jest                23.2.0   -> 23.3.0  devDependencies   (policy: latest)${EOL}` +
+          `webpack             4.14.0   -> 4.15.1  dependencies      (policy: latest)`
+      ),
+      true
     );
-    expect(lResult.message).toContain(
-      "Up'em found these packages were outdated, but did not update them because of policies"
+    match(
+      lResult.message,
+      /Up'em found these packages were outdated, but did not update them because of policies/
     );
-    expect(lResult.message).toContain(
-      `ts-jest             2.0.0   devDependencies   (policy: pin)`
+    match(
+      lResult.message,
+      /ts-jest {13}2.0.0 {3}devDependencies {3}\(policy: pin\)/
     );
-    // eslint-disable-next-line jest/max-expects
-    expect(JSON.parse(readFileSync(OUTPUT_FILENAME))).toStrictEqual(
+    deepStrictEqual(
+      JSON.parse(readFileSync(OUTPUT_FILENAME)),
       JSON.parse(readFileSync(FIXTURE_FILENAME))
     );
   });
@@ -316,6 +347,6 @@ describe("main", () => {
       join(__dirname, "__mocks__", "outdated.json")
     );
     upem(INPUT_FILENAME, lOutdated, OUTPUT_FILENAME, { dryRun: true });
-    expect(existsSync(OUTPUT_FILENAME)).toBe(false);
+    strictEqual(existsSync(OUTPUT_FILENAME), false);
   });
 });
