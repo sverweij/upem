@@ -1,34 +1,32 @@
 #!/usr/bin/env node
+/* eslint-disable node/shebang */
 import { join } from "node:path";
+// @ts-expect-error - no type definition exists for libnpmconfig
 import libNpmConfig from "libnpmconfig";
+import { IUpemOptions } from "../types/upem";
 import upem from "./main.js";
 
 const MANIFEST = join(process.cwd(), "package.json");
-/** @type {import("../types/upem.js").IUpemOptions} */
-const UPEM_OPTIONS = {
+const UPEM_OPTIONS: IUpemOptions = {
   saveExact: libNpmConfig.read().get("save-exact") || false,
   savePrefix: libNpmConfig.read().get("save-prefix") || "^",
   skipDependencyTypes: ["peerDependencies"],
 };
 let gBuffer = "";
 
-function bufferChunk(pChunk) {
+function bufferChunk(pChunk: string): void {
   gBuffer += pChunk;
 }
 
-function emitGeneralError(pError) {
+function emitGeneralError(pError: Error): void {
   process.stderr.write(
     `  Up'em encountered a hitch while reading outdated information:\n${pError}\n\n`
   );
   process.exitCode = 1;
 }
 
-/**
- *
- * @param {string[]} pArguments
- */
-function executeUpdate(pArguments) {
-  let lUpemOptions = {
+function executeUpdate(pArguments: string[]) {
+  const lUpemOptions: IUpemOptions = {
     ...UPEM_OPTIONS,
     dryRun: pArguments[pArguments.length - 1] === "--dry-run",
   };

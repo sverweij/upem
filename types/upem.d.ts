@@ -1,24 +1,10 @@
-export interface INpmOutdatedRecord {
-  current: string;
-  wanted: string;
-  latest: string;
-  location: string;
-  dependent?: string;
-  type?: DependenciesTypeType;
-  homepage?: string;
-}
-
-export interface INpmOutdated {
-  [packageName: string]: INpmOutdatedRecord;
-}
-
-export interface IMinimalManifest {
-  upem?: {
-    policies: IUpemPolicy[];
-  };
-}
-
-export type IManifest = IMinimalManifest;
+export type DependenciesTypeType =
+  | "dependencies"
+  | "devDependencies"
+  | "peerDependencies"
+  | "optionalDependencies"
+  | "bundledDependencies"
+  | "bundleDependencies";
 
 export type PolicyType =
   /**
@@ -39,11 +25,28 @@ export type PolicyType =
    */
   | "current";
 
-export interface IUpemOutdated extends INpmOutdatedRecord {
+export interface INpmOutdatedRecord {
+  current: string;
+  wanted: string;
+  latest: string;
+  location: string;
+  dependent?: string;
+  type?: DependenciesTypeType;
+  homepage?: string;
+}
+
+export interface INpmOutdated {
+  [package: string]: INpmOutdatedRecord;
+}
+
+export interface IFlatNpmOutdated extends INpmOutdatedRecord {
   /**
    * the name of the package the policy applies to
    */
   package: string;
+}
+
+export interface IUpemOutdated extends IFlatNpmOutdated {
   /**
    * what policy to apply to the package
    */
@@ -70,14 +73,16 @@ export interface IUpemPolicy {
   because?: string;
 }
 
-type PrefixType = "^" | "" | "~";
-type DependenciesTypeType =
-  | "dependencies"
-  | "devDependencies"
-  | "peerDependencies"
-  | "optionalDependencies"
-  | "bundledDependencies"
-  | "bundleDependencies";
+export interface IManifest {
+  upem?: {
+    policies: IUpemPolicy[];
+  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [whateverOtherKey: string]: any;
+}
+
+export type PrefixType = "^" | "" | "~";
+
 export interface IUpemOptions {
   /**
    * how updated packages get prefixed if true:'', if false or left out
@@ -97,7 +102,7 @@ export interface IUpemOptions {
    * if true upem will not update the manifest, but just output what it would've done
    * in all other cases will also update the manifest
    */
-  dryRun: boolean;
+  dryRun?: boolean;
 }
 
 export interface IUpemReturn {
@@ -110,5 +115,5 @@ export interface IUpemReturn {
    * human readable message
    */
   message: string;
-  outdatedList: IUpemOutdated[];
+  outdatedList?: IUpemOutdated[];
 }
