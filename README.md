@@ -17,11 +17,11 @@ and watch cat videos in the mean time:
 
 ```json
   "scripts": {
-    "check": "npm-run-all --parallel lint lint:archi test",
+    "check": "npm-run-all --parallel lint test",
     "lint": "eslint src test",
-    "lint:archi": "depcruise --validate -- src test",
     "lint:fix": "eslint --fix src test",
     "test": "mocha",
+    "upem-outdated": "npm outdated --json --long | upem --dry-run",
     "upem": "npm-run-all upem:update upem:install lint:fix check",
     "upem:update": "npm outdated --json --long | upem",
     "upem:install": "npm install"
@@ -159,8 +159,6 @@ my own would only take a sunday afternoon...
 
 ## Flare
 
-[![Build Status](https://travis-ci.org/sverweij/upem.svg?branch=main)](https://travis-ci.org/sverweij/upem)
-[![Maintainability](https://api.codeclimate.com/v1/badges/ecd08465c81bc85b83fe/maintainability)](https://codeclimate.com/github/sverweij/upem/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/ecd08465c81bc85b83fe/test_coverage)](https://codeclimate.com/github/sverweij/upem/test_coverage)
+[![linting & test coverage](https://github.com/sverweij/upem/actions/workflows/ci.yml/badge.svg)](https://github.com/sverweij/upem/actions/workflows/ci.yml)
 [![npm stable version](https://img.shields.io/npm/v/upem.svg)](https://npmjs.com/package/upem)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
