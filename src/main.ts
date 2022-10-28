@@ -1,32 +1,34 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { EOL } from "node:os";
+import {
+  IManifest,
+  IUpemOptions,
+  IUpemOutdated,
+  IUpemReturn,
+} from "types/upem.js";
 import { determinePolicies, isUpAble } from "./determine-policies.js";
 import { updateManifest } from "./update-manifest.js";
 
 const INDENT = 2;
 
-/**
- *
- * @param {import("../types/upem.js").IUpemOutdated[]} pOutdatedList
- * @param {string} pAttribute
- */
-function getMaxAttributeLength(pOutdatedList, pAttribute) {
+function getMaxAttributeLength(
+  pOutdatedList: IUpemOutdated[],
+  pAttribute: keyof IUpemOutdated
+): number {
   const lExtraPad = 2;
 
   return (
     pOutdatedList
-      .map((pOutdatedEntry) => pOutdatedEntry[pAttribute]?.length ?? 0)
+      .map(
+        (pOutdatedEntry: IUpemOutdated) =>
+          pOutdatedEntry[pAttribute]?.length ?? 0
+      )
       .reduce((pMax, pCurrent) => (pCurrent > pMax ? pCurrent : pMax), 0) +
     lExtraPad
   );
 }
 
-/**
- *
- * @param {import("../types/upem.js").IUpemOutdated[]} pOutdatedList
- * @returns {string}
- */
-function constructSuccessMessage(pOutdatedList) {
+function constructSuccessMessage(pOutdatedList: IUpemOutdated[]): string {
   let lReturnValue = "";
   const lMaxPackageLength = getMaxAttributeLength(pOutdatedList, "package");
   const lMaxCurrentLength = getMaxAttributeLength(pOutdatedList, "current");
@@ -75,7 +77,10 @@ function constructSuccessMessage(pOutdatedList) {
  * @param {import("../types/upem.js").IManifest} pPackageObject
  * @returns
  */
-function determineOutdated(pOutdatedObject, pPackageObject) {
+function determineOutdated(
+  pOutdatedObject: string,
+  pPackageObject: IManifest
+): Partial<IUpemReturn> {
   const lOutdatedObject =
     pOutdatedObject.length <= 0 ? {} : JSON.parse(pOutdatedObject);
   const lPolicies = pPackageObject?.upem?.policies || [];
@@ -101,27 +106,21 @@ function determineOutdated(pOutdatedObject, pPackageObject) {
   };
 }
 
-/**
- *
- * @param {string} pPackageInputFileName
- * @param {string} pOutdatedJSON
- * @param {string} pPackageOutputFileName
- * @param {import("../types/upem.js").IUpemOptions} pOptions
- * @returns {import("../types/upem.js").IUpemReturn}
- */
 export default function upem(
-  pPackageInputFileName,
-  pOutdatedJSON,
+  pPackageInputFileName: string,
+  pOutdatedJSON: string,
   pPackageOutputFileName = pPackageInputFileName,
-  pOptions
-) {
+  pOptions: IUpemOptions
+): IUpemReturn {
   try {
-    const lPackageFile = readFileSync(pPackageInputFileName);
+    const lPackageFile = readFileSync(pPackageInputFileName, {
+      encoding: "utf8",
+    });
     const lPackageObject = JSON.parse(lPackageFile);
     const lOutdatedResult = determineOutdated(pOutdatedJSON, lPackageObject);
 
     if (!lOutdatedResult.outdatedList) {
-      return lOutdatedResult;
+      return lOutdatedResult as IUpemReturn;
     }
 
     try {
