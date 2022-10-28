@@ -133,7 +133,6 @@ export default function upem(
               lOutdatedResult.outdatedList.filter(isUpAble),
               pOptions
             ),
-            // eslint-disable-next-line unicorn/no-null
             null,
             INDENT
           )

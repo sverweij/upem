@@ -12,13 +12,13 @@ export function determineSavePrefix(pVersionRangeString, pOptions) {
     }
     return pOptions?.saveExact ? "" : pOptions?.savePrefix ?? "^";
 }
-export function updateDependencyKey(pDependencyObject, pOutdatedList, pOptions = {}) {
+export function updateDependencyKey(pDependencyObject, pOutdatedList, pOptions) {
     return {
         ...pDependencyObject,
         ...Object.keys(pDependencyObject)
             .filter((pDependency) => pOutdatedList.some((pOutdatedEntry) => pOutdatedEntry.package === pDependency))
             .reduce((pAll, pPackageName) => {
-            pAll[pPackageName] = `${determineSavePrefix(pDependencyObject[pPackageName], pOptions)}${pOutdatedList.find((pOutdatedEntry) => pOutdatedEntry.package === pPackageName).target}`;
+            pAll[pPackageName] = `${determineSavePrefix(pDependencyObject[pPackageName], pOptions)}${pOutdatedList.find((pOutdatedEntry) => pOutdatedEntry.package === pPackageName)?.target}`;
             return pAll;
         }, {}),
     };
