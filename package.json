@@ -67,17 +67,17 @@
     "build:ts": "tsc ",
     "build:stage": "git add .",
     "check": "npm-run-all --parallel depcruise lint test",
-    "depcruise": "depcruise src --validate --cache",
+    "depcruise": "depcruise src --validate -T err",
     "depcruise:graph": "npm-run-all depcruise:graph:html",
-    "depcruise:graph:html": "depcruise src --validate --cache --output-type dot | dot -T svg | tee docs/dependencygraph.svg | depcruise-wrap-stream-in-html > docs/dependencygraph.html",
-    "depcruise:graph:view": "depcruise src --validate --cache --output-type dot --prefix vscode://file/$(pwd)/ | dot -T svg | depcruise-wrap-stream-in-html | browser",
+    "depcruise:graph:html": "depcruise src --validate --output-type dot | dot -T svg | tee docs/dependencygraph.svg | depcruise-wrap-stream-in-html > docs/dependencygraph.html",
+    "depcruise:graph:view": "depcruise src --validate --output-type dot --prefix vscode://file/$(pwd)/ | dot -T svg | depcruise-wrap-stream-in-html | browser",
     "format": "prettier --write \"src/**/*.{ts,js}\" \"*.{json,yml,md}\" .github",
     "format:check": "prettier --check \"src/**/*.{ts,js}\" \"*.{json,yml,md}\" .github",
     "lint": "npm-run-all lint:eslint format:check",
     "lint:eslint": "eslint src types",
     "lint:fix": "npm-run-all lint:fix:eslint format",
     "lint:fix:eslint": "eslint --fix src types",
-    "test": "NODE_OPTIONS=--no-warnings c8 --check-coverage --statements 100 --branches 100 --functions 100 --lines 100 --exclude \"{src/**/*.spec.js,src/__mocks__/*,src/__fixtures__/*,.mocharc.cjs}\" --reporter text-summary --reporter html --reporter json-summary mocha",
+    "test": "NODE_OPTIONS=--no-warnings c8 mocha",
     "test:watch": "find src | NODE_OPTIONS=--no-warnings entr -c npx mocha",
     "update-dependencies": "npm-run-all upem:update upem:install lint:fix check",
     "upem-outdated": "npm outdated --json --long | dist/cli.js --dry-run",
@@ -88,14 +88,5 @@
   },
   "engines": {
     "node": "^14.13.1||>=16"
-  },
-  "lint-staged": {
-    "src/**/*.ts": [
-      "depcruise --validate -- src",
-      "eslint --fix"
-    ],
-    "*.{ts,json,md,yml}": [
-      "prettier --write"
-    ]
   }
 }

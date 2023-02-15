@@ -93,6 +93,7 @@ module.exports = {
     progress: { type: "performance-log" },
     /* prefix for links in html and svg output (e.g. https://github.com/you/yourrepo/blob/develop/) */
     prefix: "https://github.com/sverweij/upem/blob/main/",
+    cache: true,
     reporterOptions: {
       dot: {
         collapsePattern: "node_modules/[^/]+",

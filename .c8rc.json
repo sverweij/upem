@@ -1,0 +1,10 @@
+{
+  "statements": 100,
+  "branches": 100,
+  "functions": 100,
+  "lines": 100,
+  "exclude": [
+    "{src/**/*.spec.js,src/__mocks__/*,src/__fixtures__/*,.mocharc.cjs}"
+  ],
+  "reporter": ["text-summary", "html", "json-summary"]
+}
