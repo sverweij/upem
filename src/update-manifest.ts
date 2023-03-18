@@ -1,9 +1,9 @@
-import {
+import type {
   DependenciesTypeType,
   IManifest,
   IUpemOptions,
   IUpemOutdated,
-} from "types/upem";
+} from "types/upem.js";
 
 function isUpAbleDependencyKey(pSkipDependencyTypes: DependenciesTypeType[]) {
   return (pManifestKey: string): boolean =>

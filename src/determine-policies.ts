@@ -1,9 +1,9 @@
-import {
+import type {
   INpmOutdated,
   IFlatNpmOutdated,
   IUpemOutdated,
   IUpemPolicy,
-} from "types/upem";
+} from "types/upem.js";
 
 function determineTargetVersion(
   pOutdatedEntry: IFlatNpmOutdated,
