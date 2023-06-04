@@ -87,6 +87,6 @@
     "prepare": "husky install"
   },
   "engines": {
-    "node": "^14.13.1||>=16"
+    "node": "^16||^18||>=20"
   }
 }
