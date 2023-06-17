@@ -51,7 +51,7 @@ function determineOutdated(pOutdatedObject, pPackageObject) {
         outdatedList: lOutdatedList,
     };
 }
-export default function upem(pPackageInputFileName, pOutdatedJSON, pPackageOutputFileName = pPackageInputFileName, pOptions) {
+export default function upem(pPackageInputFileName, pOutdatedJSON, pPackageOutputFileName = pPackageInputFileName, pOptions = {}) {
     try {
         const lPackageFile = readFileSync(pPackageInputFileName, {
             encoding: "utf8",

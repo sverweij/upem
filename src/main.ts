@@ -109,8 +109,8 @@ function determineOutdated(
 export default function upem(
   pPackageInputFileName: string,
   pOutdatedJSON: string,
-  pPackageOutputFileName = pPackageInputFileName,
-  pOptions: IUpemOptions
+  pPackageOutputFileName: string = pPackageInputFileName,
+  pOptions: IUpemOptions = {}
 ): IUpemReturn {
   try {
     const lPackageFile = readFileSync(pPackageInputFileName, {

@@ -88,11 +88,11 @@ export interface IUpemOptions {
    * how updated packages get prefixed if true:'', if false or left out
    * (the default) it'll use savePrefix
    */
-  saveExact: boolean;
+  saveExact?: boolean;
   /**
    * prefix to save new or updated package versions under
    */
-  savePrefix: PrefixType;
+  savePrefix?: PrefixType;
   /**
    * Dependencies to not apply upgrades to. This could e.g. make
    * sense for peerDependencies, that usually have large ranges in any case

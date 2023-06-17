@@ -1,12 +1,8 @@
 /* eslint-disable max-lines */
 import { strictEqual, match, deepStrictEqual } from "node:assert";
-import { fileURLToPath } from "node:url";
 import { rmSync, chmodSync, readFileSync, existsSync } from "node:fs";
 import { EOL } from "node:os";
-import { join } from "node:path";
 import upem from "./main.js";
-
-const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 const OUTDATED = JSON.stringify({
   "prod-dep": {
@@ -41,9 +37,12 @@ const OUTDATED = JSON.stringify({
   },
 });
 
+const OUTPUT_FILENAME = new URL("tmp_package-out.json", import.meta.url)
+  .pathname;
+
 describe("main", () => {
   after(() => {
-    rmSync(join(__dirname, "tmp_package-out.json"), {
+    rmSync(new URL("tmp_package-out.json", import.meta.url), {
       force: true,
       maxRetries: 3,
     });
@@ -57,7 +56,10 @@ describe("main", () => {
   });
 
   it('empty string dependency JSON yields "nothing to update"', () => {
-    const lResult = upem(join(__dirname, "__mocks__", "package-in.json"), "");
+    const lResult = upem(
+      new URL("__mocks__/package-in.json", import.meta.url).pathname,
+      ""
+    );
 
     strictEqual(lResult.OK, true);
     match(
@@ -67,7 +69,10 @@ describe("main", () => {
   });
 
   it('{} dependency JSON yields "nothing to update"', () => {
-    const lResult = upem(join(__dirname, "__mocks__", "package-in.json"), "{}");
+    const lResult = upem(
+      new URL("__mocks__/package-in.json", import.meta.url).pathname,
+      "{}"
+    );
 
     strictEqual(lResult.OK, true);
     match(
@@ -87,11 +92,10 @@ describe("main", () => {
       }
     }
     `;
-    const READONLY_INPUT_FILENAME = join(
-      __dirname,
-      "__mocks__",
-      "package-in-readonly.json"
-    );
+    const READONLY_INPUT_FILENAME = new URL(
+      "__mocks__/package-in-readonly.json",
+      import.meta.url
+    ).pathname;
 
     chmodSync(READONLY_INPUT_FILENAME, "400");
     const lResult = upem(READONLY_INPUT_FILENAME, lOutdatedJson);
@@ -115,7 +119,7 @@ describe("main", () => {
     }
     `;
     const lResult = upem(
-      join(__dirname, "__mocks__", "package-in.json"),
+      new URL("__mocks__/package-in.json", import.meta.url).pathname,
       lOutdatedJson
     );
 
@@ -129,14 +133,15 @@ describe("main", () => {
 
   it("happy day: dependencies updated with stuff in an outdated.json", () => {
     const OUTDATED_JSON = readFileSync(
-      join(__dirname, "__mocks__", "outdated.json")
+      new URL("__mocks__/outdated.json", import.meta.url),
+      "utf8"
     );
-    const INPUT_FILENAME = join(__dirname, "__mocks__", "package-in.json");
-    const OUTPUT_FILENAME = join(__dirname, "tmp_package-out.json");
-    const FIXTURE_FILENAME = join(
-      __dirname,
-      "__fixtures__",
-      "package-out.json"
+    const INPUT_FILENAME = new URL("__mocks__/package-in.json", import.meta.url)
+      .pathname;
+
+    const FIXTURE_URL = new URL(
+      "__fixtures__/package-out.json",
+      import.meta.url
     );
 
     const lResult = upem(INPUT_FILENAME, OUTDATED_JSON, OUTPUT_FILENAME, {
@@ -158,22 +163,19 @@ describe("main", () => {
       true
     );
     deepStrictEqual(
-      JSON.parse(readFileSync(OUTPUT_FILENAME)),
-      JSON.parse(readFileSync(FIXTURE_FILENAME))
+      JSON.parse(readFileSync(OUTPUT_FILENAME, "utf8")),
+      JSON.parse(readFileSync(FIXTURE_URL, "utf8"))
     );
   });
 
   it("happy day: don't up peerDependencies when told not to", () => {
-    const INPUT_FILENAME = join(
-      __dirname,
-      "__mocks__",
-      "package-in-with-peer-deps.json"
-    );
-    const OUTPUT_FILENAME = join(__dirname, "tmp_package-out.json");
-    const FIXTURE_FILENAME = join(
-      __dirname,
-      "__fixtures__",
-      "package-out-with-peer-deps-not-updated.json"
+    const INPUT_FILENAME = new URL(
+      "__mocks__/package-in-with-peer-deps.json",
+      import.meta.url
+    ).pathname;
+    const FIXTURE_URL = new URL(
+      "__fixtures__/package-out-with-peer-deps-not-updated.json",
+      import.meta.url
     );
 
     const lResult = upem(INPUT_FILENAME, OUTDATED, OUTPUT_FILENAME, {
@@ -197,22 +199,19 @@ describe("main", () => {
       true
     );
     deepStrictEqual(
-      JSON.parse(readFileSync(OUTPUT_FILENAME)),
-      JSON.parse(readFileSync(FIXTURE_FILENAME))
+      JSON.parse(readFileSync(OUTPUT_FILENAME, "utf8")),
+      JSON.parse(readFileSync(FIXTURE_URL, "utf8"))
     );
   });
 
   it("happy day: do up peerDependencies when not told not to", () => {
-    const INPUT_FILENAME = join(
-      __dirname,
-      "__mocks__",
-      "package-in-with-peer-deps.json"
-    );
-    const OUTPUT_FILENAME = join(__dirname, "tmp_package-out.json");
-    const FIXTURE_FILENAME = join(
-      __dirname,
-      "__fixtures__",
-      "package-out-with-peer-deps-updated.json"
+    const INPUT_FILENAME = new URL(
+      "__mocks__/package-in-with-peer-deps.json",
+      import.meta.url
+    ).pathname;
+    const FIXTURE_URL = new URL(
+      "__fixtures__/package-out-with-peer-deps-updated.json",
+      import.meta.url
     );
 
     const lResult = upem(INPUT_FILENAME, OUTDATED, OUTPUT_FILENAME, {
@@ -235,25 +234,23 @@ describe("main", () => {
       true
     );
     deepStrictEqual(
-      JSON.parse(readFileSync(OUTPUT_FILENAME)),
-      JSON.parse(readFileSync(FIXTURE_FILENAME))
+      JSON.parse(readFileSync(OUTPUT_FILENAME, "utf8")),
+      JSON.parse(readFileSync(FIXTURE_URL, "utf8"))
     );
   });
 
   it("happy day: don't up pin-policied packages, but do show them in the output", () => {
-    const INPUT_FILENAME = join(
-      __dirname,
-      "__mocks__",
-      "package-in-with-donotup-object.json"
-    );
-    const OUTPUT_FILENAME = join(__dirname, "tmp_package-out.json");
-    const FIXTURE_FILENAME = join(
-      __dirname,
-      "__fixtures__",
-      "package-out.json"
+    const INPUT_FILENAME = new URL(
+      "__mocks__/package-in-with-donotup-object.json",
+      import.meta.url
+    ).pathname;
+    const FIXTURE_URL = new URL(
+      "__fixtures__/package-out.json",
+      import.meta.url
     );
     const lOutdated = readFileSync(
-      join(__dirname, "__mocks__", "outdated.json")
+      new URL("__mocks__/outdated.json", import.meta.url),
+      "utf8"
     );
 
     const lResult = upem(INPUT_FILENAME, lOutdated, OUTPUT_FILENAME, {
@@ -280,25 +277,23 @@ describe("main", () => {
     );
     match(lResult.message, /ts-jest {13}2.0.0 {4}\(policy: pin\)/);
     deepStrictEqual(
-      JSON.parse(readFileSync(OUTPUT_FILENAME)),
-      JSON.parse(readFileSync(FIXTURE_FILENAME))
+      JSON.parse(readFileSync(OUTPUT_FILENAME, "utf8")),
+      JSON.parse(readFileSync(FIXTURE_URL, "utf8"))
     );
   });
 
   it("if 'type' field is available - print it", () => {
-    const INPUT_FILENAME = join(
-      __dirname,
-      "__mocks__",
-      "package-in-with-donotup-object.json"
-    );
-    const OUTPUT_FILENAME = join(__dirname, "tmp_package-out.json");
-    const FIXTURE_FILENAME = join(
-      __dirname,
-      "__fixtures__",
-      "package-out.json"
+    const INPUT_FILENAME = new URL(
+      "__mocks__/package-in-with-donotup-object.json",
+      import.meta.url
+    ).pathname;
+    const FIXTURE_URL = new URL(
+      "__fixtures__/package-out.json",
+      import.meta.url
     );
     const lOutdated = readFileSync(
-      join(__dirname, "__mocks__", "outdated-long.json")
+      new URL("__mocks__/outdated-long.json", import.meta.url),
+      "utf8"
     );
 
     const lResult = upem(INPUT_FILENAME, lOutdated, OUTPUT_FILENAME, {
@@ -328,25 +323,25 @@ describe("main", () => {
       /ts-jest {13}2.0.0 {3}devDependencies {3}\(policy: pin\)/
     );
     deepStrictEqual(
-      JSON.parse(readFileSync(OUTPUT_FILENAME)),
-      JSON.parse(readFileSync(FIXTURE_FILENAME))
+      JSON.parse(readFileSync(OUTPUT_FILENAME, "utf8")),
+      JSON.parse(readFileSync(FIXTURE_URL, "utf8"))
     );
   });
 
   it("doesn't update the specified manifest when dryRun is specified and true", () => {
-    const INPUT_FILENAME = join(
-      __dirname,
-      "__mocks__",
-      "package-in-with-donotup-object.json"
-    );
-    const OUTPUT_FILENAME = join(
-      __dirname,
-      "tmp_this-file-should-not-be-created.json"
-    );
+    const INPUT_FILENAME = new URL(
+      "__mocks__/package-in-with-donotup-object.json",
+      import.meta.url
+    ).pathname;
+    const OUTPUT_FILENAME_NONE = new URL(
+      "tmp_this-file-should-not-be-created.json",
+      import.meta.url
+    ).pathname;
     const lOutdated = readFileSync(
-      join(__dirname, "__mocks__", "outdated.json")
+      new URL("__mocks__/outdated.json", import.meta.url),
+      "utf8"
     );
-    upem(INPUT_FILENAME, lOutdated, OUTPUT_FILENAME, { dryRun: true });
-    strictEqual(existsSync(OUTPUT_FILENAME), false);
+    upem(INPUT_FILENAME, lOutdated, OUTPUT_FILENAME_NONE, { dryRun: true });
+    strictEqual(existsSync(OUTPUT_FILENAME_NONE), false);
   });
 });
