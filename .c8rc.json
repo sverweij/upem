@@ -3,8 +3,6 @@
   "branches": 100,
   "functions": 100,
   "lines": 100,
-  "exclude": [
-    "{src/**/*.spec.js,src/__mocks__/*,src/__fixtures__/*,.mocharc.cjs}"
-  ],
+  "exclude": ["{src/**/*.test.js,src/__mocks__/*,src/__fixtures__/*}"],
   "reporter": ["text-summary", "html", "json-summary"]
 }

@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import { strictEqual, match, deepStrictEqual } from "node:assert";
 import { rmSync, chmodSync, readFileSync, existsSync } from "node:fs";
+import { after, describe, it } from "node:test";
 import { EOL } from "node:os";
 import upem from "./main.js";
 

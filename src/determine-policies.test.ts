@@ -1,4 +1,5 @@
 import { deepStrictEqual } from "node:assert";
+import { describe, it } from "node:test";
 import { determinePolicies } from "./determine-policies.js";
 
 describe("determinePolicies", () => {

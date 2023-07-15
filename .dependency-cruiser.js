@@ -28,7 +28,7 @@ export default {
       severity: "error",
       from: {},
       to: {
-        path: "\\.spec\\.js$",
+        path: "\\.test\\.js$",
       },
     },
     {
@@ -38,7 +38,7 @@ export default {
         "Don't allow dependencies from src/app/lib to a development only package",
       from: {
         path: "^src",
-        pathNot: "\\.spec\\.js$",
+        pathNot: "\\.test\\.ts$",
       },
       to: {
         dependencyTypes: ["npm-dev"],
@@ -72,7 +72,7 @@ export default {
       },
       to: {
         path: "src/",
-        pathNot: ["\\.spec\\.js$"],
+        pathNot: ["\\.test\\.js$"],
         reachable: false,
       },
     },
@@ -80,11 +80,11 @@ export default {
       name: "no-non-test-coverage",
       severity: "error",
       from: {
-        path: "src/[^\\.]+\\.spec\\.js$",
+        path: "src/[^\\.]+\\.test\\.js$",
       },
       to: {
         path: "src/",
-        pathNot: ["src/cli.js", "\\.spec\\.js$"],
+        pathNot: ["src/cli.js", "\\.test\\.js$"],
         reachable: false,
       },
     },
@@ -111,7 +111,7 @@ export default {
               attributes: { fillcolor: "lime", penwidth: 2 },
             },
             {
-              criteria: { source: ".spec.js" },
+              criteria: { source: ".test.js" },
               attributes: { fillcolor: "#ccccff" },
             },
           ],
