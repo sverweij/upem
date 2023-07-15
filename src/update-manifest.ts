@@ -22,7 +22,7 @@ function getRangePrefix(pVersionRangeString: string): string {
 
 export function determineSavePrefix(
   pVersionRangeString: string,
-  pOptions?: IUpemOptions
+  pOptions?: IUpemOptions,
 ): string {
   const lIndividualRangePrefix = getRangePrefix(pVersionRangeString);
 
@@ -36,25 +36,23 @@ export function determineSavePrefix(
 export function updateDependencyKey(
   pDependencyObject: { [packageName: string]: string },
   pOutdatedList: IUpemOutdated[],
-  pOptions: IUpemOptions
+  pOptions: IUpemOptions,
 ) {
   return {
     ...pDependencyObject,
     ...Object.keys(pDependencyObject)
       .filter((pDependency) =>
         pOutdatedList.some(
-          (pOutdatedEntry) => pOutdatedEntry.package === pDependency
-        )
+          (pOutdatedEntry) => pOutdatedEntry.package === pDependency,
+        ),
       )
       .reduce((pAll, pPackageName) => {
         pAll[pPackageName] = `${determineSavePrefix(
           pDependencyObject[pPackageName] as string,
-          pOptions
-        )}${
-          pOutdatedList.find(
-            (pOutdatedEntry) => pOutdatedEntry.package === pPackageName
-          )?.target
-        }`;
+          pOptions,
+        )}${pOutdatedList.find(
+          (pOutdatedEntry) => pOutdatedEntry.package === pPackageName,
+        )?.target}`;
         return pAll;
       }, {} as IManifest),
   };
@@ -63,7 +61,7 @@ export function updateDependencyKey(
 export function updateManifest(
   pManifestObject: IManifest,
   pOutdatedPackages: IUpemOutdated[],
-  pOptions: IUpemOptions
+  pOptions: IUpemOptions,
 ): IManifest {
   return {
     ...pManifestObject,
@@ -73,7 +71,7 @@ export function updateManifest(
         pAll[pDependencyKey] = updateDependencyKey(
           pManifestObject[pDependencyKey],
           pOutdatedPackages,
-          pOptions
+          pOptions,
         );
         return pAll;
       }, {}),

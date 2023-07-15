@@ -20,7 +20,7 @@ function bufferChunk(pChunk: string): void {
 
 function emitGeneralError(pError: Error): void {
   process.stderr.write(
-    `  Up'em encountered a hitch while reading outdated information:\n${pError}\n\n`
+    `  Up'em encountered a hitch while reading outdated information:\n${pError}\n\n`,
   );
   process.exitCode = 1;
 }

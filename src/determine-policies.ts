@@ -7,7 +7,7 @@ import type {
 
 function determineTargetVersion(
   pOutdatedEntry: IFlatNpmOutdated,
-  pPolicy: keyof IFlatNpmOutdated
+  pPolicy: keyof IFlatNpmOutdated,
 ): string {
   return pOutdatedEntry[pPolicy] || pOutdatedEntry.current;
 }
@@ -29,7 +29,7 @@ function tagOutdatedEntry(pPolicies: IUpemPolicy[]) {
       policy: lPolicy,
       target: determineTargetVersion(
         pOutdatedEntry,
-        lPolicy as keyof IFlatNpmOutdated
+        lPolicy as keyof IFlatNpmOutdated,
       ),
     };
   };
@@ -41,7 +41,7 @@ export function isUpAble(pOutdated: IUpemOutdated): boolean {
 
 export function determinePolicies(
   pOutdatedPackages: INpmOutdated,
-  pPolicies: IUpemPolicy[]
+  pPolicies: IUpemPolicy[],
 ): IUpemOutdated[] {
   return objectToArray(pOutdatedPackages).map(tagOutdatedEntry(pPolicies));
 }

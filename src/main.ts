@@ -13,7 +13,7 @@ const INDENT = 2;
 
 function getMaxAttributeLength(
   pOutdatedList: IUpemOutdated[],
-  pAttribute: keyof IUpemOutdated
+  pAttribute: keyof IUpemOutdated,
 ): number {
   const lExtraPad = 2;
 
@@ -21,7 +21,7 @@ function getMaxAttributeLength(
     pOutdatedList
       .map(
         (pOutdatedEntry: IUpemOutdated) =>
-          pOutdatedEntry[pAttribute]?.length ?? 0
+          pOutdatedEntry[pAttribute]?.length ?? 0,
       )
       .reduce((pMax, pCurrent) => (pCurrent > pMax ? pCurrent : pMax), 0) +
     lExtraPad
@@ -42,18 +42,18 @@ function constructSuccessMessage(pOutdatedList: IUpemOutdated[]): string {
       .map(
         (pOutdatedEntry) =>
           `${pOutdatedEntry.package.padEnd(
-            lMaxPackageLength
+            lMaxPackageLength,
           )}${pOutdatedEntry.current.padEnd(
-            lMaxCurrentLength
+            lMaxCurrentLength,
           )} -> ${pOutdatedEntry.target.padEnd(lMaxTargetLength)}${
             pOutdatedEntry.type?.padEnd(lMaxTypeLength) ?? ""
-          } (policy: ${pOutdatedEntry.policy})`
+          } (policy: ${pOutdatedEntry.policy})`,
       )
       .join(EOL)}${EOL}${EOL}`;
   }
 
   const lNotUpdated = pOutdatedList.filter(
-    (pOutdatedEntry) => !isUpAble(pOutdatedEntry)
+    (pOutdatedEntry) => !isUpAble(pOutdatedEntry),
   );
 
   if (lNotUpdated.length > 0) {
@@ -61,10 +61,10 @@ function constructSuccessMessage(pOutdatedList: IUpemOutdated[]): string {
       .map(
         (pOutdatedEntry) =>
           `${pOutdatedEntry.package.padEnd(
-            lMaxPackageLength
+            lMaxPackageLength,
           )}${pOutdatedEntry.current.padEnd(lMaxTargetLength)}${
             pOutdatedEntry.type?.padEnd(lMaxTypeLength) ?? ""
-          } (policy: ${pOutdatedEntry.policy})`
+          } (policy: ${pOutdatedEntry.policy})`,
       )
       .join(EOL)}${EOL}${EOL}`;
   }
@@ -79,7 +79,7 @@ function constructSuccessMessage(pOutdatedList: IUpemOutdated[]): string {
  */
 function determineOutdated(
   pOutdatedObject: string,
-  pPackageObject: IManifest
+  pPackageObject: IManifest,
 ): Partial<IUpemReturn> {
   const lOutdatedObject =
     pOutdatedObject.length <= 0 ? {} : JSON.parse(pOutdatedObject);
@@ -110,7 +110,7 @@ export default function upem(
   pPackageInputFileName: string,
   pOutdatedJSON: string,
   pPackageOutputFileName: string = pPackageInputFileName,
-  pOptions: IUpemOptions = {}
+  pOptions: IUpemOptions = {},
 ): IUpemReturn {
   try {
     const lPackageFile = readFileSync(pPackageInputFileName, {
@@ -131,11 +131,11 @@ export default function upem(
             updateManifest(
               lPackageObject,
               lOutdatedResult.outdatedList.filter(isUpAble),
-              pOptions
+              pOptions,
             ),
             null,
-            INDENT
-          )
+            INDENT,
+          ),
         );
       }
       return {

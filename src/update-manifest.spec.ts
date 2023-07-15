@@ -67,7 +67,7 @@ describe("updateManifest - updateDependencyKey", () => {
   it("deps, outdated yields updated deps, prefixed with carets", () => {
     deepStrictEqual(
       updateDependencyKey(DEPS_FIXTURE, OUTDATED_NO_POLICIES_FIXTURE),
-      DEPS_UPDATED_CARET_FIXTURE
+      DEPS_UPDATED_CARET_FIXTURE,
     );
   });
   it("deps, outdated with saveExact yields updated deps, pinned", () => {
@@ -75,7 +75,7 @@ describe("updateManifest - updateDependencyKey", () => {
       updateDependencyKey(DEPS_FIXTURE, OUTDATED_NO_POLICIES_FIXTURE, {
         saveExact: true,
       }),
-      DEPS_UPDATED_PINNED_FIXTURE
+      DEPS_UPDATED_PINNED_FIXTURE,
     );
   });
   it("deps, outdated with saveExact yields updated deps, pinned even when savePrefix ^ is provided", () => {
@@ -84,7 +84,7 @@ describe("updateManifest - updateDependencyKey", () => {
         saveExact: true,
         savePrefix: "^",
       }),
-      DEPS_UPDATED_PINNED_FIXTURE
+      DEPS_UPDATED_PINNED_FIXTURE,
     );
   });
   it("deps, outdated with saveExact false yields updated deps, caret prefixed", () => {
@@ -92,7 +92,7 @@ describe("updateManifest - updateDependencyKey", () => {
       updateDependencyKey(DEPS_FIXTURE, OUTDATED_NO_POLICIES_FIXTURE, {
         saveExact: false,
       }),
-      DEPS_UPDATED_CARET_FIXTURE
+      DEPS_UPDATED_CARET_FIXTURE,
     );
   });
   it("deps, outdated with savePrefix ~ yields updated deps, tilde prefixed", () => {
@@ -100,7 +100,7 @@ describe("updateManifest - updateDependencyKey", () => {
       updateDependencyKey(DEPS_FIXTURE, OUTDATED_NO_POLICIES_FIXTURE, {
         savePrefix: "~",
       }),
-      DEPS_UPDATED_TILDE_FIXTURE
+      DEPS_UPDATED_TILDE_FIXTURE,
     );
   });
   it("deps, outdated with individual prefix, and saveExact: true, updates to latest and leaves prefix in place", () => {
@@ -108,7 +108,7 @@ describe("updateManifest - updateDependencyKey", () => {
       updateDependencyKey(DEPS_CARET_FIXTURE, OUTDATED_NO_POLICIES_FIXTURE, {
         saveExact: true,
       }),
-      DEPS_CARET_UPDATED_LATEST_FIXTURE
+      DEPS_CARET_UPDATED_LATEST_FIXTURE,
     );
   });
   it("updates those with a 'wanted' policy to wanted", () => {
@@ -116,9 +116,9 @@ describe("updateManifest - updateDependencyKey", () => {
       updateDependencyKey(
         DEPS_CARET_FIXTURE,
         OUTDATED_WANTED_POLICIES_FIXTURE,
-        { saveExact: true }
+        { saveExact: true },
       ),
-      DEPS_CARET_UPDATED_WANTED_FIXTURE
+      DEPS_CARET_UPDATED_WANTED_FIXTURE,
     );
   });
 });
@@ -136,7 +136,7 @@ describe("updateManifest - determineSavePrefix", () => {
   it("with saveExact = false and a savePrefix, returns that savePrefix", () => {
     strictEqual(
       determineSavePrefix(">=0.0.0", { saveExact: false, savePrefix: "~" }),
-      "~"
+      "~",
     );
   });
   it("with only saveExact = true, and an individual prefix returns that prefix", () => {
