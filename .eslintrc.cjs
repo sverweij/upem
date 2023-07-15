@@ -21,10 +21,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ["src/**/*.spec.ts"],
-      env: {
-        mocha: true,
-      },
+      files: ["src/**/*.test.ts"],
       rules: {
         "node/global-require": "off",
         "max-lines-per-function": "off",

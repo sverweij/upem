@@ -1,4 +1,5 @@
 import { strictEqual, deepStrictEqual } from "node:assert";
+import { describe, it } from "node:test";
 import { updateDependencyKey, determineSavePrefix } from "./update-manifest.js";
 import { determinePolicies } from "./determine-policies.js";
 

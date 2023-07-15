@@ -26,7 +26,7 @@ To make this as easy as possible for you, here's some simple guidelines:
 - Code quality
   - Additions pass eslint (as configured in this repo -
     `npm run lint:fix` will help you loads).
-  - Unit tests (we use mocha) prove your code does what it intends.
+  - Unit tests (we use `node:test`) prove your code does what it intends.
   - Your code does not introduce regressions - `npm run check` proves this.
   - Code style (you know, petty things like indentations, where brackets go,
     how variables & parameters are named) fits in with the current code base.

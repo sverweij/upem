@@ -9,6 +9,6 @@ plugins:
 exclude_patterns:
   - ".github/"
   - "docs/"
-  - "src/**/*.spec.js"
+  - "src/**/*.test.ts"
   - "**/node_modules/"
   - "**/*.d.ts"
