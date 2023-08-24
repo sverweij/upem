@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { strictEqual, match, deepStrictEqual } from "node:assert";
+import { equal, match, deepEqual } from "node:assert/strict";
 import { rmSync, chmodSync, readFileSync, existsSync } from "node:fs";
 import { after, describe, it } from "node:test";
 import { EOL } from "node:os";
@@ -52,7 +52,7 @@ describe("main", () => {
   it("non-existing package.json errors", () => {
     const lResult = upem("thisfiledoesnotexist", "");
 
-    strictEqual(lResult.OK, false);
+    equal(lResult.OK, false);
     match(lResult.message, /Up'em encountered a hitch:/);
   });
 
@@ -62,7 +62,7 @@ describe("main", () => {
       "",
     );
 
-    strictEqual(lResult.OK, true);
+    equal(lResult.OK, true);
     match(
       lResult.message,
       /Up'em says: Everything seems to be up to date already./,
@@ -75,7 +75,7 @@ describe("main", () => {
       "{}",
     );
 
-    strictEqual(lResult.OK, true);
+    equal(lResult.OK, true);
     match(
       lResult.message,
       /Up'em says: Everything seems to be up to date already./,
@@ -101,7 +101,7 @@ describe("main", () => {
     chmodSync(READONLY_INPUT_FILENAME, "400");
     const lResult = upem(READONLY_INPUT_FILENAME, lOutdatedJson);
 
-    strictEqual(lResult.OK, false);
+    equal(lResult.OK, false);
     match(
       lResult.message,
       /Up'em encountered a hitch when updating package.json:/,
@@ -124,7 +124,7 @@ describe("main", () => {
       lOutdatedJson,
     );
 
-    strictEqual(lResult.OK, true);
+    equal(lResult.OK, true);
     match(
       lResult.message,
       /Up'em found these packages were outdated, but did not update them because of policies/,
@@ -149,12 +149,12 @@ describe("main", () => {
       saveExact: true,
     });
 
-    strictEqual(lResult.OK, true);
+    equal(lResult.OK, true);
     match(
       lResult.message,
       /Up'em just updated these outdated dependencies in package.json:/,
     );
-    strictEqual(
+    equal(
       lResult.message.includes(
         `@types/node         10.5.1   -> 10.5.2   (policy: latest)${EOL}` +
           `dependency-cruiser  4.1.0    -> 4.1.1    (policy: latest)${EOL}` +
@@ -163,7 +163,7 @@ describe("main", () => {
       ),
       true,
     );
-    deepStrictEqual(
+    deepEqual(
       JSON.parse(readFileSync(OUTPUT_FILENAME, "utf8")),
       JSON.parse(readFileSync(FIXTURE_URL, "utf8")),
     );
@@ -184,12 +184,12 @@ describe("main", () => {
       skipDependencyTypes: ["peerDependencies"],
     });
 
-    strictEqual(lResult.OK, true);
+    equal(lResult.OK, true);
     match(
       lResult.message,
       /Up'em just updated these outdated dependencies in package.json/,
     );
-    strictEqual(
+    equal(
       lResult.message.includes(
         `prod-dep          1.2.3   -> 1.3.0   (policy: latest)${EOL}` +
           `prod-dep-two      4.5.6   -> 5.0.0   (policy: latest)${EOL}` +
@@ -199,7 +199,7 @@ describe("main", () => {
       ),
       true,
     );
-    deepStrictEqual(
+    deepEqual(
       JSON.parse(readFileSync(OUTPUT_FILENAME, "utf8")),
       JSON.parse(readFileSync(FIXTURE_URL, "utf8")),
     );
@@ -219,12 +219,12 @@ describe("main", () => {
       saveExact: true,
     });
 
-    strictEqual(lResult.OK, true);
+    equal(lResult.OK, true);
     match(
       lResult.message,
       /Up'em just updated these outdated dependencies in package.json/,
     );
-    strictEqual(
+    equal(
       lResult.message.includes(
         `prod-dep          1.2.3   -> 1.3.0   (policy: latest)${EOL}` +
           `prod-dep-two      4.5.6   -> 5.0.0   (policy: latest)${EOL}` +
@@ -234,7 +234,7 @@ describe("main", () => {
       ),
       true,
     );
-    deepStrictEqual(
+    deepEqual(
       JSON.parse(readFileSync(OUTPUT_FILENAME, "utf8")),
       JSON.parse(readFileSync(FIXTURE_URL, "utf8")),
     );
@@ -258,12 +258,12 @@ describe("main", () => {
       saveExact: true,
     });
 
-    strictEqual(lResult.OK, true);
+    equal(lResult.OK, true);
     match(
       lResult.message,
       /Up'em just updated these outdated dependencies in package.json/,
     );
-    strictEqual(
+    equal(
       lResult.message.includes(
         `@types/node         10.5.1   -> 10.5.2   (policy: latest)${EOL}` +
           `dependency-cruiser  4.1.0    -> 4.1.1    (policy: latest)${EOL}` +
@@ -277,7 +277,7 @@ describe("main", () => {
       /Up'em found these packages were outdated, but did not update them because of policies/,
     );
     match(lResult.message, /ts-jest {13}2.0.0 {4}\(policy: pin\)/);
-    deepStrictEqual(
+    deepEqual(
       JSON.parse(readFileSync(OUTPUT_FILENAME, "utf8")),
       JSON.parse(readFileSync(FIXTURE_URL, "utf8")),
     );
@@ -301,12 +301,12 @@ describe("main", () => {
       saveExact: true,
     });
 
-    strictEqual(lResult.OK, true);
+    equal(lResult.OK, true);
     match(
       lResult.message,
       /Up'em just updated these outdated dependencies in package.json/,
     );
-    strictEqual(
+    equal(
       lResult.message.includes(
         `@types/node         10.5.1   -> 10.5.2  devDependencies   (policy: latest)${EOL}` +
           `dependency-cruiser  4.1.0    -> 4.1.1   devDependencies   (policy: latest)${EOL}` +
@@ -323,7 +323,7 @@ describe("main", () => {
       lResult.message,
       /ts-jest {13}2.0.0 {3}devDependencies {3}\(policy: pin\)/,
     );
-    deepStrictEqual(
+    deepEqual(
       JSON.parse(readFileSync(OUTPUT_FILENAME, "utf8")),
       JSON.parse(readFileSync(FIXTURE_URL, "utf8")),
     );
@@ -343,6 +343,6 @@ describe("main", () => {
       "utf8",
     );
     upem(INPUT_FILENAME, lOutdated, OUTPUT_FILENAME_NONE, { dryRun: true });
-    strictEqual(existsSync(OUTPUT_FILENAME_NONE), false);
+    equal(existsSync(OUTPUT_FILENAME_NONE), false);
   });
 });

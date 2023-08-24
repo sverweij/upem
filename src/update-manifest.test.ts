@@ -1,4 +1,4 @@
-import { strictEqual, deepStrictEqual } from "node:assert";
+import { equal, deepEqual } from "node:assert/strict";
 import { describe, it } from "node:test";
 import { updateDependencyKey, determineSavePrefix } from "./update-manifest.js";
 import { determinePolicies } from "./determine-policies.js";
@@ -60,19 +60,19 @@ const DEPS_CARET_UPDATED_WANTED_FIXTURE = {
 
 describe("updateManifest - updateDependencyKey", () => {
   it("empty deps, no outdated yield input", () => {
-    deepStrictEqual(updateDependencyKey({}, []), {});
+    deepEqual(updateDependencyKey({}, []), {});
   });
   it("deps, no outdated yield input", () => {
-    deepStrictEqual(updateDependencyKey(DEPS_FIXTURE, []), DEPS_FIXTURE);
+    deepEqual(updateDependencyKey(DEPS_FIXTURE, []), DEPS_FIXTURE);
   });
   it("deps, outdated yields updated deps, prefixed with carets", () => {
-    deepStrictEqual(
+    deepEqual(
       updateDependencyKey(DEPS_FIXTURE, OUTDATED_NO_POLICIES_FIXTURE),
       DEPS_UPDATED_CARET_FIXTURE,
     );
   });
   it("deps, outdated with saveExact yields updated deps, pinned", () => {
-    deepStrictEqual(
+    deepEqual(
       updateDependencyKey(DEPS_FIXTURE, OUTDATED_NO_POLICIES_FIXTURE, {
         saveExact: true,
       }),
@@ -80,7 +80,7 @@ describe("updateManifest - updateDependencyKey", () => {
     );
   });
   it("deps, outdated with saveExact yields updated deps, pinned even when savePrefix ^ is provided", () => {
-    deepStrictEqual(
+    deepEqual(
       updateDependencyKey(DEPS_FIXTURE, OUTDATED_NO_POLICIES_FIXTURE, {
         saveExact: true,
         savePrefix: "^",
@@ -89,7 +89,7 @@ describe("updateManifest - updateDependencyKey", () => {
     );
   });
   it("deps, outdated with saveExact false yields updated deps, caret prefixed", () => {
-    deepStrictEqual(
+    deepEqual(
       updateDependencyKey(DEPS_FIXTURE, OUTDATED_NO_POLICIES_FIXTURE, {
         saveExact: false,
       }),
@@ -97,7 +97,7 @@ describe("updateManifest - updateDependencyKey", () => {
     );
   });
   it("deps, outdated with savePrefix ~ yields updated deps, tilde prefixed", () => {
-    deepStrictEqual(
+    deepEqual(
       updateDependencyKey(DEPS_FIXTURE, OUTDATED_NO_POLICIES_FIXTURE, {
         savePrefix: "~",
       }),
@@ -105,7 +105,7 @@ describe("updateManifest - updateDependencyKey", () => {
     );
   });
   it("deps, outdated with individual prefix, and saveExact: true, updates to latest and leaves prefix in place", () => {
-    deepStrictEqual(
+    deepEqual(
       updateDependencyKey(DEPS_CARET_FIXTURE, OUTDATED_NO_POLICIES_FIXTURE, {
         saveExact: true,
       }),
@@ -113,7 +113,7 @@ describe("updateManifest - updateDependencyKey", () => {
     );
   });
   it("updates those with a 'wanted' policy to wanted", () => {
-    deepStrictEqual(
+    deepEqual(
       updateDependencyKey(
         DEPS_CARET_FIXTURE,
         OUTDATED_WANTED_POLICIES_FIXTURE,
@@ -126,24 +126,24 @@ describe("updateManifest - updateDependencyKey", () => {
 
 describe("updateManifest - determineSavePrefix", () => {
   it("without options, regardless, returns ^ (no prefix case)", () => {
-    strictEqual(determineSavePrefix("0.0.0"), "^");
+    equal(determineSavePrefix("0.0.0"), "^");
   });
   it("without options, regardless, returns ^ (>= case)", () => {
-    strictEqual(determineSavePrefix(">=0.0.0"), "^");
+    equal(determineSavePrefix(">=0.0.0"), "^");
   });
   it("with only saveExact = false, returns ^ as a prefix", () => {
-    strictEqual(determineSavePrefix(">=0.0.0", { saveExact: false }), "^");
+    equal(determineSavePrefix(">=0.0.0", { saveExact: false }), "^");
   });
   it("with saveExact = false and a savePrefix, returns that savePrefix", () => {
-    strictEqual(
+    equal(
       determineSavePrefix(">=0.0.0", { saveExact: false, savePrefix: "~" }),
       "~",
     );
   });
   it("with only saveExact = true, and an individual prefix returns that prefix", () => {
-    strictEqual(determineSavePrefix(">=0.0.0", { saveExact: true }), ">=");
+    equal(determineSavePrefix(">=0.0.0", { saveExact: true }), ">=");
   });
   it("with only saveExact = true, and no individual prefix returns empty string", () => {
-    strictEqual(determineSavePrefix("0.0.0", { saveExact: true }), "");
+    equal(determineSavePrefix("0.0.0", { saveExact: true }), "");
   });
 });

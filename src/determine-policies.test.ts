@@ -1,10 +1,10 @@
-import { deepStrictEqual } from "node:assert";
+import { deepEqual } from "node:assert/strict";
 import { describe, it } from "node:test";
 import { determinePolicies } from "./determine-policies.js";
 
 describe("determinePolicies", () => {
   it("when there's no outdated there's an empty array of policies", () => {
-    deepStrictEqual(determinePolicies({}, []), []);
+    deepEqual(determinePolicies({}, []), []);
   });
 
   it("adds policy related attributes & transforms it into an array", () => {
@@ -16,7 +16,7 @@ describe("determinePolicies", () => {
         location: "node_modules/@types/node",
       },
     };
-    deepStrictEqual(determinePolicies(lSomeOutdated, []), [
+    deepEqual(determinePolicies(lSomeOutdated, []), [
       {
         current: "10.5.1",
         wanted: "10.5.1",
