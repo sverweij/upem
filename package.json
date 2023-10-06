@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@types/mocha": "10.0.2",
+    "@types/node": "20.8.2",
     "@typescript-eslint/eslint-plugin": "6.7.4",
     "c8": "8.0.1",
     "dependency-cruiser": "14.1.0",
@@ -78,7 +79,6 @@
     "lint:fix": "npm-run-all lint:fix:eslint format",
     "lint:fix:eslint": "eslint --fix src types",
     "test": "c8 node --no-warnings --loader 'tsx' --test-reporter dot --test src/*.test.ts",
-    "test:only-for-node-16-without-the-test-reporter": "node --no-warnings --loader 'tsx' --test src/*.test.ts",
     "test:watch": "find src | NODE_OPTIONS=--no-warnings entr -c npm test",
     "update-dependencies": "npm-run-all upem:update upem:install lint:fix check",
     "upem-outdated": "npm outdated --json --long | dist/cli.js --dry-run",
@@ -88,6 +88,6 @@
     "prepare": "husky install"
   },
   "engines": {
-    "node": "^16||^18||>=20"
+    "node": "^18.17||>=20"
   }
 }

@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         node-version:
-          - 16.x
+          - 18.x
           - 20.x
         platform:
           - ubuntu-latest
@@ -37,6 +37,3 @@ jobs:
         if: matrix.platform == 'ubuntu-latest' && matrix.node-version == '20.x'
       - run: npm run depcruise
       - run: npm test
-        if: matrix.node-version != '16.x'
-      - run: npm run test:only-for-node-16-without-the-test-reporter
-        if: matrix.node-version == '16.x'
