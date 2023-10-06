@@ -3,7 +3,7 @@ import type {
   IManifest,
   IUpemOptions,
   IUpemOutdated,
-} from "types/upem.js";
+} from "./types.js";
 
 function isUpAbleDependencyKey(pSkipDependencyTypes: DependenciesTypeType[]) {
   return (pManifestKey: string): boolean =>

@@ -5,7 +5,7 @@ import {
   IUpemOptions,
   IUpemOutdated,
   IUpemReturn,
-} from "types/upem.js";
+} from "./types.js";
 import { determinePolicies, isUpAble } from "./determine-policies.js";
 import { updateManifest } from "./update-manifest.js";
 

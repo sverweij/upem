@@ -6,9 +6,6 @@
   "bin": {
     "upem": "dist/cli.js"
   },
-  "exports": {
-    ".": "./dist/main.js"
-  },
   "files": [
     "dist",
     "package.json",
@@ -75,9 +72,9 @@
     "format": "prettier --write \"src/**/*.{ts,js}\" \"*.{json,yml,md}\" .github",
     "format:check": "prettier --check \"src/**/*.{ts,js}\" \"*.{json,yml,md}\" .github",
     "lint": "npm-run-all lint:eslint format:check",
-    "lint:eslint": "eslint src types",
+    "lint:eslint": "eslint src",
     "lint:fix": "npm-run-all lint:fix:eslint format",
-    "lint:fix:eslint": "eslint --fix src types",
+    "lint:fix:eslint": "eslint --fix src",
     "test": "c8 node --no-warnings --loader 'tsx' --test-reporter dot --test src/*.test.ts",
     "test:watch": "find src | NODE_OPTIONS=--no-warnings entr -c npm test",
     "update-dependencies": "npm-run-all upem:update upem:install lint:fix check",
