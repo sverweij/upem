@@ -3,7 +3,7 @@ import type {
   IFlatNpmOutdated,
   IUpemOutdated,
   IUpemPolicy,
-} from "types/upem.js";
+} from "./types.js";
 
 function determineTargetVersion(
   pOutdatedEntry: IFlatNpmOutdated,

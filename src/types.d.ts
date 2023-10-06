@@ -36,7 +36,7 @@ export interface INpmOutdatedRecord {
 }
 
 export interface INpmOutdated {
-  [package: string]: INpmOutdatedRecord;
+  [packageName: string]: INpmOutdatedRecord;
 }
 
 export interface IFlatNpmOutdated extends INpmOutdatedRecord {

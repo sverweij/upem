@@ -3,7 +3,7 @@
 import { join } from "node:path";
 // @ts-expect-error - no type definition exists for libnpmconfig
 import libNpmConfig from "libnpmconfig";
-import type { IUpemOptions } from "../types/upem.js";
+import type { IUpemOptions } from "./types.js";
 import upem from "./main.js";
 
 const MANIFEST = join(process.cwd(), "package.json");
