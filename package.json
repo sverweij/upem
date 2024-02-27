@@ -58,7 +58,7 @@
     "libnpmconfig": "^1.2.1"
   },
   "scripts": {
-    "build": "npm-run-all build:clean build:ts build:chmod-bin",
+    "build": "npm-run-all build:clean build:ts format:dist build:chmod-bin",
     "build:chmod-bin": "chmod 700 dist/cli.js",
     "build:clean": "rm -rf dist",
     "build:ts": "tsc",
@@ -68,6 +68,7 @@
     "depcruise:graph": "npm-run-all depcruise:graph:html",
     "depcruise:graph:html": "depcruise src --validate --output-type dot | dot -T svg | tee docs/dependencygraph.svg | depcruise-wrap-stream-in-html > docs/dependencygraph.html",
     "depcruise:graph:view": "depcruise src --validate --output-type dot --prefix vscode://file/$(pwd)/ | dot -T svg | depcruise-wrap-stream-in-html | browser",
+    "format:dist": "prettier --write dist/",
     "format": "prettier --write \"src/**/*.{ts,js}\" \"*.{json,yml,md}\" .github",
     "format:check": "prettier --check \"src/**/*.{ts,js}\" \"*.{json,yml,md}\" .github",
     "lint": "npm-run-all lint:eslint format:check",

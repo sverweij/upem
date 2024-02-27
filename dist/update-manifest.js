@@ -1,36 +1,52 @@
 function isUpAbleDependencyKey(pSkipDependencyTypes) {
-    return (pManifestKey) => pManifestKey.includes("ependencies") &&
-        !pSkipDependencyTypes.includes(pManifestKey);
+  return (pManifestKey) =>
+    pManifestKey.includes("ependencies") &&
+    !pSkipDependencyTypes.includes(pManifestKey);
 }
 function getRangePrefix(pVersionRangeString) {
-    return (pVersionRangeString.match(/^(?<prefix>[^0-9]{0,2}).+/)?.groups?.prefix ?? "");
+  return (
+    pVersionRangeString.match(/^(?<prefix>[^0-9]{0,2}).+/)?.groups?.prefix ?? ""
+  );
 }
 export function determineSavePrefix(pVersionRangeString, pOptions) {
-    const lIndividualRangePrefix = getRangePrefix(pVersionRangeString);
-    if (pOptions?.saveExact && lIndividualRangePrefix) {
-        return lIndividualRangePrefix;
-    }
-    return pOptions?.saveExact ? "" : pOptions?.savePrefix ?? "^";
+  const lIndividualRangePrefix = getRangePrefix(pVersionRangeString);
+  if (pOptions?.saveExact && lIndividualRangePrefix) {
+    return lIndividualRangePrefix;
+  }
+  return pOptions?.saveExact ? "" : pOptions?.savePrefix ?? "^";
 }
-export function updateDependencyKey(pDependencyObject, pOutdatedList, pOptions) {
-    return {
-        ...pDependencyObject,
-        ...Object.keys(pDependencyObject)
-            .filter((pDependency) => pOutdatedList.some((pOutdatedEntry) => pOutdatedEntry.package === pDependency))
-            .reduce((pAll, pPackageName) => {
-            pAll[pPackageName] = `${determineSavePrefix(pDependencyObject[pPackageName], pOptions)}${pOutdatedList.find((pOutdatedEntry) => pOutdatedEntry.package === pPackageName)?.target}`;
-            return pAll;
-        }, {}),
-    };
+export function updateDependencyKey(
+  pDependencyObject,
+  pOutdatedList,
+  pOptions,
+) {
+  return {
+    ...pDependencyObject,
+    ...Object.keys(pDependencyObject)
+      .filter((pDependency) =>
+        pOutdatedList.some(
+          (pOutdatedEntry) => pOutdatedEntry.package === pDependency,
+        ),
+      )
+      .reduce((pAll, pPackageName) => {
+        pAll[pPackageName] =
+          `${determineSavePrefix(pDependencyObject[pPackageName], pOptions)}${pOutdatedList.find((pOutdatedEntry) => pOutdatedEntry.package === pPackageName)?.target}`;
+        return pAll;
+      }, {}),
+  };
 }
 export function updateManifest(pManifestObject, pOutdatedPackages, pOptions) {
-    return {
-        ...pManifestObject,
-        ...Object.keys(pManifestObject)
-            .filter(isUpAbleDependencyKey(pOptions?.skipDependencyTypes ?? []))
-            .reduce((pAll, pDependencyKey) => {
-            pAll[pDependencyKey] = updateDependencyKey(pManifestObject[pDependencyKey], pOutdatedPackages, pOptions);
-            return pAll;
-        }, {}),
-    };
+  return {
+    ...pManifestObject,
+    ...Object.keys(pManifestObject)
+      .filter(isUpAbleDependencyKey(pOptions?.skipDependencyTypes ?? []))
+      .reduce((pAll, pDependencyKey) => {
+        pAll[pDependencyKey] = updateDependencyKey(
+          pManifestObject[pDependencyKey],
+          pOutdatedPackages,
+          pOptions,
+        );
+        return pAll;
+      }, {}),
+  };
 }
