@@ -50,9 +50,11 @@ export function updateDependencyKey(
         pAll[pPackageName] = `${determineSavePrefix(
           pDependencyObject[pPackageName] as string,
           pOptions,
-        )}${pOutdatedList.find(
-          (pOutdatedEntry) => pOutdatedEntry.package === pPackageName,
-        )?.target}`;
+        )}${
+          pOutdatedList.find(
+            (pOutdatedEntry) => pOutdatedEntry.package === pPackageName,
+          )?.target
+        }`;
         return pAll;
       }, {} as IManifest),
   };
