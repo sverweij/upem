@@ -6,7 +6,7 @@ updates:
     schedule:
       interval: "weekly"
     groups:
-      all-the-things:
+      all-github-actions:
         update-types: ["major", "minor", "patch"]
     commit-message:
       prefix: "ci"
