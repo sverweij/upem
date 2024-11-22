@@ -32,27 +32,27 @@
     "url": "https://github.com/sverweij/upem/issues"
   },
   "devDependencies": {
-    "@types/node": "20.12.8",
-    "@typescript-eslint/eslint-plugin": "7.8.0",
-    "c8": "9.1.0",
-    "clean-pkg-json": "1.2.0",
-    "dependency-cruiser": "16.3.1",
-    "eslint": "8.57.0",
-    "eslint-config-moving-meadow": "4.0.2",
-    "eslint-config-prettier": "9.1.0",
+    "@types/node": "22.15.21",
+    "@typescript-eslint/eslint-plugin": "8.32.1",
+    "c8": "10.1.3",
+    "clean-pkg-json": "1.3.0",
+    "dependency-cruiser": "16.10.2",
+    "eslint": "^8.57.1",
+    "eslint-config-moving-meadow": "^4.0.2",
+    "eslint-config-prettier": "10.1.5",
     "eslint-plugin-budapestian": "6.0.0",
     "eslint-plugin-eslint-comments": "3.2.0",
-    "eslint-plugin-import": "2.29.1",
-    "eslint-plugin-mocha": "10.4.3",
+    "eslint-plugin-import": "2.31.0",
+    "eslint-plugin-mocha": "10.5.0",
     "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-security": "3.0.0",
-    "eslint-plugin-unicorn": "52.0.0",
-    "husky": "9.0.11",
-    "lint-staged": "15.2.2",
+    "eslint-plugin-security": "3.0.1",
+    "eslint-plugin-unicorn": "56.0.1",
+    "husky": "9.1.7",
+    "lint-staged": "16.0.0",
     "npm-run-all": "4.1.5",
-    "prettier": "3.2.5",
-    "tsx": "4.9.0",
-    "typescript": "5.4.5"
+    "prettier": "3.5.3",
+    "tsx": "4.19.4",
+    "typescript": "5.8.3"
   },
   "dependencies": {
     "libnpmconfig": "^1.2.1"
@@ -92,6 +92,21 @@
         "package": "eslint",
         "policy": "wanted",
         "because": "@typescript-eslint/eslint-plugin 7.6.0 uses @typescript-eslint/parser 7.6.0 (currently _latest_) which isn't on eslint 9 yet (it peer requires ^8.56.0)"
+      },
+      {
+        "package": "eslint-config-moving-meadow",
+        "policy": "wanted",
+        "because": "something something esm"
+      },
+      {
+        "package": "eslint-plugin-mocha",
+        "policy": "wanted",
+        "because": "in the next version (11) some things incompatible with the current setup happen (- very likely due to esm-ness?)"
+      },
+      {
+        "package": "eslint-plugin-unicorn",
+        "policy": "wanted",
+        "because": "in the next version (57) some things incompatible with the current setup happen (e.g. unicorn/catch-error-name dropped? troubles with esm-ness?)"
       }
     ]
   },
