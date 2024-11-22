@@ -15,7 +15,7 @@ function getRangePrefix(pVersionRangeString: string): string {
   return (
     /* c8 ignore start */
     /* c8 ignore - as the ?? "" safety valve is never hit */
-    pVersionRangeString.match(/^(?<prefix>[^0-9]{0,2}).+/)?.groups?.prefix ?? ""
+    /^(?<prefix>\D{0,2}).+/.exec(pVersionRangeString)?.groups?.prefix ?? ""
     /* c8 ignore stop */
   );
 }
@@ -30,7 +30,7 @@ export function determineSavePrefix(
     return lIndividualRangePrefix;
   }
 
-  return pOptions?.saveExact ? "" : pOptions?.savePrefix ?? "^";
+  return pOptions?.saveExact ? "" : (pOptions?.savePrefix ?? "^");
 }
 
 export function updateDependencyKey(

@@ -9,7 +9,7 @@ function determineTargetVersion(
   pOutdatedEntry: IFlatNpmOutdated,
   pPolicy: keyof IFlatNpmOutdated,
 ): string {
-  return pOutdatedEntry[pPolicy] || pOutdatedEntry.current;
+  return pOutdatedEntry[pPolicy] ?? pOutdatedEntry.current;
 }
 
 function objectToArray(pObject: INpmOutdated): IFlatNpmOutdated[] {
