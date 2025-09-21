@@ -9,6 +9,7 @@ on:
 
 jobs:
   publish:
+    environment: npm
     if: github.repository == 'sverweij/upem'
     runs-on: ubuntu-latest
     permissions:
@@ -24,10 +25,6 @@ jobs:
       - name: publish as latest
         run: npm publish --provenance --access public
         if: github.event.release.prerelease == false
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: publish as beta
         run: npm publish --provenance --access public --tag beta
         if: github.event.release.prerelease == true
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
