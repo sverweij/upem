@@ -1,5 +1,5 @@
 function determineTargetVersion(pOutdatedEntry, pPolicy) {
-	return pOutdatedEntry[pPolicy] || pOutdatedEntry.current;
+	return pOutdatedEntry[pPolicy] ?? pOutdatedEntry.current;
 }
 function objectToArray(pObject) {
 	return Object.keys(pObject).map((pKey) => ({

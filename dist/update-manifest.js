@@ -5,7 +5,7 @@ function isUpAbleDependencyKey(pSkipDependencyTypes) {
 }
 function getRangePrefix(pVersionRangeString) {
 	return (
-		pVersionRangeString.match(/^(?<prefix>[^0-9]{0,2}).+/)?.groups?.prefix ?? ""
+		/^(?<prefix>\D{0,2}).+/.exec(pVersionRangeString)?.groups?.prefix ?? ""
 	);
 }
 export function determineSavePrefix(pVersionRangeString, pOptions) {
@@ -13,7 +13,7 @@ export function determineSavePrefix(pVersionRangeString, pOptions) {
 	if (pOptions?.saveExact && lIndividualRangePrefix) {
 		return lIndividualRangePrefix;
 	}
-	return pOptions?.saveExact ? "" : pOptions?.savePrefix ?? "^";
+	return pOptions?.saveExact ? "" : (pOptions?.savePrefix ?? "^");
 }
 export function updateDependencyKey(
 	pDependencyObject,
