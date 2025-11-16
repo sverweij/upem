@@ -1,13 +1,10 @@
 #!/usr/bin/env node
 import { join } from "node:path";
-import libNpmConfig from "libnpmconfig";
+import Config from "@npmcli/config";
+import things from "@npmcli/config/lib/definitions/index.js";
 import upem from "./main.js";
+const { definitions, flatten, shorthands } = things;
 const MANIFEST = join(process.cwd(), "package.json");
-const UPEM_OPTIONS = {
-	saveExact: libNpmConfig.read().get("save-exact") || false,
-	savePrefix: libNpmConfig.read().get("save-prefix") || "^",
-	skipDependencyTypes: ["peerDependencies"],
-};
 let gBuffer = "";
 function bufferChunk(pChunk) {
 	gBuffer += pChunk;
@@ -18,12 +15,42 @@ function emitGeneralError(pError) {
 	);
 	process.exitCode = 1;
 }
-function executeUpdate(pArguments) {
-	const lUpemOptions = {
-		...UPEM_OPTIONS,
-		dryRun: pArguments[pArguments.length - 1] === "--dry-run",
-	};
+async function loadNpmConfig() {
+	let lUpemOptions = null;
+	try {
+		const config = new Config({
+			npmPath: process.cwd(),
+			definitions,
+			flatten,
+			shorthands,
+			argv: process.argv,
+		});
+		await config.load();
+		lUpemOptions = {
+			saveExact: config.get("save-exact") || false,
+			savePrefix: config.get("save-prefix") || "^",
+			skipDependencyTypes: ["peerDependencies"],
+		};
+	} catch (_pError) {
+		lUpemOptions = {
+			saveExact: false,
+			savePrefix: "^",
+			skipDependencyTypes: ["peerDependencies"],
+		};
+	}
+	return lUpemOptions;
+}
+function executeUpdate(pArguments, pUpemOptions) {
 	return () => {
+		if (!pUpemOptions) {
+			process.stderr.write("Error: npm config not loaded\n");
+			process.exitCode = 1;
+			return;
+		}
+		const lUpemOptions = {
+			...pUpemOptions,
+			dryRun: pArguments[pArguments.length - 1] === "--dry-run",
+		};
 		const lResult = upem(MANIFEST, gBuffer, MANIFEST, lUpemOptions);
 		if (lResult.OK) {
 			process.stdout.write(lResult.message);
@@ -33,7 +60,12 @@ function executeUpdate(pArguments) {
 		}
 	};
 }
-process.stdin
-	.on("data", bufferChunk)
-	.on("end", executeUpdate(process.argv))
-	.on("error", emitGeneralError);
+try {
+	const gUpemOptions = await loadNpmConfig();
+	process.stdin
+		.on("data", bufferChunk)
+		.on("end", executeUpdate(process.argv, gUpemOptions))
+		.on("error", emitGeneralError);
+} catch (pError) {
+	emitGeneralError(pError);
+}
