@@ -1,4 +1,4 @@
 {
-  "src/**/*.ts": ["depcruise --validate -- src", "eslint --fix"],
+  "src/**/*.ts": ["depcruise --validate -- src"],
   "*.{ts,json,md,yml}": ["prettier --write"]
 }
