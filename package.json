@@ -32,19 +32,19 @@
     "url": "https://github.com/sverweij/upem/issues"
   },
   "devDependencies": {
-    "@types/node": "25.6.0",
+    "@types/node": "25.9.3",
     "c8": "11.0.0",
-    "clean-pkg-json": "1.4.1",
-    "dependency-cruiser": "17.3.10",
+    "clean-pkg-json": "2.0.0",
+    "dependency-cruiser": "17.4.3",
     "husky": "9.1.7",
-    "lint-staged": "16.4.0",
-    "npm-run-all2": "8.0.4",
-    "prettier": "3.8.2",
-    "tsx": "4.21.0",
-    "typescript": "6.0.2"
+    "lint-staged": "17.0.7",
+    "npm-run-all2": "9.0.2",
+    "prettier": "3.8.4",
+    "tsx": "4.22.4",
+    "typescript": "6.0.3"
   },
   "dependencies": {
-    "@npmcli/config": "10.8.1"
+    "@npmcli/config": "10.11.0"
   },
   "overrides": {
     "test-exclude": "^8.0.0",
