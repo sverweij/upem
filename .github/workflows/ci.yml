@@ -32,7 +32,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: ${{matrix.node-version}}
-      - run: npm install
+      - run: npm clean-install --ignore-scripts
       - run: node --run=build
       - run: node --run=lint
         if: matrix.platform == 'ubuntu-latest' && matrix.node-version == env.NODE_LATEST

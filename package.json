@@ -32,25 +32,22 @@
     "url": "https://github.com/sverweij/upem/issues"
   },
   "devDependencies": {
-    "@types/node": "25.9.3",
-    "c8": "11.0.0",
+    "@types/node": "26.1.1",
+    "c8": "12.0.0",
     "clean-pkg-json": "2.0.0",
-    "dependency-cruiser": "17.4.3",
+    "dependency-cruiser": "18.1.0",
     "husky": "9.1.7",
-    "lint-staged": "17.0.7",
+    "lint-staged": "17.2.0",
     "npm-run-all2": "9.0.2",
-    "prettier": "3.8.4",
-    "tsx": "4.22.4",
+    "prettier": "3.9.6",
+    "tsx": "4.23.1",
     "typescript": "6.0.3"
   },
   "dependencies": {
-    "@npmcli/config": "10.11.0"
+    "@npmcli/config": "11.0.0"
   },
   "overrides": {
-    "test-exclude": "^8.0.0",
-    "c8": {
-      "yargs": "^18.0.0"
-    }
+    "test-exclude": "^8.0.0"
   },
   "scripts": {
     "build": "npm-run-all build:clean build:ts format:dist build:chmod-bin",
@@ -77,9 +74,22 @@
     "upem:update": "npm outdated --json --long | dist/cli.js | pbcopy && pbpaste",
     "upem:install": "npm install",
     "version": "npm-run-all build check depcruise:graph build:stage",
-    "prepare": "husky install"
+    "prepare": "husky"
+  },
+  "upem": {
+    "policies": [
+      {
+        "package": "typescript",
+        "policy": "wanted",
+        "because": "we want to stay on version 6 This is OK - as we use it as devDependency for testing purposes only"
+      }
+    ]
   },
   "engines": {
     "node": "^22.17||>=24"
+  },
+  "allowScripts": {
+    "esbuild": true,
+    "fsevents": false
   }
 }
