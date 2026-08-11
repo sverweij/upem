@@ -2,7 +2,7 @@
   "name": "upem",
   "version": "11.0.1",
   "type": "module",
-  "description": "Ups your package.json dependencies to latest. Opinionated. Respectless.",
+  "description": "Updates your package.json dependencies to latest. Opinionated. Respectless.",
   "bin": {
     "upem": "dist/cli.js"
   },
@@ -56,10 +56,10 @@
     "build:ts": "tsc",
     "build:stage": "git add .",
     "check": "npm-run-all --parallel depcruise lint test",
-    "depcruise": "depcruise src --validate -T err",
+    "depcruise": "depcruise src",
     "depcruise:graph": "npm-run-all depcruise:graph:html",
-    "depcruise:graph:html": "depcruise src --validate --output-type dot | dot -T svg | tee docs/dependencygraph.svg | depcruise-wrap-stream-in-html > docs/dependencygraph.html",
-    "depcruise:graph:view": "depcruise src --validate --output-type dot --prefix vscode://file/$(pwd)/ | dot -T svg | depcruise-wrap-stream-in-html | browser",
+    "depcruise:graph:html": "depcruise src --output-type dot | dot -T svg | tee docs/dependencygraph.svg | depcruise-wrap-stream-in-html > docs/dependencygraph.html",
+    "depcruise:graph:view": "depcruise src --output-type x-dot-webpage --prefix vscode://file/$(pwd)/ | browser",
     "format:dist": "prettier --write --use-tabs dist/",
     "format": "prettier --write \"src/**/*.{ts,js}\" \"*.{json,yml,md}\" .github",
     "format:check": "prettier --check \"src/**/*.{ts,js}\" \"*.{json,yml,md}\" .github",
