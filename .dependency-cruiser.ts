@@ -1,4 +1,4 @@
-import type { IConfiguration } from "dependency-cruiser"
+import type { IConfiguration } from "dependency-cruiser";
 
 const lConfiguration: IConfiguration = {
   extends: "dependency-cruiser/configs/recommended-strict",
@@ -29,7 +29,7 @@ const lConfiguration: IConfiguration = {
       severity: "error",
       from: {},
       to: {
-        path: "\\.test\\.js$",
+        path: "[.]test[.]ts$",
       },
     },
     {
@@ -38,8 +38,8 @@ const lConfiguration: IConfiguration = {
       comment:
         "Don't allow dependencies from src/app/lib to a development only package",
       from: {
-        path: "^src",
-        pathNot: "\\.test\\.ts$",
+        path: "^src/",
+        pathNot: "[.]test[.]ts$",
       },
       to: {
         dependencyTypes: ["npm-dev"],
@@ -69,11 +69,11 @@ const lConfiguration: IConfiguration = {
       name: "no-unreachable",
       severity: "error",
       from: {
-        path: "src/cli.js",
+        path: "src/cli[.]ts",
       },
       to: {
         path: "src/",
-        pathNot: ["\\.test\\.js$"],
+        pathNot: ["[.]test[.]ts$"],
         reachable: false,
       },
     },
@@ -81,11 +81,11 @@ const lConfiguration: IConfiguration = {
       name: "no-non-test-coverage",
       severity: "error",
       from: {
-        path: "src/[^\\.]+\\.test\\.js$",
+        path: "src/[^.]+[.]test[.]ts$",
       },
       to: {
         path: "src/",
-        pathNot: ["src/cli.js", "\\.test\\.js$"],
+        pathNot: ["src/cli[.]ts", "[.]test[.]ts$"],
         reachable: false,
       },
     },
@@ -95,6 +95,7 @@ const lConfiguration: IConfiguration = {
     /* prefix for links in html and svg output (e.g. https://github.com/you/yourrepo/blob/develop/) */
     prefix: "https://github.com/sverweij/upem/blob/main/",
     cache: true,
+    tsPreCompilationDeps: true,
     reporterOptions: {
       dot: {
         collapsePattern: "node_modules/[^/]+",
@@ -112,7 +113,7 @@ const lConfiguration: IConfiguration = {
               attributes: { fillcolor: "lime", penwidth: 2 },
             },
             {
-              criteria: { source: ".test.js" },
+              criteria: { source: "[.]test[.]ts" },
               attributes: { fillcolor: "#ccccff" },
             },
           ],
@@ -135,5 +136,5 @@ const lConfiguration: IConfiguration = {
     },
   },
 };
-// generated: dependency-cruiser@4.11.0 on 2019-01-08T19:24:33.102Z
 export default lConfiguration;
+// generated: dependency-cruiser@4.11.0 on 2019-01-08T19:24:33.102Z
