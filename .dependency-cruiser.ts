@@ -1,5 +1,6 @@
-/** @type {import('dependency-cruiser').IConfiguration} */
-export default {
+import type { IConfiguration } from "dependency-cruiser"
+
+const lConfiguration: IConfiguration = {
   extends: "dependency-cruiser/configs/recommended-strict",
   /*
        the 'dependency-cruiser/configs/recommended-strict' preset
@@ -135,3 +136,4 @@ export default {
   },
 };
 // generated: dependency-cruiser@4.11.0 on 2019-01-08T19:24:33.102Z
+export default lConfiguration;
