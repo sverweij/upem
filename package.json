@@ -1,6 +1,6 @@
 {
   "name": "upem",
-  "version": "11.0.2",
+  "version": "11.0.3",
   "type": "module",
   "description": "Updates your package.json dependencies to latest. Opinionated. Respectless.",
   "bin": {
