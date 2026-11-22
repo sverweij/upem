@@ -32,22 +32,29 @@
     "url": "https://github.com/sverweij/upem/issues"
   },
   "devDependencies": {
-    "@types/node": "26.6.5",
+    "@types/node": "26.6.6",
     "c8": "12.0.0",
-    "clean-pkg-json": "2.0.0",
-    "dependency-cruiser": "18.8.0-beta-1",
+    "clean-pkg-json": "2.1.0",
+    "dependency-cruiser": "18.8.0",
     "husky": "9.1.7",
-    "lint-staged": "17.6.0",
-    "npm-run-all2": "9.0.4",
-    "prettier": "3.9.10",
+    "lint-staged": "17.6.2",
+    "npm-run-all2": "9.1.0",
+    "prettier": "3.10.1",
     "tsx": "4.23.15",
     "typescript": "7.1.0-beta"
   },
   "dependencies": {
-    "@npmcli/config": "11.2.0"
+    "@npmcli/config": "11.2.1"
   },
   "overrides": {
-    "test-exclude": "^8.0.0"
+    "test-exclude": {
+      "glob": "^14.0.6",
+      "minimatch": "^11.0.9"
+    },
+    "c8": {
+      "glob": "^14.0.6",
+      "minimatch": "^11.0.9"
+    }
   },
   "scripts": {
     "build": "npm-run-all build:clean build:ts format:dist build:chmod-bin",
@@ -78,11 +85,6 @@
   },
   "upem": {
     "policies": [
-      {
-        "package": "dependency-cruiser",
-        "policy": "wanted",
-        "because": "we want to stay on 18.8 beta for a bit"
-      },
       {
         "package": "typescript",
         "policy": "pin",
